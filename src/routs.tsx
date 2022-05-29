@@ -7,6 +7,7 @@ import LotteryList from './containers/Lottery/LotteryList/LotteryList';
 import CreateRepeatedLottery from './containers/Lottery/CreateLottery/RepeatedLottery/CreateLottery';
 import CreateOneTimeLottery from './containers/Lottery/CreateLottery/OneTimeLottery/CreateOneTimeLottery';
 import ViewLottery from './containers/Lottery/ViewLottery/ViewLottery';
+import LoginForm from './containers/Login/Login';
 
 export const adminRouts = {
     rootPath: "/",
@@ -22,7 +23,8 @@ export const adminRouts = {
     modifyAuction:"/admin/auction/update",
     usersList:"/admin/users",
     viewUser:"/admin/users/view",
-    settings:"/admin/settings"
+    settings:"/admin/settings",
+    login:"/admin/login"
 }
 
 const AppRoute:FC = () => {
@@ -34,6 +36,7 @@ const AppRoute:FC = () => {
             <Route path={adminRouts.viewLottery} element={<ViewLottery />} />
             <Route path={adminRouts.createRepeatedLottery} element={<CreateRepeatedLottery />} />
             <Route path={adminRouts.createOneTimeLottery} element={<CreateOneTimeLottery />} />
+            <Route path={adminRouts.login} element={<LoginForm />} />
             <Route path={"*"} element={<h3>404</h3>} />
         </Routes>
     )

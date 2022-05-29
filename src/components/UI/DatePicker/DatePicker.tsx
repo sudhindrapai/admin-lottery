@@ -10,8 +10,8 @@ import React from 'react';
 interface DatepickerProps {
     label:string,
     name:string,
-    value: Date | undefined,
-    onChangeDate(date: Date|null, name: string):void| undefined
+    value: Date | null,
+    onChangeDate(date: Date|null, name: string):void
 }
 
 const DatePickerComponent:React.FC<DatepickerProps> = ({label, name, value, onChangeDate}) => {
@@ -26,9 +26,9 @@ const DatePickerComponent:React.FC<DatepickerProps> = ({label, name, value, onCh
 
     return<LocalizationProvider dateAdapter={AdapterMoment}>
     <DesktopDatePicker
-          label="Date desktop"
-          inputFormat="MM/dd/yyyy"
-          value={value1}
+          label={label}
+          inputFormat="DD/mm/yy"
+          value={value}
           onChange={handleChange}
           renderInput={(params) => <TextField {...params} fullWidth={true} />}
         />

@@ -111,6 +111,23 @@ export const updateFormTimeState = (date: Date|null, name: string, formValues:Fo
     return updatedArray;
 }
 
+export const updateFormDate = (date: Date|null, name: string, formValues:FormElement[]):FormElement[] => {
+    let updatedArray = formValues.map((formObj) => {
+        if (formObj.id === name) {
+            let obj = Object.assign(formObj);
+            obj["value"] = date;
+            obj["isTouched"] = true;
+            obj["errorMessage"] = "";
+            obj["slectedDate"] = date;
+            obj["isValidInput"] = "";
+            return obj;
+        } else {
+            return formObj;
+        }
+    });
+    return updatedArray;
+}
+
 // method will validate the input with empty and custom validation
 const validateFormElement = (validationType:customValidationType, value:string, isRequired:boolean, customValidationRequired:boolean):ValidatedFormObj => {
     let updatedValue = value;

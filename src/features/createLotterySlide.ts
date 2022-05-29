@@ -1,4 +1,8 @@
 import {createSlice, PayloadAction, createAsyncThunk} from '@reduxjs/toolkit';
+import * as endpoints from '../networkUtility/endpoints'
+
+import * as localStorageActiontype from '../LocalStorage/ActionTypes';
+import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 
 interface CreateLottery{
     errorMessage: string,
@@ -10,20 +14,45 @@ const createLotteryState:CreateLottery = {
     isLotteryCreated: false
 };
 
-export const createOneTimeLottery = createAsyncThunk(
+export const createLottery = createAsyncThunk(
     'oneTimeLottery',
-    async () => {
-        
+    async (requeryBody:any, {dispatch}) => {
+        await fetch (endpoints.createLottery,{
+            method: "POST",
+            body: JSON.stringify(requeryBody),
+            headers:{
+                Authorization: `Bearer ${getLocalStorage(localStorageActiontype.GET_ACCESS_TOKEN)}`,
+                "Content-type": "application/json; charset=UTF-8",
+            }
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            console.log(data);
+            dispatch(toggleLotteryCreateState({
+                isCreated: true
+            }))
+        })
     }
-) 
+);
+
+interface ToggleLotteryCreate {
+    isCreated: boolean
+}
 
 const createLotterySlide = createSlice({
     name:'create lottery',
     initialState: createLotteryState,
     reducers:{
-
+        toggleLotteryCreateState: (state, action:PayloadAction<ToggleLotteryCreate>) => {
+            return {
+                ...state,
+                isLotteryCreated: action.payload.isCreated
+            }
+        }
     }
 });
 
-export const {} = createLotterySlide.actions;
+export const {toggleLotteryCreateState} = createLotterySlide.actions;
 export default createLotterySlide.reducer

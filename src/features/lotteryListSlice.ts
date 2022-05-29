@@ -2,6 +2,9 @@ import {createSlice, PayloadAction, createAsyncThunk} from '@reduxjs/toolkit';
 import {LotteryDetail} from '../Utility/InterFacesAndEnum';
 import * as endpoint from '../networkUtility/endpoints';
 
+import * as localStorageActiontype from '../LocalStorage/ActionTypes';
+import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
+
 interface getLotteriesInitialState {
     lotteryList:LotteryDetail[],
     page: number,
@@ -23,7 +26,8 @@ export const getLotteryList = createAsyncThunk(
     async (queryParams, {dispatch}) => {
         await fetch(endpoint.getLotteryList, {
             method: 'GET',
-            headers: {
+            headers:{
+                Authorization: `Bearer ${getLocalStorage(localStorageActiontype.GET_ACCESS_TOKEN)}`,
                 "Content-type": "application/json; charset=UTF-8",
             }
         })
@@ -36,7 +40,7 @@ export const getLotteryList = createAsyncThunk(
             }))
         })
     }
-)
+);
 
 
 const LotteryListSlice = createSlice({

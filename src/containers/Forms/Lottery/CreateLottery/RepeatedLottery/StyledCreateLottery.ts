@@ -94,3 +94,37 @@ font-weight: 500;
 text-transform: uppercase;
 margin-top: 16px;
 `;
+
+export const TwoFormSection = styled.div`
+width: 100%;
+box-sizing: border-box;
+display: flex;
+flex-flow: row nowrap;
+align-items: flex-start;
+justify-content: flex-start;
+gap: 10px;
+`;
+
+export const FormView = styled.div`
+width: 100%;
+box-sizing: border-box;
+flex-flow: column;
+`;
+
+export const Action = styled.div`
+width: 100%;
+box-sizing: border-box;
+display: flex
+justify-content: center;
+text-align: right;
+margin: 15px 0;
+Button: first-child{
+    margin-right: 15px;
+}
+`;
+
+export const UploadImageBtnSection = styled.div`
+width: 100%;
+box-sizing: border-box;
+text-align: right;
+`;

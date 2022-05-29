@@ -11,12 +11,13 @@ background-color: #3a57e8;
 
 export const PrimaryBtnFilled = styled.button`
 background-color: #3a57e8;
-padding: ${(props:ButtonProps) => props.btnSize === 'small' ? '4px 6px' : props.btnSize === 'medium' ? '6px 8px' : '8px 16px'};
-width: auto;
+padding: ${(props:ButtonProps) => props.btnSize === 'small' ? '4px 6px' : props.btnSize === 'medium' ? '16px 20px' : '16px 16px'};
+width: ${(props:ButtonProps) => props.btnSize === 'large' ? '100%' : 'auto'};
 border: none;
 color: #ffffff;
 cursor: pointer;
 border-radius: 4px;
+font-size: 16px;
 `;
 
 export const PrimaryBtnLink = styled.button`

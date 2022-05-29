@@ -87,7 +87,7 @@ const FormBuilder:React.FC<FormbuilderProps> = (props) => {
                             <DatePicker 
                             label={formElement.label} 
                             name={formElement.id} 
-                            value={formElement.dobDate} 
+                            value={formElement.slectedDate? formElement.slectedDate : null} 
                             onChangeDate={onChangeDate}
                              />
                         </StyledFormElement>

@@ -34,4 +34,7 @@ export const Content = styled.div`
 width: 100%;
 box-sizing: border-box;
 padding: 20px 40px 0 40px;
+height: 100%;
+max-height: 90vh;
+overflow-y: scroll;
 `;

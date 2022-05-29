@@ -165,7 +165,7 @@ const LotteryList:FC = () => {
         <BreadcrumbSection>
     <ViewHeader title={"Lottery"} isNeedCreateButton={true} btnText={"Test button"}
      routePath={"/"} />
-     <Button title={"+ Create Lottery"} btnSize={ButtonSize.lg} btnVariant={ButtonVariant.primaryFilled} 
+     <Button title={"+ Create Lottery"} btnSize={ButtonSize.md} btnVariant={ButtonVariant.primaryFilled} 
      clicked={() => {setCreateLotteryModalStatus(true)}} />
      </BreadcrumbSection>
      <ContentSection>

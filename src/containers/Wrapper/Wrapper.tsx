@@ -1,5 +1,5 @@
 import {FC} from 'react';
-
+import {useLocation} from 'react-router-dom';
 import {StyledAppWrapper, LeftMenuSection, ContentWrapper, Content} from './StyledWrapper';
 import LeftMenu from '../LeftMenu/Leftmenu';
 import TopBar from '../../components/AppTopbar/AppTopBar';
@@ -9,12 +9,14 @@ interface AppWrapper {
 }
 
 const Wrapper:FC<AppWrapper> = ({children}) => {
+    const location = useLocation();
+    let pathName = location.pathname;
     return <StyledAppWrapper>
-            <LeftMenuSection>
+            {pathName !== "/admin/login" &&<LeftMenuSection>
                 <LeftMenu />
-            </LeftMenuSection>
+            </LeftMenuSection>}
             <ContentWrapper>
-                <TopBar />
+               { pathName !== "/admin/login" && <TopBar />}
                 <Content>
                     {children}
                 </Content>
