@@ -645,6 +645,9 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
         completeObject["rewardGiftDesc"] = "";
         completeObject["isRepeat"] = true;
         completeObject["isMemberLottery"] = false;
+        completeObject["lotteryStartDay"] = "monday";
+        completeObject["lotteryEndDay"] = "friday";
+        
         onCreateLottery(completeObject);
     };
 

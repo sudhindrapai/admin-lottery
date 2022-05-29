@@ -30,9 +30,11 @@ export const createLottery = createAsyncThunk(
         })
         .then((data) => {
             console.log(data);
-            dispatch(toggleLotteryCreateState({
-                isCreated: true
-            }))
+            if (data.statusCode === 200){
+                dispatch(toggleLotteryCreateState({
+                    isCreated: true
+                }));
+            }
         })
     }
 );
