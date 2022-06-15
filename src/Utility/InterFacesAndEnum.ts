@@ -83,17 +83,19 @@ export interface FormElement {
 }
 
 export interface LotteryDetail {
-    lotteryId: number,
-    lotteryName: string,
-    lotteryDesc: string,
-    lotteryTypeId: number,
-    lotteryImage: string,
-    isRepeat: boolean,
-    lotteryStartDate: Date,
-    lotteryEndDate: Date,
-    lotteryStartDay: Date,
-    lotteryEndDay: Date,
-    isActive: boolean
+    lotteryGameId: number,
+      lotteryGameNo: number | null,
+      rewardType: string,
+      rewardAmount: number,
+      rewardGiftName: string | null,
+      rewardGiftDesc: string | null,
+      lotteryGameStartDate: Date,
+      lotteryGameEndDate: Date,
+      isActive: boolean,
+      isMemberLottery: boolean,
+      noOfUsersJoined: number,
+      amountCollected: number,
+      lotteryGameStatus: string
 }
 
 export enum NotificationType {

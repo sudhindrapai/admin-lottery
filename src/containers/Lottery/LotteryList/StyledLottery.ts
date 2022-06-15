@@ -173,8 +173,7 @@ outline: none;
 border-radius: 0 6px 6px 0;
 :active {
     outline: none;
-}
-`;
+}`;
 
 
 // Icons 
@@ -222,4 +221,27 @@ font-size: 16px;
 color: #000000;
 font-weight: 400;
 margin-top: 10px;
+`;
+
+
+export const Live = styled.span`
+padding: 1px 8px 2px 8px;
+width: 53px;
+height: 20px;
+background: rgba(33, 150, 83, 0.1);
+border: 1px solid #219653;
+border-radius: 4px;
+font-size: 12px;
+color: #219653;
+`;
+
+export const Upcoming = styled.span`
+padding: 1px 8px 2px 8px;
+width: 78px;
+height: 20px;
+background: rgba(235, 87, 87, 0.1);
+border: 1px solid #EB5757;
+border-radius: 4px;
+font-size: 12px;
+color: #EB5757;
 `;

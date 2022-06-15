@@ -1,8 +1,19 @@
 import styled from "styled-components";
-import {Dashboard} from '@styled-icons/material/Dashboard';
+import {Simpleanalytics} from '@styled-icons/simple-icons/Simpleanalytics';
+import {Ticket} from '@styled-icons/zondicons/Ticket';
+import {Hammer} from '@styled-icons/fa-solid/Hammer';
+import {UserSolidCircle} from '@styled-icons/zondicons/UserSolidCircle';
+import {Speakerphone} from '@styled-icons/heroicons-outline/Speakerphone';
+import {Notification} from '@styled-icons/zondicons/Notification';
+import {SettingsSuggest} from '@styled-icons/material/SettingsSuggest';
+import {DotSingle} from '@styled-icons/entypo/DotSingle';
 
 interface NavItemProps {
     isActive: boolean
+}
+
+interface SubmenuProps {
+    isSubmenuVisible: boolean
 }
 
 export const StyledWrapper =styled.nav`
@@ -33,6 +44,7 @@ width: 100%;
 box-sizing: border-box;
 padding: 0 10px;
 margin-top: 30px;
+overflow-y: scroll;
 `;
 
 export const NavMenuItem = styled.div`
@@ -60,6 +72,14 @@ font-size: 12px;
 `;
 
 export const NavLabel = styled.div`
+width: 100%;
+box-sizing: border-box;
+display:flex;
+flex-flow: column;
+align-items: flex-start;
+`;
+
+export const LabelAndArrow = styled.div`
 display: flex;
 flex-flow: row;
 align-items: center;
@@ -67,7 +87,55 @@ justify-content: flex-start;
 font-size: 16px;
 `;
 
-export const DashboardIcon = styled(Dashboard)`
+export const Option = styled.div`
+font-size: 14px;
+color: #979797;
+padding: 10px 0 10px 44px;
+`;
+
+export const SubmenuContainer = styled.div`
+width: 100%;
+box-sizing: border-box;
+display: ${(props:SubmenuProps) => props.isSubmenuVisible ? 'block': 'none' };
+background-color: #ffffff;
+cursor: pointer;
+`;
+
+export const DashboardIcon = styled(Simpleanalytics)`
 color: ${(props:NavItemProps) => props.isActive ? '#3a57e8' : '#000000'};
-height: 24px;
+height: 18px;
+`;
+
+export const LotteryIcon = styled(Ticket)`
+color: ${(props:NavItemProps) => props.isActive ? '#3a57e8' : '#000000'};
+height: 18px;
+`;
+
+export const HammerIcon = styled(Hammer)`
+color: ${(props:NavItemProps) => props.isActive ? '#3a57e8' : '#000000'};
+height: 18px;
+`;
+
+export const UserSolidCircleIcon = styled(UserSolidCircle)`
+color: ${(props:NavItemProps) => props.isActive ? '#3a57e8' : '#000000'};
+height: 18px;
+`;
+
+export const SpeakerphoneIcon = styled(Speakerphone)`
+color:${(props:NavItemProps) => props.isActive ? '#3a57e8' : '#000000'};
+height: 18px;
+`;
+
+export const NotificationIcon = styled(Notification)`
+color:${(props:NavItemProps) => props.isActive ? '#3a57e8' : '#000000'};
+height: 18px;
+`;
+
+export const SettingsSuggestIcon = styled(SettingsSuggest)`
+color:${(props:NavItemProps) => props.isActive ? '#3a57e8' : '#000000'};
+height: 18px;
+`;
+
+export const DotSingleIcon = styled(DotSingle)`
+height: 18px
 `;

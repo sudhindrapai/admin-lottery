@@ -7,7 +7,11 @@ import LotteryList from './containers/Lottery/LotteryList/LotteryList';
 import CreateRepeatedLottery from './containers/Lottery/CreateLottery/RepeatedLottery/CreateLottery';
 import CreateOneTimeLottery from './containers/Lottery/CreateLottery/OneTimeLottery/CreateOneTimeLottery';
 import ViewLottery from './containers/Lottery/ViewLottery/ViewLottery';
+import GamesList from './containers/Lottery/TemplateList/LotteryTemplateList';
 import LoginForm from './containers/Login/Login';
+import UpdateLottery from './containers/Lottery/UpdateLottery/UpdateLottery';
+import UpdateLotteryTemplate from './containers/Lottery/UpdateTemplate/UpdateTemplate';
+import UpdateOneTimeLotteryTemplate from './containers/Lottery/UpdateTemplate/UpdateOneTimeTemplate';
 
 export const adminRouts = {
     rootPath: "/",
@@ -24,7 +28,11 @@ export const adminRouts = {
     usersList:"/admin/users",
     viewUser:"/admin/users/view",
     settings:"/admin/settings",
-    login:"/admin/login"
+    gamesList:"/admin/games/list",
+    login:"/admin/login",
+    updateLottery: "/admin/lottery/update-lottery",
+    updateTemplate: "/admin/lottery/update-template/:lotteryId",
+    updateOneTimeTemplate: "/admin/lottery/update-onetime-template/:lotteryId"
 }
 
 const AppRoute:FC = () => {
@@ -33,9 +41,13 @@ const AppRoute:FC = () => {
             <Route path={adminRouts.rootPath} element={<Dashboard />} />
             <Route path={adminRouts.dashboard} element={<Dashboard />} />
             <Route path={adminRouts.lotteryList} element={<LotteryList />} />
+            <Route path={adminRouts.gamesList} element={<GamesList />} />
             <Route path={adminRouts.viewLottery} element={<ViewLottery />} />
             <Route path={adminRouts.createRepeatedLottery} element={<CreateRepeatedLottery />} />
             <Route path={adminRouts.createOneTimeLottery} element={<CreateOneTimeLottery />} />
+            <Route path={adminRouts.updateLottery} element={<UpdateLottery />} />
+            <Route path={adminRouts.updateTemplate} element={<UpdateLotteryTemplate />} />
+            <Route path={adminRouts.updateOneTimeTemplate} element={<UpdateOneTimeLotteryTemplate />} />
             <Route path={adminRouts.login} element={<LoginForm />} />
             <Route path={"*"} element={<h3>404</h3>} />
         </Routes>

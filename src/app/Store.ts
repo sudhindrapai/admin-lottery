@@ -3,12 +3,16 @@ import {configureStore} from '@reduxjs/toolkit';
 import LoginSlice from '../features/loginSlice';
 import LotteryListSlice from '../features/lotteryListSlice';
 import CreateLottery from '../features/createLotterySlide';
+import TemplateList from '../features/templateListslice';
+import UpdateTemplate from '../features/updateTemplateSlice';
 
 const store = configureStore({
     reducer:{
         login: LoginSlice,
        lotteryList: LotteryListSlice,
-       createLottery: CreateLottery
+       createLottery: CreateLottery,
+       templateList: TemplateList,
+       updateTemplate: UpdateTemplate
     }
 })
 

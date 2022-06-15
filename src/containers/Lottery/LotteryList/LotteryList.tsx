@@ -7,7 +7,9 @@ import Button from '../../../components/UI/Button/Button';
 import {useNavigate} from 'react-router-dom';
 import {adminRouts} from '../../../routs';
 import {transformDate} from '../../../Utility/Utility';
-import Modal from '../../../components/Modal/Modal'
+import Modal from '../../../components/Modal/Modal';
+import TableHeaderComponent from '../../../components/TableHeader/TableHeader';
+import TableFooter from '../../../components/TableFooter/TableFooter';
 import {BreadcrumbSection, 
     TableWrapper,
     Table, 
@@ -15,7 +17,8 @@ import {BreadcrumbSection,
     ContentSection, 
     Tbody, NumberOfUsers, TabMenuContainer, MenuOption,
      DropdownContainer, DropdownOptionsContainer, DropdownOption, 
-     DropdownActiveOption, SearchSectionContainer, Input, LotteryOptionsList, LotteryOption, LotteryTypeTitle} from './StyledLottery';
+     DropdownActiveOption, SearchSectionContainer, Input, LotteryOptionsList, LotteryOption,
+      LotteryTypeTitle, Live, Upcoming} from './StyledLottery';
 import {ChevronDownIcon, FilterIcon} from './StyledLottery';
 
 import oneTimeLotteryImgSrc from '../../../assets/images/oneTimeLottery.svg';
@@ -32,28 +35,54 @@ enum ButtonVariant {
     primaryLink = "primaryLink"
 }
 
+interface TableHeaders{
+    label: string,
+    isSortRequired:boolean
+    isAscSorted:boolean,
+    id:string
+}
+
+
+class TableHeader{
+    constructor(public label:string, public isSortRequired: boolean, public isAscSorted: boolean, public isDscSorted:boolean, public id: string){}
+}
+
+let tableHeaders = [
+    new TableHeader("Lottery ID", true, true, false, 'Lottery_ID'),
+    new TableHeader("Lottery price", true, false, false, 'Lottery_price'),
+    new TableHeader("Start date", false, false, false, 'Start_date'),
+    new TableHeader("End date", false, false, false, 'End_date'),
+    new TableHeader("Received amount", true, false, false, 'Received_amount'),
+    new TableHeader("users joined", true, false, false, 'users_joined'),
+    new TableHeader("Status", false, false, false, 'Status')
+]
+
 let tabMenuViewList = [
     {
         label: "All",
         id: "all_1",
+        queryParam:"A",
         isActive: true,
         isSerarchViewActive: true
     },
     {
         label: "Winner Lotteries",
         id: "winnerLotteries_2",
+        queryParam:"E",
         isActive: false,
         isSerarchViewActive: false
     },
     {
         label: "Cancelled Lotteries",
         id: "cancelledLotteries_3",
+        queryParam:"D",
         isActive: false,
         isSerarchViewActive: false
     },
     {
         label: "Pending Lotteries",
         id: "pendingLotteries_3",
+        queryParam:"U",
         isActive: false,
         isSerarchViewActive: false
     }
@@ -68,12 +97,14 @@ const LotteryList:FC = () => {
 
     const [tabMenu, setTabMenu] = useState(tabMenuViewList);
 
+    const [tableHeaderValues, setHeaderValues] = useState(tableHeaders);
+
     let lotteryList = useSelector((state: RootState) => state.lotteryList.lotteryList);
     let page = useSelector((state: RootState) => state.lotteryList.page);
 
     useEffect(() => {
-        dispatch(getLotteryList())
-    },[])
+        getLotteryData(tabMenu);
+    },[]);
 
     const redirectToCreateLottery = (type: number):void => {
         if (type === 1) {
@@ -87,29 +118,29 @@ const LotteryList:FC = () => {
         navigate(`/admin/lottery/view/${lotteryId}`, {state:lotteryId});
     };
 
-    const toggleActiveStateOfDropdown = (selectedMenuId:string) => {
-        let updateMenu = tabMenu.map((menuObj) => {
-            return {
-                ...menuObj,
-                isSerarchViewActive: menuObj.id === selectedMenuId
-            }
-        });
-        setTabMenu(updateMenu);
-    }
+    // const toggleActiveStateOfDropdown = (selectedMenuId:string) => {
+    //     let updateMenu = tabMenu.map((menuObj) => {
+    //         return {
+    //             ...menuObj,
+    //             isSerarchViewActive: menuObj.id === selectedMenuId
+    //         }
+    //     });
+    //     setTabMenu(updateMenu);
+    // }
 
-    let searchDropdown = tabMenu.map((menuObj) => {
-        return <DropdownOption onClick={() => {toggleActiveStateOfDropdown(menuObj.id)}}>
-            {menuObj.label}
-        </DropdownOption>
-    });
+    // let searchDropdown = tabMenu.map((menuObj) => {
+    //     return <DropdownOption onClick={() => {toggleActiveStateOfDropdown(menuObj.id)}}>
+    //         {menuObj.label}
+    //     </DropdownOption>
+    // });
 
-    let activeDropdownOptionObj = tabMenu.filter((menuObj) => {
-        return menuObj.isSerarchViewActive;
-    })[0];
+    // let activeDropdownOptionObj = tabMenu.filter((menuObj) => {
+    //     return menuObj.isSerarchViewActive;
+    // })[0];
 
-    let activeDropdownLabel = <DropdownActiveOption>
-        {activeDropdownOptionObj.label} 
-    </DropdownActiveOption>
+    // let activeDropdownLabel = <DropdownActiveOption>
+    //     {activeDropdownOptionObj.label} 
+    // </DropdownActiveOption>
 
     const updateTabMenuOption = (selectedMenuId) => {
         let updatedMenuArray = tabMenu.map((menuObj) => {
@@ -118,8 +149,17 @@ const LotteryList:FC = () => {
                 isActive: menuObj.id === selectedMenuId
             }
         });
+        getLotteryData(updatedMenuArray)
         setTabMenu(updatedMenuArray);
     };
+
+    const getLotteryData = (tabObj) => {
+        let selectedObj = tabObj.filter((tabObj) => {
+            return tabObj.isActive
+        })[0];
+
+        dispatch(getLotteryList(selectedObj.queryParam));
+    }
 
     let tabMenuView = tabMenu.map((menuObj) => {
         return <MenuOption onClick={() => {updateTabMenuOption(menuObj.id)}} 
@@ -127,21 +167,32 @@ const LotteryList:FC = () => {
     });
 
     let lotteries = lotteryList.map((lotteryObj) => {
-        let lotterIdBtn =  <Button title={`#${lotteryObj.lotteryId}`} 
+        let lotterIdBtn =  <Button title={`#${lotteryObj.lotteryGameId}`} 
         btnSize={ButtonSize.sm} btnVariant={ButtonVariant.primaryLink} 
-        clicked={() => {redirectToLotteryDetail(lotteryObj.lotteryId)}} />
+        clicked={() => {redirectToLotteryDetail(lotteryObj.lotteryGameId)}} />;
+
+        let lotteryStatusTag = lotteryObj.lotteryGameStatus === "C" ? <Live>
+            Live
+        </Live> : lotteryObj.lotteryGameStatus === "U" ? <Upcoming>
+            Not Live
+        </Upcoming> : null;
+
         return<tr>
             <td>
                 {lotterIdBtn}
                 </td>
-            <td>&#x24; {lotteryObj.lotteryId}</td>
-            <td>{transformDate(lotteryObj.lotteryStartDate)}</td>
-            <td>{transformDate(lotteryObj.lotteryEndDate)}</td>
-            <td>&#x24; {lotteryObj.lotteryId}</td>
-            <td><NumberOfUsers>{lotteryObj.lotteryId}</NumberOfUsers></td>
-            <td>{lotteryObj.lotteryId}</td>
+            <td>&#x24; {lotteryObj.lotteryGameId}</td>
+            <td>{transformDate(lotteryObj.lotteryGameStartDate)}</td>
+            <td>{transformDate(lotteryObj.lotteryGameEndDate)}</td>
+            <td>&#x24; {lotteryObj.rewardAmount}</td>
+            <td><NumberOfUsers>{lotteryObj.noOfUsersJoined}</NumberOfUsers></td>
+            <td>{lotteryStatusTag}</td>
             </tr>
     });
+
+    const updatePageNumber = (pageNumber:number) => {
+        console.log(pageNumber)
+    }
 
     return <Fragment>
         <Modal isOpen={createLotteryModal} 
@@ -170,12 +221,12 @@ const LotteryList:FC = () => {
      </BreadcrumbSection>
      <ContentSection>
          <SearchSectionContainer>
-         <DropdownContainer>
+         {/* <DropdownContainer>
          <FilterIcon /> {activeDropdownLabel} <ChevronDownIcon/>
              <DropdownOptionsContainer>
                  {searchDropdown}
              </DropdownOptionsContainer>
-        </DropdownContainer>
+        </DropdownContainer> */}
         <Input placeholder={"Search"} />
         </SearchSectionContainer>
 
@@ -184,36 +235,21 @@ const LotteryList:FC = () => {
          </TabMenuContainer>
      <TableWrapper>
          <Table>
-         <tr>
-             <Th>
-                 lottery Id
-             </Th>
-             <Th>
-                 lottery Price
-             </Th>
-             <Th>
-                 start date
-             </Th>
-             <Th>
-                 end date
-             </Th>
-             <Th>
-                 Received Amount
-             </Th>
-             <Th>
-                useer Joined
-             </Th>
-             <Th>
-                 Status
-             </Th>
-         </tr>
+         <thead>
+             <TableHeaderComponent headers={tableHeaderValues} onToggleSort={() => {}} />
+         </thead>
          <Tbody>
              {lotteries}
          </Tbody>
          </Table>
+         <TableFooter totalCount={lotteries.length} currentPageNumber={1} updatePageNumber={updatePageNumber} />
      </TableWrapper>
      </ContentSection>
     </Fragment>
 };
 
 export default LotteryList
+
+function queryParams(queryParams: any, string: any): import("@reduxjs/toolkit").AsyncThunkAction<void, string, {}> {
+    throw new Error('Function not implemented.');
+}

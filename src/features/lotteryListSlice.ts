@@ -23,8 +23,8 @@ interface getLotteryListResponse {
 
 export const getLotteryList = createAsyncThunk(
     'lottery/get',
-    async (queryParams, {dispatch}) => {
-        await fetch(endpoint.getLotteryList, {
+    async (queryParams:string, {dispatch}) => {
+        await fetch(`${endpoint.getLotteryList}?lotteryType=${queryParams}`, {
             method: 'GET',
             headers:{
                 Authorization: `Bearer ${getLocalStorage(localStorageActiontype.GET_ACCESS_TOKEN)}`,
@@ -35,9 +35,16 @@ export const getLotteryList = createAsyncThunk(
             return response.json();
         })
         .then((response) => {
-            dispatch(setLotteryList({
-                lotteryList:response.result
-            }))
+            console.log(response)
+            if (response.statusCode === 200) {
+                dispatch(setLotteryList({
+                    lotteryList:response.result
+                }));
+            } else if (response.statusCode === 504) {
+                dispatch(setLotteryList({
+                    lotteryList:[]
+                }));
+            }
         })
     }
 );

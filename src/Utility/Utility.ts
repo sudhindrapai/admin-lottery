@@ -227,3 +227,5 @@ export const transformDate = (dateObj:Date): string => {
     let date = new Date(dateObj);
     return `${date.getDate()} ${monthNames(date.getMonth())} ${date.getFullYear()}`
 };
+
+export const sortTableValues = () => {}
