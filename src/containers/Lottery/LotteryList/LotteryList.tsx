@@ -229,7 +229,6 @@ const LotteryList:FC = () => {
         </DropdownContainer> */}
         <Input placeholder={"Search"} />
         </SearchSectionContainer>
-
          <TabMenuContainer>
              {tabMenuView}
          </TabMenuContainer>

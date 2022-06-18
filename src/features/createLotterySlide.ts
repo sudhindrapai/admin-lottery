@@ -43,7 +43,7 @@ interface ToggleLotteryCreate {
     isCreated: boolean
 }
 
-const createLotterySlide = createSlice({
+const createLotterySlice = createSlice({
     name:'create lottery',
     initialState: createLotteryState,
     reducers:{
@@ -56,5 +56,5 @@ const createLotterySlide = createSlice({
     }
 });
 
-export const {toggleLotteryCreateState} = createLotterySlide.actions;
-export default createLotterySlide.reducer
+export const {toggleLotteryCreateState} = createLotterySlice.actions;
+export default createLotterySlice.reducer

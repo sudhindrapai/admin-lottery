@@ -77,9 +77,21 @@ const LeftMenu:FC = () => {
             iconName: 'HammerIcon',
             position: 3,
             isVisible:true,
-            routePath: adminRouts.auctionList,
-            isSubmenuExists: false,
-            isSubmenuExpanded: false
+            routePath: "#",
+            isSubmenuExists: true,
+            isSubmenuExpanded: true,
+            submenu:[
+                {
+                    submenuLabel: "Auctions",
+                    isActive: false,
+                    routePath: adminRouts.auctionList
+                },
+                {
+                    submenuLabel: "New Auctions",
+                    isActive: false,
+                    routePath: adminRouts.auctionRequestList
+                }
+            ]
         },
         {
             label: "Users",

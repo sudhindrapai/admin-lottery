@@ -12,6 +12,9 @@ import LoginForm from './containers/Login/Login';
 import UpdateLottery from './containers/Lottery/UpdateLottery/UpdateLottery';
 import UpdateLotteryTemplate from './containers/Lottery/UpdateTemplate/UpdateTemplate';
 import UpdateOneTimeLotteryTemplate from './containers/Lottery/UpdateTemplate/UpdateOneTimeTemplate';
+import AuctionList from './containers/Auction/AuctionsList/AuctionList';
+import AuctionRequests from './containers/Auction/NewAuctionsList/NewAuctionList';
+import CreateAuction from './containers/Auction/CreateAuction/CreateAuction';
 
 export const adminRouts = {
     rootPath: "/",
@@ -22,6 +25,7 @@ export const adminRouts = {
     viewLottery:"/admin/lottery/view/:lotteryId",
     modifyLottery:"/admin/lottery/update",
     auctionList:"/admin/auction/list",
+    auctionRequestList:"/admin/auction/request-list",
     createAuction:"/admin/auction/create",
     viewAuction:"/admin/auction/view",
     modifyAuction:"/admin/auction/update",
@@ -32,7 +36,7 @@ export const adminRouts = {
     login:"/admin/login",
     updateLottery: "/admin/lottery/update-lottery",
     updateTemplate: "/admin/lottery/update-template/:lotteryId",
-    updateOneTimeTemplate: "/admin/lottery/update-onetime-template/:lotteryId"
+    updateOneTimeTemplate: "/admin/lottery/update-onetime-template/:lotteryId",
 }
 
 const AppRoute:FC = () => {
@@ -49,6 +53,9 @@ const AppRoute:FC = () => {
             <Route path={adminRouts.updateTemplate} element={<UpdateLotteryTemplate />} />
             <Route path={adminRouts.updateOneTimeTemplate} element={<UpdateOneTimeLotteryTemplate />} />
             <Route path={adminRouts.login} element={<LoginForm />} />
+            <Route path={adminRouts.auctionList} element={<AuctionList />} />
+            <Route path={adminRouts.auctionRequestList} element={<AuctionRequests />} />
+            <Route path={adminRouts.createAuction} element={<CreateAuction />} />
             <Route path={"*"} element={<h3>404</h3>} />
         </Routes>
     )
