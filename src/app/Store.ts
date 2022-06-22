@@ -6,6 +6,7 @@ import CreateLottery from '../features/createLotterySlide';
 import TemplateList from '../features/templateListslice';
 import UpdateTemplate from '../features/updateTemplateSlice';
 import Auction from '../features/auctionList';
+import ImageUploader from '../features/imageUploaderSlice';
 
 const store = configureStore({
     reducer:{
@@ -14,7 +15,8 @@ const store = configureStore({
        createLottery: CreateLottery,
        templateList: TemplateList,
        updateTemplate: UpdateTemplate,
-       auction:Auction
+       auction:Auction,
+       images:ImageUploader
     }
 })
 

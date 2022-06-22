@@ -1,8 +1,7 @@
 import TextField from '@mui/material/TextField';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 import React from 'react';
 
@@ -25,9 +24,9 @@ const DatePickerComponent:React.FC<DatepickerProps> = ({label, name, value, onCh
   };
 
     return<LocalizationProvider dateAdapter={AdapterMoment}>
-    <DesktopDatePicker
+    <DateTimePicker
           label={label}
-          inputFormat="DD/mm/yy"
+          inputFormat="DD/mm/yy h:mm:ss a"
           value={value}
           onChange={handleChange}
           renderInput={(params) => <TextField {...params} fullWidth={true} />}

@@ -1,0 +1,56 @@
+import styled from 'styled-components';
+
+export const Wrapper = styled.div`
+width: 100%;
+box-sizing: border-box;
+margin-bottom: 24px;
+`;
+
+export const Container = styled.div`
+width: 100%;
+box-sizing: border-box;
+display: flex;
+flex-flow: column;
+align-items: flex-start;
+justify-content: flex-start;
+background-color: #ffffff;
+border-radius: 8px;
+box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.12);
+`;
+
+export const TitleWrapper = styled.div`
+width: 100%;
+box-sizing: border-box;
+display: flex;
+flex-flow: row nowrap;
+align-items: center;
+justify-content: space-between;
+padding: 24px;
+border-bottom: 1px solid #E9EDF5;
+`;
+
+export const Title = styled.div`
+font-weight: 500;
+font-size: 18px;
+letter-spacing: 0.0024em;
+color: #200E32;
+`;
+
+export const AddBtn = styled.div`
+font-weight: 400;
+font-size: 18px;
+letter-spacing: 0.0024em;
+color: #3A57E8;
+cursor: pointer;
+`;
+
+export const EmptyImgSection = styled.div`
+width: 100%;
+box-sizing: border-box;
+padding: 65px;
+text-align: center;
+font-weight: 400;
+font-size: 18px;
+line-height: 20px;
+color: #ADB5BD;
+`;
