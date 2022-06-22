@@ -15,6 +15,15 @@ import UpdateOneTimeLotteryTemplate from './containers/Lottery/UpdateTemplate/Up
 import AuctionList from './containers/Auction/AuctionsList/AuctionList';
 import AuctionRequests from './containers/Auction/NewAuctionsList/NewAuctionList';
 import CreateAuction from './containers/Auction/CreateAuction/CreateAuction';
+import AuctionDetail from './containers/Auction/AuctionDetail/AuctionDetail';
+
+const routeToAuctionDetail = (id:number | null) => {
+    if (id === null) {
+        return "/admin/auction/auction-detail/:auctionId"
+    } else {
+        return `/admin/auction/auction-detail/${id}`
+    }
+}
 
 export const adminRouts = {
     rootPath: "/",
@@ -37,6 +46,7 @@ export const adminRouts = {
     updateLottery: "/admin/lottery/update-lottery",
     updateTemplate: "/admin/lottery/update-template/:lotteryId",
     updateOneTimeTemplate: "/admin/lottery/update-onetime-template/:lotteryId",
+    updateAuction:routeToAuctionDetail
 }
 
 const AppRoute:FC = () => {
@@ -56,6 +66,7 @@ const AppRoute:FC = () => {
             <Route path={adminRouts.auctionList} element={<AuctionList />} />
             <Route path={adminRouts.auctionRequestList} element={<AuctionRequests />} />
             <Route path={adminRouts.createAuction} element={<CreateAuction />} />
+            <Route path={adminRouts.updateAuction(null)} element={<AuctionDetail />} />
             <Route path={"*"} element={<h3>404</h3>} />
         </Routes>
     )

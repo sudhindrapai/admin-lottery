@@ -90,7 +90,9 @@ const AuctionList = () => {
         navigate(path);
     };
 
-    const redirectToDetailView = (auctionId) => {}
+    const redirectToDetailView = (auctionId:number) => {
+        navigate(adminRouts.updateAuction(auctionId));
+    }
 
     const updateTabMenuOption = (selectedMenuId) => {
         let updatedMenuArray = tabMenu.map((menuObj) => {

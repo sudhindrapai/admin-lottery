@@ -1,0 +1,713 @@
+import {FC, Fragment, useState} from 'react';
+import ViewHeader from '../../../components/ViewHeader/ViewHeader';
+
+import ImageUploader from '../../../components/ImageUploader/ImageUploader'
+import FormBuilder from '../../FormBuilder/FormBuilder';
+import Button from '../../../components/UI/Button/Button';
+
+import {updateFormInputState, validateForm, updateFormSelectState, updateFormTimeState, updateFormDate} from '../../../Utility/Utility';
+import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement} from '../../../Utility/InterFacesAndEnum';
+
+import {adminRouts} from '../../../routs'
+
+import {CreateLotteryFirstSection, CreateLotterySecondSection} from '../../Forms/Lottery/CreateLottery/RepeatedLottery/StyledCreateLottery';
+import {HeaderView,FormContainer, FormWrapper, SectionTitle, FormBody, TwoSections, ActionBtn} from '../CreateAuction/StyledCreateAuction';
+import {StatusContainer, StatusBody, StatusTitle, Value, TwoSection} from './StyledAuctionDetail';
+
+interface FormState {
+    form: FormElement[],
+    isValidForm: boolean
+} 
+
+enum ButtonSize {
+    sm = "small",
+    md = "medium",
+    lg = "large"
+}
+enum ButtonVariant {
+    primaryFilled = "primary-filled",
+    secondary = "secondary",
+    primaryLink = "primaryLink"
+}
+
+const AuctionDetail: FormState = {
+    form:[{
+        elementType:FormElementType.input,
+            value:"",
+            id:"auctionId",
+            isRequired:true,
+            fullWidth: true,
+            isCustomValidationRequred: true,
+            inputVariant: InputVariant.outlined,
+            inputType: InputTypes.text,
+            customValidationType: customValidationType.numberValidation,
+            isValidInput:false,
+            isTouched:false,
+            errorMessage:"",
+            label:"Auction Id",
+            radioGroupValues:[],
+            isPasswordHidden:true,
+            dropdownValues:[],
+            selectedTime: null,
+            slectedDate: null
+    }, 
+    {elementType:FormElementType.input,
+        value:"",
+        id:"title",
+        isRequired:true,
+        fullWidth: true,
+        isCustomValidationRequred: true,
+        inputVariant: InputVariant.outlined,
+        inputType: InputTypes.text,
+        customValidationType: customValidationType.numberValidation,
+        isValidInput:false,
+        isTouched:false,
+        errorMessage:"",
+        label:"Title",
+        radioGroupValues:[],
+        isPasswordHidden:true,
+        dropdownValues:[],
+        selectedTime: null,
+        slectedDate: null
+},
+{elementType:FormElementType.input,
+    value:"",
+    id:"description",
+    isRequired:true,
+    fullWidth: true,
+    isCustomValidationRequred: true,
+    inputVariant: InputVariant.outlined,
+    inputType: InputTypes.text,
+    customValidationType: customValidationType.numberValidation,
+    isValidInput:false,
+    isTouched:false,
+    errorMessage:"",
+    label:"Description (Optional)",
+    radioGroupValues:[],
+    isPasswordHidden:true,
+    dropdownValues:[],
+    selectedTime: null,
+    slectedDate: null
+},
+{elementType:FormElementType.input,
+    value:"",
+    id:"auctionPrice",
+    isRequired:true,
+    fullWidth: true,
+    isCustomValidationRequred: true,
+    inputVariant: InputVariant.outlined,
+    inputType: InputTypes.number,
+    customValidationType: customValidationType.numberValidation,
+    isValidInput:false,
+    isTouched:false,
+    errorMessage:"",
+    label:"Number",
+    radioGroupValues:[],
+    isPasswordHidden:true,
+    dropdownValues:[],
+    selectedTime: null,
+    slectedDate: null
+}],
+    isValidForm: true
+};
+
+const ScheduleDays: FormState = {
+    form:[{
+        elementType:FormElementType.datePicker,
+            value:"",
+            id:"startDate",
+            isRequired:true,
+            fullWidth: true,
+            isCustomValidationRequred: true,
+            inputVariant: InputVariant.outlined,
+            inputType: InputTypes.date,
+            customValidationType: customValidationType.numberValidation,
+            isValidInput:false,
+            isTouched:false,
+            errorMessage:"",
+            label:"Start Date",
+            radioGroupValues:[],
+            isPasswordHidden:true,
+            dropdownValues:[],
+            selectedTime: null,
+            slectedDate: null
+    }, 
+    {elementType:FormElementType.datePicker,
+        value:"",
+        id:"endDate",
+        isRequired:true,
+        fullWidth: true,
+        isCustomValidationRequred: true,
+        inputVariant: InputVariant.outlined,
+        inputType: InputTypes.date,
+        customValidationType: customValidationType.numberValidation,
+        isValidInput:false,
+        isTouched:false,
+        errorMessage:"",
+        label:"End Date",
+        radioGroupValues:[],
+        isPasswordHidden:true,
+        dropdownValues:[],
+        selectedTime: null,
+        slectedDate: null
+}],
+    isValidForm: true
+}
+
+const AddressDetails: FormState = {
+    form:[{
+        elementType:FormElementType.input,
+            value:"",
+            id:"location",
+            isRequired:true,
+            fullWidth: true,
+            isCustomValidationRequred: true,
+            inputVariant: InputVariant.outlined,
+            inputType: InputTypes.text,
+            customValidationType: customValidationType.numberValidation,
+            isValidInput:false,
+            isTouched:false,
+            errorMessage:"",
+            label:"Location",
+            radioGroupValues:[],
+            isPasswordHidden:true,
+            dropdownValues:[],
+            selectedTime: null,
+            slectedDate: null
+    }, 
+    {elementType:FormElementType.input,
+        value:"",
+        id:"State",
+        isRequired:true,
+        fullWidth: true,
+        isCustomValidationRequred: true,
+        inputVariant: InputVariant.outlined,
+        inputType: InputTypes.text,
+        customValidationType: customValidationType.numberValidation,
+        isValidInput:false,
+        isTouched:false,
+        errorMessage:"",
+        label:"State",
+        radioGroupValues:[],
+        isPasswordHidden:true,
+        dropdownValues:[],
+        selectedTime: null,
+        slectedDate: null
+},
+{elementType:FormElementType.input,
+    value:"",
+    id:"country",
+    isRequired:true,
+    fullWidth: true,
+    isCustomValidationRequred: true,
+    inputVariant: InputVariant.outlined,
+    inputType: InputTypes.text,
+    customValidationType: customValidationType.numberValidation,
+    isValidInput:false,
+    isTouched:false,
+    errorMessage:"",
+    label:"Country",
+    radioGroupValues:[],
+    isPasswordHidden:true,
+    dropdownValues:[],
+    selectedTime: null,
+    slectedDate: null
+}],
+    isValidForm: true
+};
+
+const UserDetails: FormState = {
+    form:[{
+        elementType:FormElementType.input,
+            value:"",
+            id:"name",
+            isRequired:true,
+            fullWidth: true,
+            isCustomValidationRequred: true,
+            inputVariant: InputVariant.outlined,
+            inputType: InputTypes.text,
+            customValidationType: customValidationType.numberValidation,
+            isValidInput:false,
+            isTouched:false,
+            errorMessage:"",
+            label:"Name",
+            radioGroupValues:[],
+            isPasswordHidden:true,
+            dropdownValues:[],
+            selectedTime: null,
+            slectedDate: null
+    }, 
+    {elementType:FormElementType.input,
+        value:"",
+        id:"mobile",
+        isRequired:true,
+        fullWidth: true,
+        isCustomValidationRequred: true,
+        inputVariant: InputVariant.outlined,
+        inputType: InputTypes.number,
+        customValidationType: customValidationType.mobileValidation,
+        isValidInput:false,
+        isTouched:false,
+        errorMessage:"",
+        label:"Mobile Number",
+        radioGroupValues:[],
+        isPasswordHidden:true,
+        dropdownValues:[],
+        selectedTime: null,
+        slectedDate: null
+},
+{elementType:FormElementType.input,
+    value:"",
+    id:"emailAddress",
+    isRequired:true,
+    fullWidth: true,
+    isCustomValidationRequred: true,
+    inputVariant: InputVariant.outlined,
+    inputType: InputTypes.email,
+    customValidationType: customValidationType.emailValidation,
+    isValidInput:false,
+    isTouched:false,
+    errorMessage:"",
+    label:"Email",
+    radioGroupValues:[],
+    isPasswordHidden:true,
+    dropdownValues:[],
+    selectedTime: null,
+    slectedDate: null
+}],
+    isValidForm: true
+};
+
+const TicketDetail: FormState = {
+    form:[{
+        elementType:FormElementType.input,
+            value:"",
+            id:"bronze",
+            isRequired:true,
+            fullWidth: true,
+            isCustomValidationRequred: true,
+            inputVariant: InputVariant.outlined,
+            inputType: InputTypes.number,
+            customValidationType: customValidationType.characterValidation,
+            isValidInput:false,
+            isTouched:false,
+            errorMessage:"",
+            label:"Bronze",
+            radioGroupValues:[],
+            isPasswordHidden:true,
+            dropdownValues:[],
+            selectedTime: null,
+            slectedDate: null
+    }, 
+    {elementType:FormElementType.input,
+        value:"",
+        id:"silver",
+        isRequired:true,
+        fullWidth: true,
+        isCustomValidationRequred: true,
+        inputVariant: InputVariant.outlined,
+        inputType: InputTypes.number,
+        customValidationType: customValidationType.characterValidation,
+        isValidInput:false,
+        isTouched:false,
+        errorMessage:"",
+        label:"Silver",
+        radioGroupValues:[],
+        isPasswordHidden:true,
+        dropdownValues:[],
+        selectedTime: null,
+        slectedDate: null
+},
+{elementType:FormElementType.input,
+    value:"",
+    id:"gold",
+    isRequired:true,
+    fullWidth: true,
+    isCustomValidationRequred: true,
+    inputVariant: InputVariant.outlined,
+    inputType: InputTypes.number,
+    customValidationType: customValidationType.characterValidation,
+    isValidInput:false,
+    isTouched:false,
+    errorMessage:"",
+    label:"Gold",
+    radioGroupValues:[],
+    isPasswordHidden:true,
+    dropdownValues:[],
+    selectedTime: null,
+    slectedDate: null
+}, {elementType:FormElementType.input,
+    value:"",
+    id:"platinum",
+    isRequired:true,
+    fullWidth: true,
+    isCustomValidationRequred: true,
+    inputVariant: InputVariant.outlined,
+    inputType: InputTypes.number,
+    customValidationType: customValidationType.characterValidation,
+    isValidInput:false,
+    isTouched:false,
+    errorMessage:"",
+    label:"Platinum",
+    radioGroupValues:[],
+    isPasswordHidden:true,
+    dropdownValues:[],
+    selectedTime: null,
+    slectedDate: null
+}],
+    isValidForm: true
+};
+
+const subTicketDetails: FormState = {
+    form:[{
+        elementType:FormElementType.input,
+            value:"",
+            id:"bronzeSubTickets",
+            isRequired:true,
+            fullWidth: true,
+            isCustomValidationRequred: true,
+            inputVariant: InputVariant.outlined,
+            inputType: InputTypes.number,
+            customValidationType: customValidationType.characterValidation,
+            isValidInput:false,
+            isTouched:false,
+            errorMessage:"",
+            label:"No. of Sub Tickets",
+            radioGroupValues:[],
+            isPasswordHidden:true,
+            dropdownValues:[],
+            selectedTime: null,
+            slectedDate: null
+    }, 
+    {elementType:FormElementType.input,
+        value:"",
+        id:"silverSubTickets",
+        isRequired:true,
+        fullWidth: true,
+        isCustomValidationRequred: true,
+        inputVariant: InputVariant.outlined,
+        inputType: InputTypes.number,
+        customValidationType: customValidationType.characterValidation,
+        isValidInput:false,
+        isTouched:false,
+        errorMessage:"",
+        label:"No. of Sub Tickets",
+        radioGroupValues:[],
+        isPasswordHidden:true,
+        dropdownValues:[],
+        selectedTime: null,
+        slectedDate: null
+},
+{elementType:FormElementType.input,
+    value:"",
+    id:"goldSubTickets",
+    isRequired:true,
+    fullWidth: true,
+    isCustomValidationRequred: true,
+    inputVariant: InputVariant.outlined,
+    inputType: InputTypes.number,
+    customValidationType: customValidationType.characterValidation,
+    isValidInput:false,
+    isTouched:false,
+    errorMessage:"",
+    label:"No. of Sub Tickets",
+    radioGroupValues:[],
+    isPasswordHidden:true,
+    dropdownValues:[],
+    selectedTime: null,
+    slectedDate: null
+}, {elementType:FormElementType.input,
+    value:"",
+    id:"platinumSubTickets",
+    isRequired:true,
+    fullWidth: true,
+    isCustomValidationRequred: true,
+    inputVariant: InputVariant.outlined,
+    inputType: InputTypes.number,
+    customValidationType: customValidationType.characterValidation,
+    isValidInput:false,
+    isTouched:false,
+    errorMessage:"",
+    label:"No. of Sub Tickets",
+    radioGroupValues:[],
+    isPasswordHidden:true,
+    dropdownValues:[],
+    selectedTime: null,
+    slectedDate: null
+}],
+    isValidForm: true
+};
+
+const productDetails: FormState = {
+    form:[{
+        elementType:FormElementType.select,
+            value:"select",
+            id:"type",
+            isRequired:true,
+            fullWidth: true,
+            isCustomValidationRequred: false,
+            inputVariant: InputVariant.outlined,
+            inputType: InputTypes.number,
+            customValidationType: customValidationType.characterValidation,
+            isValidInput:false,
+            isTouched:false,
+            errorMessage:"",
+            label:"Type",
+            radioGroupValues:[],
+            isPasswordHidden:true,
+            dropdownValues:["select", "category one"],
+            selectedTime: null,
+            slectedDate: null
+    }, 
+    {elementType:FormElementType.select,
+        value:"select",
+        id:"category",
+        isRequired:true,
+        fullWidth: true,
+        isCustomValidationRequred: false,
+        inputVariant: InputVariant.outlined,
+        inputType: InputTypes.number,
+        customValidationType: customValidationType.characterValidation,
+        isValidInput:false,
+        isTouched:false,
+        errorMessage:"",
+        label:"Category",
+        radioGroupValues:[],
+        isPasswordHidden:true,
+        dropdownValues:["select", "category"],
+        selectedTime: null,
+        slectedDate: null
+}],
+    isValidForm: true
+};
+
+const CreateAuction:FC = () => {
+    const [auctionDetail, setauctoinDetail] = useState<FormState>(AuctionDetail);
+    const [scheduleDetail, setScheduleDetail] = useState<FormState>(ScheduleDays);
+    const [addressDetail, setAddressDetail] = useState<FormState>(AddressDetails);
+    const [userDetail, setUserDetail] = useState<FormState>(UserDetails);
+    const [ticketdetail, setTicketDetail] = useState<FormState>(TicketDetail);
+    const [subTicketDetail, setSubTicketDetail] = useState<FormState>(subTicketDetails);
+    const [productDetail, setProductDetails] = useState<FormState>(productDetails)
+
+    // ---------- auction detail form ------
+
+    const handleAuctionDetailInput = (event:React.ChangeEvent <HTMLTextAreaElement | HTMLInputElement>):void => {
+        let updatedStateArray = updateFormInputState(event, auctionDetail.form);
+        setauctoinDetail({
+            ...auctionDetail,
+            form: updatedStateArray
+        });
+    }
+
+    const auctionDetailView = <FormBuilder formElements={auctionDetail.form} 
+    onInputChange = {handleAuctionDetailInput} 
+    onSelectValueChange={() => {}} 
+    onChangeDate={() => {}} onChangeTime={() => {}} />;
+
+    // ---------- end auction detail --------
+
+    //  ---------- schedule days -------------
+    const handleScheduleDaysTimeInput = (date: Date, name: string) => {
+        let updatedArray = updateFormDate(date, name, scheduleDetail.form);
+        setScheduleDetail({
+            ...scheduleDetail,
+            form:updatedArray
+        });
+    };
+
+    const scheduleDaysView = <FormBuilder formElements={ScheduleDays.form} 
+    onInputChange = {()=>{}} 
+    onSelectValueChange={() => {}} 
+    onChangeDate={handleScheduleDaysTimeInput} onChangeTime={() => {}} />;
+
+    //  ---------- end schedule days ----------
+
+    //  --------- address details ------------
+    const handleAddressState = (event:React.ChangeEvent <HTMLTextAreaElement | HTMLInputElement>):void => {
+        let updatedStateArray = updateFormInputState(event, addressDetail.form);
+        setAddressDetail({
+            ...addressDetail,
+            form: updatedStateArray
+        });
+    }
+
+    const addressDetailView = <FormBuilder formElements={addressDetail.form} 
+    onInputChange = {handleAddressState} 
+    onSelectValueChange={() => {}} 
+    onChangeDate={() => {}} onChangeTime={() => {}} />;
+
+    // --------- end address details ---------
+
+    //  -------------- user detals -------
+    const handleUserDeailState = (event:React.ChangeEvent <HTMLTextAreaElement | HTMLInputElement>):void => {
+        let updatedStateArray = updateFormInputState(event, userDetail.form);
+        setUserDetail({
+            ...userDetail,
+            form: updatedStateArray
+        });
+    }
+
+    const useDetailView = <FormBuilder formElements={addressDetail.form} 
+    onInputChange = {handleUserDeailState} 
+    onSelectValueChange={() => {}} 
+    onChangeDate={() => {}} onChangeTime={() => {}} />;
+    //  -------------- end user details --------
+
+    //  ------------- ticket details -----------
+
+    const handleTicketDetails = (event:React.ChangeEvent <HTMLTextAreaElement | HTMLInputElement>):void => {
+        let updatedStateArray = updateFormInputState(event, ticketdetail.form);
+        setTicketDetail({
+            ...ticketdetail,
+            form: updatedStateArray
+        });
+    }
+
+    const ticketDetalView = <FormBuilder formElements={ticketdetail.form} 
+    onInputChange = {handleTicketDetails} 
+    onSelectValueChange={() => {}} 
+    onChangeDate={() => {}} onChangeTime={() => {}} />;
+    // ------------- end ticket details --------
+
+    //  ---------- subticket details --------
+    const handleSubTicketDetails = (event:React.ChangeEvent <HTMLTextAreaElement | HTMLInputElement>):void => {
+        let updatedStateArray = updateFormInputState(event, subTicketDetail.form);
+        setSubTicketDetail({
+            ...subTicketDetail,
+            form: updatedStateArray
+        });
+    }
+
+    const subTicketDetalView = <FormBuilder formElements={subTicketDetail.form} 
+    onInputChange = {handleSubTicketDetails} 
+    onSelectValueChange={() => {}} 
+    onChangeDate={() => {}} onChangeTime={() => {}} />;
+    //  ---------- end subticket details --------
+
+    // --------- product details ----------
+    const handleProductDetails = (value: string, name: string) => {
+        let updatedArray = updateFormSelectState(value, name, productDetail.form);
+        setProductDetails({
+            ...productDetail,
+            form:updatedArray
+        });
+    }
+    const productDetailView = <FormBuilder formElements={productDetail.form} 
+    onInputChange = {() => {}} 
+    onSelectValueChange={handleProductDetails} 
+    onChangeDate={() => {}} onChangeTime={() => {}} />;
+    // --------- set product details ------
+
+    const validateForm = () => {};
+
+    return <Fragment>
+        <HeaderView>
+        <ViewHeader title={"Create Auction"} isBackButtonRequired={true} backButtonRedirectionUrl={adminRouts.auctionList} />
+        </HeaderView>
+        <FormContainer>
+            <CreateLotteryFirstSection>
+                <FormWrapper>
+                    <SectionTitle>
+                        Auction Detail
+                    </SectionTitle>
+                    <FormBody>
+                        {auctionDetailView}
+                    </FormBody>
+                </FormWrapper>
+                <FormWrapper>
+                    <SectionTitle>
+                        Schedule Days
+                    </SectionTitle>
+                    <FormBody>
+                        {scheduleDaysView}
+                    </FormBody>
+                </FormWrapper>
+                <FormWrapper>
+                    <SectionTitle>
+                        Address
+                    </SectionTitle>
+                    <FormBody>
+                        {addressDetailView}
+                    </FormBody>
+                </FormWrapper>
+                <ImageUploader />
+                <ActionBtn>
+                <Button
+                title={"Update"}
+            btnSize ={ButtonSize.md} 
+            btnVariant={ButtonVariant.primaryFilled} clicked={validateForm} />
+        </ActionBtn>
+            </CreateLotteryFirstSection>
+            <CreateLotterySecondSection>
+                <StatusContainer>
+                    <TwoSection>
+                    <StatusBody>
+                        <StatusTitle>
+                            Status
+                        </StatusTitle>
+                        <Value>
+                        Live
+                        </Value>
+                    </StatusBody>
+                    <StatusBody>
+                        <StatusTitle>
+                           Ends on
+                        </StatusTitle>
+                        <Value>
+                        01:02:23
+                        </Value>
+                    </StatusBody>
+                    </TwoSection>
+                    <StatusBody>
+                        <StatusTitle>
+                            Auction Type
+                        </StatusTitle>
+                        <Value>
+                        Admin created
+                        </Value>
+                    </StatusBody>
+                    <StatusBody>
+                        <StatusTitle>
+                        Visibility
+                        </StatusTitle>
+                        <Value>
+                        All memberbs
+                        </Value>
+                    </StatusBody>
+                </StatusContainer>
+            <FormWrapper>
+                    <SectionTitle>
+                        User Details
+                    </SectionTitle>
+                    <FormBody>
+                        {useDetailView}
+                    </FormBody>
+                </FormWrapper>
+                <FormWrapper>
+                    <SectionTitle>
+                    ticket Prices
+                    </SectionTitle>
+                    <TwoSections>
+                    <FormBody>
+                        {ticketDetalView}
+                    </FormBody>
+                    <FormBody>
+                        {subTicketDetalView}
+                    </FormBody>
+                    </TwoSections>
+                </FormWrapper>
+                <FormWrapper>
+                    <SectionTitle>
+                        Product details
+                    </SectionTitle>
+                    <FormBody>
+                        {productDetailView}
+                    </FormBody>
+                </FormWrapper>
+            </CreateLotterySecondSection>
+        </FormContainer>
+    </Fragment>
+};
+
+export default CreateAuction
