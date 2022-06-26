@@ -10,3 +10,4 @@ export const getApprovedAuctionList = `${baseUrl}/kingsrings/api/v1/auction/admi
 export const getAuctionRequestList = `${baseUrl}/kingsrings/api/v1/auction/adminapprovallist`;/** ?auctionStatus=I */
 export const areateAuction = `${baseUrl}/kingsrings/api/v1/auction/admincreate`;
 export const getAuctionById = `${baseUrl}/kingsrings/api/v1/auction/list/`; /** userId */
+export const uploadImage = `${baseUrl}/kingsrings/api/v1/file/upload`;
