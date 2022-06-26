@@ -800,16 +800,6 @@ const CreateAuction:FC = () => {
                 <FormWrapper>
                     <SectionTitle>
                         Winner Details
-                        <div>
-                        <Button
-                title={"Change winner"}
-            btnSize ={ButtonSize.sm} 
-            btnVariant={ButtonVariant.secondary} clicked={validateForm} />
-                        <Button
-                title={"Announce Winner"}
-            btnSize ={ButtonSize.sm} 
-            btnVariant={ButtonVariant.primaryFilled} clicked={validateForm} />
-            </div>
                     </SectionTitle>
                     <FormBody>
                     <Table>

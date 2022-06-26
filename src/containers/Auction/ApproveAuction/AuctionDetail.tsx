@@ -10,9 +10,9 @@ import {updateFormInputState, validateForm, updateFormSelectState, updateFormTim
 import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement} from '../../../Utility/InterFacesAndEnum';
 
 import {adminRouts} from '../../../routs';
-import {getAuctionDetailById} from '../../../features/auctionList';
+import {getAuctionDetailById,approveUserAuction,toggleAuctionApproveState} from '../../../features/auctionList';
 import {useSelector, useDispatch} from 'react-redux';
-import {useParams} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 
 import {CreateLotteryFirstSection, CreateLotterySecondSection} from '../../Forms/Lottery/CreateLottery/RepeatedLottery/StyledCreateLottery';
 import {HeaderView,FormContainer, FormWrapper, SectionTitle, FormBody, TwoSections, ActionBtn} from '../CreateAuction/StyledCreateAuction';
@@ -529,6 +529,7 @@ const CreateAuction:FC = () => {
 
     const dispatch = useDispatch();
     const {auctionId} = useParams();
+    const navigate = useNavigate();
 
     const [auctionDetail, setauctoinDetail] = useState<FormState>(AuctionDetail);
     const [scheduleDetail, setScheduleDetail] = useState<FormState>(ScheduleDays);
@@ -540,10 +541,27 @@ const CreateAuction:FC = () => {
     const [isForGoldMembers, setStatus] = useState<boolean>(false);
 
     const detailResponse = useSelector((state:RootState) => state.auction.auctionDetail);
+    const isAuctionApproved = useSelector((state:RootState) => state.auction.isAuctionApproved);
 
     useEffect(() => {
-        dispatch(getAuctionDetailById(auctionId?auctionId:""))
-    },[])
+        dispatch(getAuctionDetailById(auctionId?auctionId:""));
+        return () => {
+            dispatch(toggleAuctionApproveState({
+                isAuctionApproved: false
+            }));
+        }
+    },[]);
+
+    useEffect(() => {
+        if (isAuctionApproved === true) {
+            navigate(adminRouts.auctionRequestList);
+        }
+        return () => {
+            dispatch(toggleAuctionApproveState({
+                isAuctionApproved: false
+            }));
+        }
+    },[isAuctionApproved])
 
     useEffect(() => {
         // if (Object.keys(detailResponse).length > 0) {
@@ -709,7 +727,34 @@ const CreateAuction:FC = () => {
     onChangeDate={() => {}} onChangeTime={() => {}} />;
     // --------- set product details ------
 
-    const validateForm = () => {};
+    const validateForm = () => {
+
+    // const [isForGoldMembers, setStatus] = useState<boolean>(false);
+
+        let elementsArray = [
+            ...auctionDetail.form,
+            ...scheduleDetail.form,
+            ...addressDetail.form,
+            ...userDetail.form,
+            ...ticketdetail.form,
+            ...subTicketDetail.form,
+            ...productDetail.form
+        ];
+
+        let payloadObj = {};
+
+        for (let element of elementsArray) {
+            payloadObj[element.id] = element.value;
+        }
+        
+        payloadObj["auctionId"] = auctionId;
+        payloadObj["auctionImages"] = [];
+        payloadObj["auctionStatus"] = "A";
+        payloadObj["isMemberAuction"] = isForGoldMembers;
+
+        dispatch(approveUserAuction(payloadObj));
+
+    };
 
     return <Fragment>
         <HeaderView>

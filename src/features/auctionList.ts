@@ -67,7 +67,8 @@ interface AuctoinInitiaStateProps {
     isNewAuctionCreated: boolean,
     auctionDetail:any 
     page: number,
-    isAuctionCreated: boolean
+    isAuctionCreated: boolean,
+    isNewAuctionApproved: boolean
 }
 
 const auctionInitialState: AuctoinInitiaStateProps = {
@@ -77,9 +78,13 @@ const auctionInitialState: AuctoinInitiaStateProps = {
     isAuctionApproved:false,
     isNewAuctionCreated: false,
     page:1,
-    isAuctionCreated: false
+    isAuctionCreated: false,
+    isNewAuctionApproved: false
 }
 
+interface ToggleNewAuctionApproveState {
+    isAuctionApproved:boolean
+}
 
 interface setAuctionDetail {
     data: any
@@ -220,6 +225,31 @@ export const getAuctionDetailById = createAsyncThunk(
     }
 );
 
+
+export const approveUserAuction = createAsyncThunk(
+    'approve auction',
+    async (payload:any, {dispatch}) => {
+        await fetch (endpoints.approveUserAuction,{
+            method: 'PUT',
+            headers:{
+                Authorization: `Bearer ${getLocalStorage(localStorageActiontype.GET_ACCESS_TOKEN)}`,
+                "Content-type": "application/json; charset=UTF-8",
+            },
+            body: JSON.stringify(payload)
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then((response) => {
+            if (response.statusCode === 200) {
+                dispatch(toggleAuctionApproveState({
+                    isAuctionApproved: true
+                }))
+            }
+        })
+    }
+);
+
 const auctionSlice = createSlice({
     name: 'Auction Slice',
     initialState: auctionInitialState,
@@ -247,9 +277,15 @@ const auctionSlice = createSlice({
                 ...state,
                 isAuctionCreated: action.payload.isAuctionCreated
             }
+        },
+        toggleAuctionApproveState: (state, action:PayloadAction<ToggleNewAuctionApproveState>) => {
+            return{
+                ...state,
+                isAuctionApproved: action.payload.isAuctionApproved
+            }
         }
     }
 });
 
-export const {setAuctionList, setAuctionRequestList, toggleAuctionCreation, setAuctionDetail} = auctionSlice.actions
+export const {setAuctionList, setAuctionRequestList, toggleAuctionCreation, setAuctionDetail, toggleAuctionApproveState} = auctionSlice.actions
 export default auctionSlice.reducer;
