@@ -478,7 +478,6 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
     ]);
 
     useEffect(() => {
-console.log(templateDetail,"templateDetail")
         if (Object.keys(templateDetail).length > 0) {
             let ticketType = templateDetail.rewardType === "M" ? "Money Lottery": "Gift Lottery";
             let Visibility = templateDetail.isMemberLottery ?  "Gold Members" : "All Members";
@@ -510,7 +509,7 @@ console.log(templateDetail,"templateDetail")
                         value: lotteryObj.id === "rewardType" ? ticketType : lotteryObj.id === "lotterySettingVisibility"? Visibility : lotteryObj.value
                     }
                 });
-                console.log(updatedForm,'updatedForm')
+                
                 setLotterySettingForm({
                     ...lotterySettingForm,
                     form:updatedForm

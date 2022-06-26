@@ -1,4 +1,16 @@
 import styled from 'styled-components';
+import {CheckBox} from '@styled-icons/material-outlined/CheckBox';
+import {CheckBoxOutlineBlank} from '@styled-icons/material-outlined/CheckBoxOutlineBlank';
+
+export const SelectedCheckbox = styled(CheckBox)`
+color: #000000;
+height: 26px;
+`;
+
+export const EmptyCheckbox  = styled(CheckBoxOutlineBlank)`
+color: #000000;
+height: 26px;
+`;
 
 export const HeaderView = styled.div`
 width: 100%;
@@ -76,4 +88,20 @@ width: 100%;
 box-sizing: border-box;
 text-align: right;
 margin-bottom: 50px;
+`;
+
+export const CheckboxContainer = styled.div`
+weight: 100%; 
+box-sizing: border-box;
+display: flex;
+flex-flow:row nowrap;
+align-items: center;
+justify-content: flex-start;
+margin-top: 18px;
+cursor: pointer;
+`;
+
+export const CheckboxDesc = styled.div`
+color: #000000;
+margin-left: 15px;
 `;

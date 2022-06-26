@@ -30,3 +30,14 @@ cursor: pointer;
 text-decoration: underline;
 text-decoration-color: #3a57e8;
 `;
+
+export const SecondaryBtn = styled.button`
+background-color: transparent;
+padding: ${(props:ButtonProps) => props.btnSize === 'small' ? '4px 6px' : props.btnSize === 'medium' ? '16px 20px' : '16px 16px'};
+width: ${(props:ButtonProps) => props.btnSize === 'large' ? '100%' : 'auto'};
+width: auto;
+border: 1px solid #3a57e8;
+color: #3a57e8;
+cursor: pointer;
+text-decoration: none;
+`;

@@ -7,9 +7,10 @@ import TableFooter from '../../../components/TableFooter/TableFooter';
 
 import {RootState} from '../../../app/Store';
 import {useSelector, useDispatch} from 'react-redux';
-import {getNewAuctions} from '../../../features/auctionList';
-
-import * as TableStyle from '../../Lottery/LotteryList/StyledLottery'
+import {getAuctionRequest} from '../../../features/auctionList';
+import {useNavigate} from 'react-router-dom';
+import {adminRouts} from '../../../routs';
+import * as TableStyle from '../../Lottery/LotteryList/StyledLottery';
 
 
 enum ButtonSize {
@@ -55,8 +56,9 @@ let tabMenuViewList = [
 
 
 const AuctionList = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
-    let auctionList = useSelector((state:RootState) => state.auction.newAuctions);
+    let requestList = useSelector((state:RootState) => state.auction.newAuctions);
     let page = useSelector((state: RootState) => state.lotteryList.page);
 
     const [tabMenu, setTabMenu] = useState(tabMenuViewList);
@@ -70,7 +72,9 @@ const AuctionList = () => {
 
     };
 
-    const redirectToDetailView = (auctionId) => {}
+    const redirectToDetailView = (auctionId:number) => {
+        navigate(adminRouts.approveAuction(auctionId))
+    }
 
     const updateTabMenuOption = (selectedMenuId) => {
         let updatedMenuArray = tabMenu.map((menuObj) => {
@@ -88,7 +92,7 @@ const AuctionList = () => {
             return tabObj.isActive
         })[0];
 
-        dispatch(getNewAuctions(selectedObj.queryParam));
+        dispatch(getAuctionRequest("auctionStatus=I"));
     }
 
     const updatePageNumber = (pageNumber) => {};
@@ -100,8 +104,8 @@ const AuctionList = () => {
 
 
 
-    let tableBody = auctionList.map((tableRowObj) => {
-
+    let tableBody = requestList.map((tableRowObj) => {
+console.log(requestList,"requestList")
         let idBtn =  <Button title={`#${tableRowObj.auctionId}`} 
         btnSize={ButtonSize.sm} btnVariant={ButtonVariant.primaryLink} 
         clicked={() => {redirectToDetailView(tableRowObj.auctionId)}} />;
@@ -117,19 +121,19 @@ const AuctionList = () => {
             {idBtn}
             </td>
             <td>
-                &#x24; {tableRowObj.auctionPrice}
+                &#x24; {tableRowObj.auctionProposedPrice}
             </td>
             <td>
-                {transformDate(tableRowObj.requestedDate)}
+                {transformDate(tableRowObj.auctionStartDate)}
             </td>
             <td>
-                {tableRowObj.category}
+                {tableRowObj.productCategory}
             </td>
             <td>
-            {tableRowObj.name}
+            {tableRowObj.userName}
             </td>
             <td>
-            {tableRowObj.email}
+            {tableRowObj.userEmailId}
             </td>
         </tr>
     })
@@ -153,7 +157,7 @@ const AuctionList = () => {
             <TableStyle.Tbody>
                 {tableBody}
             </TableStyle.Tbody>
-            <TableFooter totalCount={auctionList.length} currentPageNumber={page} updatePageNumber={updatePageNumber} />
+            <TableFooter totalCount={requestList.length} currentPageNumber={page} updatePageNumber={updatePageNumber} />
             </TableStyle.Table>
         </TableStyle.TableWrapper>
         </TableStyle.ContentSection>

@@ -110,7 +110,7 @@ const AuctionList = () => {
             return tabObj.isActive
         })[0];
 
-        dispatch(getAuctions(selectedObj.queryParam));
+        dispatch(getAuctions("auctionStatus=U"));
     }
 
     const updatePageNumber = (pageNumber) => {};
@@ -128,9 +128,9 @@ const AuctionList = () => {
         btnSize={ButtonSize.sm} btnVariant={ButtonVariant.primaryLink} 
         clicked={() => {redirectToDetailView(tableRowObj.auctionId)}} />;
 
-        let status = tableRowObj.auctionType === "C" ? <TableStyle.Live>
+        let status = tableRowObj.auctionStatus === "C" ? <TableStyle.Live>
             Live
-        </TableStyle.Live> : tableRowObj.auctionType === "U" ? <TableStyle.Upcoming>
+        </TableStyle.Live> : tableRowObj.auctionStatus === "U" ? <TableStyle.Upcoming>
             Not Live
         </TableStyle.Upcoming> : null;
 
@@ -142,17 +142,17 @@ const AuctionList = () => {
                 &#x24; {tableRowObj.auctionPrice}
             </td>
             <td>
-                {transformDate(tableRowObj.startDate)}
+                {transformDate(tableRowObj.auctionStartDate)}
             </td>
             <td>
-                {transformDate(tableRowObj.endDate)}
+                {transformDate(tableRowObj.auctionEndDate)}
             </td>
             <td>
-            &#x24; {tableRowObj.receivedAmount}
+            &#x24; {tableRowObj.amountCollected}
             </td>
             <td>
                 <TableStyle.NumberOfUsers>
-                    {tableRowObj.userJoined}
+                    {tableRowObj.noOfUsersJoined}
                 </TableStyle.NumberOfUsers>
             </td>
             <td>

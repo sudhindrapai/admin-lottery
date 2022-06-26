@@ -71,8 +71,6 @@ const LotteryTemplateList = () => {
     <BreadCrumbs>
     <ViewHeader title={"Lottery Templates"} isNeedCreateButton={false} btnText={"Test button"}
      routePath={"/"} />
-     <Button title={"+ Create Repeat Lottery"} btnSize={ButtonSize.md} btnVariant={ButtonVariant.primaryFilled} 
-     clicked={redirectToCreateGame} />
      </BreadCrumbs>
      <GamesView>
          <TemplateListHeader>

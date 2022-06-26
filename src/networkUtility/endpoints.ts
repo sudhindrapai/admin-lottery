@@ -6,3 +6,7 @@ export const getLotteryList = `${baseUrl}/kingsrings/api/v1/lotterygame/adminlis
 export const createLottery = `${baseUrl}/kingsrings/api/v1/lottery/create`;
 export const getTemplateList = `${baseUrl}/kingsrings/api/v1/lottery/list`; /** ?lotteryType=A */
 export const getSingleTemplateDetail = `${baseUrl}/kingsrings/api/v1/lottery/list/`; /** {{lotteryId}} */
+export const getApprovedAuctionList = `${baseUrl}/kingsrings/api/v1/auction/adminlist`; /** ?auctionStatus=U */
+export const getAuctionRequestList = `${baseUrl}/kingsrings/api/v1/auction/adminapprovallist`;/** ?auctionStatus=I */
+export const areateAuction = `${baseUrl}/kingsrings/api/v1/auction/admincreate`;
+export const getAuctionById = `${baseUrl}/kingsrings/api/v1/auction/list/`; /** userId */

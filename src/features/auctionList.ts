@@ -4,39 +4,85 @@ import * as localStorageActiontype from '../LocalStorage/ActionTypes';
 import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 
 interface AuctonObj{
-        auctionId:number,
-        auctionPrice: number,
-        startDate: Date | null,
-        endDate: Date | null,
-        receivedAmount: number,
-        userJoined: number,
-        auctionType: string
+    auctionId: number,
+      auctionTitle: string,
+      auctionDesc: string,
+      auctionType: string,
+      productType: string,
+      productCategory: string,
+      auctionPrice: number,
+      auctionStartDate: string,
+      auctionEndDate: string,
+      isActive: boolean,
+      isMemberAuction: boolean,
+      userName: string,
+      noOfUsersJoined: number,
+      amountCollected: number,
+      auctionStatus: string
 }
 
 interface AuctionRequestObj {
     auctionId: number,
-    auctionPrice: number,
-    requestedDate: Date | null,
-    category: string,
-    name: string,
-    email: string
+      auctionTitle: string,
+      auctionDesc: string,
+      auctionType: string,
+      productType: string,
+      productCategory: string,
+      auctionPrice: number | null,
+      auctionProposedPrice: number,
+      auctionImages: null | string[],
+      auctionStartDate: string,
+      auctionEndDate: string,
+      isActive: boolean,
+      isMemberAuction: boolean,
+      bronzeTicketPrice: null | number,
+      silverTicketPrice: null | number,
+      goldTicketPrice: null | number,
+      platinumTicketPrice: null | number,
+      bronzeSubTickets: null |number,
+      silverSubTickets: null| number,
+      goldSubTickets: null | number,
+      platinumSubTickets: null | number,
+      userName: string,
+      userMobile: string,
+      userEmailId: string,
+      address: string,
+      city: string,
+      state: string,
+      country: string,
+      pincode: string,
+      auctionStatus: string,
+      winnerTicketNo: null | number,
+      winnerUserId: null | number
 }
 
+interface ToggleAuctionCreation {
+    isAuctionCreated: boolean
+}
 
 interface AuctoinInitiaStateProps {
     auctions:[] | AuctonObj[],
     newAuctions:[] | AuctionRequestObj[],
     isAuctionApproved: boolean,
     isNewAuctionCreated: boolean,
-    page: number
+    auctionDetail:any 
+    page: number,
+    isAuctionCreated: boolean
 }
 
 const auctionInitialState: AuctoinInitiaStateProps = {
     auctions:[],
     newAuctions:[],
+    auctionDetail:{},
     isAuctionApproved:false,
     isNewAuctionCreated: false,
-    page:1
+    page:1,
+    isAuctionCreated: false
+}
+
+
+interface setAuctionDetail {
+    data: any
 }
 
 interface SetAuctonsProps {
@@ -46,72 +92,6 @@ interface SetAuctonsProps {
 interface SetAuctionRequest {
     result: AuctionRequestObj[] | []
 }
-
-let auctionListData = [
-    {
-        auctionId:1,
-        auctionPrice:1000,
-        startDate:new Date(),
-        endDate: new Date(),
-        receivedAmount: 10000,
-        userJoined:10,
-        auctionType: "C"
-    },
-    {
-        auctionId:1,
-        auctionPrice:1000,
-        startDate:new Date(),
-        endDate: new Date(),
-        receivedAmount: 10000,
-        userJoined:10,
-        auctionType: "W"
-    },
-    {
-        auctionId:1,
-        auctionPrice:1000,
-        startDate:new Date(),
-        endDate: new Date(),
-        receivedAmount: 10000,
-        userJoined:10,
-        auctionType: "U"
-    },
-    {
-        auctionId:1,
-        auctionPrice:1000,
-        startDate:new Date(),
-        endDate: new Date(),
-        receivedAmount: 10000,
-        userJoined:10,
-        auctionType: "U"
-    },
-    {
-        auctionId:1,
-        auctionPrice:1000,
-        startDate:new Date(),
-        endDate: new Date(),
-        receivedAmount: 10000,
-        userJoined:10,
-        auctionType: "U"
-    },
-    {
-        auctionId:1,
-        auctionPrice:1000,
-        startDate:new Date(),
-        endDate: new Date(),
-        receivedAmount: 10000,
-        userJoined:10,
-        auctionType: "U"
-    },
-    {
-        auctionId:1,
-        auctionPrice:1000,
-        startDate:new Date(),
-        endDate: new Date(),
-        receivedAmount: 10000,
-        userJoined:10,
-        auctionType: "D"
-    }
-]
 
 let auctionRequestData = [
     {
@@ -143,7 +123,7 @@ let auctionRequestData = [
 export const getAuctions = createAsyncThunk(
     'get all auctions',
     async (queryParams:string, {dispatch}) => {
-        await fetch (`${endpoints.getLotteryList}?lotteryType=${queryParams}`,{
+        await fetch (`${endpoints.getApprovedAuctionList}?${queryParams}`,{
             method: 'GET',
             headers:{
                 Authorization: `Bearer ${getLocalStorage(localStorageActiontype.GET_ACCESS_TOKEN)}`,
@@ -156,7 +136,7 @@ export const getAuctions = createAsyncThunk(
         .then((response) => {
             if (response.statusCode === 200) {
                 dispatch(setAuctionList({
-                    result: auctionListData
+                    result: response.result
                 }))
             } else if (response.statusCode === 504) {
                 dispatch(setAuctionList({
@@ -168,11 +148,11 @@ export const getAuctions = createAsyncThunk(
 );
 
 
-export const getNewAuctions = createAsyncThunk(
-    'get new auctions list',
-    async (queryParams: string, {dispatch}) => {
-        await fetch(`${endpoints.getLotteryList}?lotteryType=${queryParams}`, {
-            method: "GET",
+export const getAuctionRequest = createAsyncThunk(
+    'get auction request list',
+    async (payload: string, {dispatch}) => {
+        await fetch(`${endpoints.getAuctionRequestList}?${payload}`, {
+            method: 'GET',
             headers:{
                 Authorization: `Bearer ${getLocalStorage(localStorageActiontype.GET_ACCESS_TOKEN)}`,
                 "Content-type": "application/json; charset=UTF-8",
@@ -184,12 +164,61 @@ export const getNewAuctions = createAsyncThunk(
         .then((response) => {
             if (response.statusCode === 200) {
                 dispatch(setAuctionRequestList({
-                    result: auctionRequestData
+                    result: response.result
                 }))
             }
         })
     }
-    )
+);
+
+export const createAuction = createAsyncThunk(
+    'Create auction',
+    async(payload:any, {dispatch}) => {
+        payload["publicUserId"] = getLocalStorage(localStorageActiontype.GET_PUBLIC_USER_ID);
+        await fetch(endpoints.areateAuction, {
+            method: 'POST',
+            headers:{
+                Authorization: `Bearer ${getLocalStorage(localStorageActiontype.GET_ACCESS_TOKEN)}`,
+                "Content-type": "application/json; charset=UTF-8",
+            },
+            body: JSON.stringify(payload)
+        })
+        .then((response) => {
+            return response.json()
+        })
+        .then((response) => {
+            if (response.statusCode === 200) {
+                dispatch(toggleAuctionCreation({
+                    isAuctionCreated: true
+                }));
+            }
+        })
+    }
+);
+
+export const getAuctionDetailById = createAsyncThunk(
+    'get auction detail by auction id',
+    async(payload:string,{dispatch}) => {
+        await fetch(`${endpoints.getAuctionById}${payload}`,{
+            method: 'GET',
+            headers:{
+                Authorization: `Bearer ${getLocalStorage(localStorageActiontype.GET_ACCESS_TOKEN)}`,
+                "Content-type": "application/json; charset=UTF-8",
+            }
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then((response) => {
+            console.log(response);
+            if (response.statusCode === 200) {
+                dispatch(setAuctionDetail({
+                    data: response.result
+                }))
+            }
+        })
+    }
+);
 
 const auctionSlice = createSlice({
     name: 'Auction Slice',
@@ -206,9 +235,21 @@ const auctionSlice = createSlice({
                 ...state,
                 newAuctions: action.payload.result
             }
+        },
+        setAuctionDetail: (state, action:PayloadAction<setAuctionDetail>) => {
+            return{
+                ...state,
+                auctionDetail: action.payload.data
+            }
+        },
+        toggleAuctionCreation: (state, action:PayloadAction<ToggleAuctionCreation>) => {
+            return{
+                ...state,
+                isAuctionCreated: action.payload.isAuctionCreated
+            }
         }
     }
 });
 
-export const {setAuctionList, setAuctionRequestList} = auctionSlice.actions
+export const {setAuctionList, setAuctionRequestList, toggleAuctionCreation, setAuctionDetail} = auctionSlice.actions
 export default auctionSlice.reducer;

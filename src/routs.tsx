@@ -16,12 +16,21 @@ import AuctionList from './containers/Auction/AuctionsList/AuctionList';
 import AuctionRequests from './containers/Auction/NewAuctionsList/NewAuctionList';
 import CreateAuction from './containers/Auction/CreateAuction/CreateAuction';
 import AuctionDetail from './containers/Auction/AuctionDetail/AuctionDetail';
+import ApproveAuction from './containers/Auction/ApproveAuction/AuctionDetail';
 
 const routeToAuctionDetail = (id:number | null) => {
     if (id === null) {
         return "/admin/auction/auction-detail/:auctionId"
     } else {
         return `/admin/auction/auction-detail/${id}`
+    }
+}
+
+const routeToGetAuctionApproveDetail = (id:number | null) => {
+    if (id === null) {
+        return "/admin/auction/request-for-approve/auction-detail/:auctionId"
+    } else {
+        return `/admin/auction/request-for-approve/auction-detail/${id}`
     }
 }
 
@@ -46,7 +55,8 @@ export const adminRouts = {
     updateLottery: "/admin/lottery/update-lottery",
     updateTemplate: "/admin/lottery/update-template/:lotteryId",
     updateOneTimeTemplate: "/admin/lottery/update-onetime-template/:lotteryId",
-    updateAuction:routeToAuctionDetail
+    updateAuction:routeToAuctionDetail,
+    approveAuction:routeToGetAuctionApproveDetail
 }
 
 const AppRoute:FC = () => {
@@ -67,6 +77,7 @@ const AppRoute:FC = () => {
             <Route path={adminRouts.auctionRequestList} element={<AuctionRequests />} />
             <Route path={adminRouts.createAuction} element={<CreateAuction />} />
             <Route path={adminRouts.updateAuction(null)} element={<AuctionDetail />} />
+            <Route path={adminRouts.approveAuction(null)} element={<ApproveAuction />} />
             <Route path={"*"} element={<h3>404</h3>} />
         </Routes>
     )

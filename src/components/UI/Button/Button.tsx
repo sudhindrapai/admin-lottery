@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {StyledButton, PrimaryBtnFilled, PrimaryBtnLink} from './StyledButton';
+import {StyledButton, PrimaryBtnFilled, PrimaryBtnLink, SecondaryBtn} from './StyledButton';
 
 enum ButtonSize {
     sm = "small",
@@ -33,6 +33,10 @@ const Button:FC<ButtonProps> = (props) => {
         btn = <PrimaryBtnLink btnSize={btnSize} onClick={clicked}>
             {title}
         </PrimaryBtnLink>
+    } else if (btnVariant === "secondary") {
+        btn = <SecondaryBtn btnSize={btnSize} onClick={clicked} >
+{title}
+        </SecondaryBtn>
     }
 
     return btn

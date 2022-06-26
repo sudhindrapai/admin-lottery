@@ -1,8 +1,6 @@
 import {FC, Fragment, useState, useEffect} from 'react';
 import ViewHeader from '../../../components/ViewHeader/ViewHeader';
 import CountdownTimer from '../../../components/CountdownTimer/CountdownTimer';
-import TableHeaderComponent from '../../../components/TableHeader/TableHeader';
-import TablFooter from '../../../components/TableFooter/TableFooter';
 
 import ImageUploader from '../../../components/ImageUploader/ImageUploader'
 import FormBuilder from '../../FormBuilder/FormBuilder';
@@ -17,30 +15,10 @@ import {useSelector, useDispatch} from 'react-redux';
 import {useParams} from 'react-router-dom';
 
 import {CreateLotteryFirstSection, CreateLotterySecondSection} from '../../Forms/Lottery/CreateLottery/RepeatedLottery/StyledCreateLottery';
-import {HeaderView,FormContainer, FormWrapper, FormBody, TwoSections, ActionBtn} from '../CreateAuction/StyledCreateAuction';
-import {StatusContainer, StatusBody, StatusTitle,SectionTitle, Value, TwoSection, CheckboxContainer, CheckboxDesc, Table, EmptyTableBody} from './StyledAuctionDetail';
+import {HeaderView,FormContainer, FormWrapper, SectionTitle, FormBody, TwoSections, ActionBtn} from '../CreateAuction/StyledCreateAuction';
+import {StatusContainer, StatusBody, StatusTitle, Value, TwoSection, CheckboxContainer, CheckboxDesc} from './StyledAuctionDetail';
 import { RootState } from '../../../app/Store';
 import {SelectedCheckbox, EmptyCheckbox} from './StyledAuctionDetail';
-
-class TableHeader{
-    constructor(public label:string, public isSortRequired: boolean, public isAscSorted: boolean, public isDscSorted:boolean, public id: string){}
-}
-
-let winnerDetailTableHeaders = [
-    new TableHeader("Users", true, true, false, 'users'),
-    new TableHeader("Purchase Date", true, false, false, 'purchaseDate'),
-    new TableHeader("Ticket type", false, false, false, 'ticketType'),
-    new TableHeader("No Of Tickets", false, false, false, 'noOfTickets'),
-    new TableHeader("Total amount", true, false, false, 'totalAmount')
-];
-
-let purchaseDetailTableHeaders = [
-    new TableHeader("Users", true, true, false, 'users'),
-    new TableHeader("Purchase Date", true, false, false, 'purchaseDate'),
-    new TableHeader("Ticket type", false, false, false, 'ticketType'),
-    new TableHeader("No Of Tickets", false, false, false, 'noOfTickets'),
-    new TableHeader("Total amount", true, false, false, 'totalAmount')
-];
 
 
 interface FormState {
@@ -147,10 +125,10 @@ const ScheduleDays: FormState = {
             id:"auctionStartDate",
             isRequired:true,
             fullWidth: true,
-            isCustomValidationRequred: false,
+            isCustomValidationRequred: true,
             inputVariant: InputVariant.outlined,
             inputType: InputTypes.date,
-            customValidationType: customValidationType.null,
+            customValidationType: customValidationType.numberValidation,
             isValidInput:false,
             isTouched:false,
             errorMessage:"",
@@ -166,10 +144,10 @@ const ScheduleDays: FormState = {
         id:"auctionEndDate",
         isRequired:true,
         fullWidth: true,
-        isCustomValidationRequred: false,
+        isCustomValidationRequred: true,
         inputVariant: InputVariant.outlined,
         inputType: InputTypes.date,
-        customValidationType: customValidationType.null,
+        customValidationType: customValidationType.numberValidation,
         isValidInput:false,
         isTouched:false,
         errorMessage:"",
@@ -560,8 +538,6 @@ const CreateAuction:FC = () => {
     const [subTicketDetail, setSubTicketDetail] = useState<FormState>(subTicketDetails);
     const [productDetail, setProductDetails] = useState<FormState>(productDetails);
     const [isForGoldMembers, setStatus] = useState<boolean>(false);
-    const [tableHeaderValues, setTableHeader] = useState(winnerDetailTableHeaders);
-    const [purchaseTableHeaders, setPurchaseTableHeaders] = useState(purchaseDetailTableHeaders);
 
     const detailResponse = useSelector((state:RootState) => state.auction.auctionDetail);
 
@@ -618,10 +594,7 @@ const CreateAuction:FC = () => {
             let updatedElement = {
                 ...element
             }
-            // if (element.elementType === "datePicker") {
-                updatedElement["value"] = detailResponse[element.id];
-            // }
-            
+            updatedElement["value"] = detailResponse[element.id];
             return updatedElement;
         });
         return updatedFormElement;
@@ -647,10 +620,9 @@ const CreateAuction:FC = () => {
     //  ---------- schedule days -------------
     const handleScheduleDaysTimeInput = (date: Date, name: string) => {
         let updatedArray = updateFormDate(date, name, scheduleDetail.form);
-        console.log(updatedArray,"updatedArray")
         setScheduleDetail({
             ...scheduleDetail,
-            form: updatedArray
+            form:updatedArray
         });
     };
 
@@ -776,55 +748,9 @@ const CreateAuction:FC = () => {
                     </FormBody>
                 </FormWrapper>
                 <ImageUploader />
-                <FormWrapper>
-                    <SectionTitle>
-                    Purchases
-                    <div>
-                    <Button
-                title={"Export"}
-            btnSize ={ButtonSize.sm} 
-            btnVariant={ButtonVariant.secondary} clicked={validateForm} />
-            </div>
-                    </SectionTitle>
-                    <FormBody>
-                    <Table>
-                        <thead>
-                    <TableHeaderComponent headers={purchaseTableHeaders} onToggleSort={() => {}} />
-                    </thead>
-                    </Table>
-                    <EmptyTableBody>
-                        No Data Found
-                    </EmptyTableBody>
-                    </FormBody>
-                </FormWrapper>
-                <FormWrapper>
-                    <SectionTitle>
-                        Winner Details
-                        <div>
-                        <Button
-                title={"Change winner"}
-            btnSize ={ButtonSize.sm} 
-            btnVariant={ButtonVariant.secondary} clicked={validateForm} />
-                        <Button
-                title={"Announce Winner"}
-            btnSize ={ButtonSize.sm} 
-            btnVariant={ButtonVariant.primaryFilled} clicked={validateForm} />
-            </div>
-                    </SectionTitle>
-                    <FormBody>
-                    <Table>
-                        <thead>
-                    <TableHeaderComponent headers={tableHeaderValues} onToggleSort={() => {}} />
-                    </thead>
-                    </Table>
-                    <EmptyTableBody>
-                        No Data Found
-                    </EmptyTableBody>
-                    </FormBody>
-                </FormWrapper>
                 <ActionBtn>
                 <Button
-                title={"Update"}
+                title={"Approve"}
             btnSize ={ButtonSize.md} 
             btnVariant={ButtonVariant.primaryFilled} clicked={validateForm} />
         </ActionBtn>
@@ -845,7 +771,7 @@ const CreateAuction:FC = () => {
                            Ends on
                         </StatusTitle>
                         <Value>
-                        <CountdownTimer timestamp={new Date(detailResponse.auctionEndDate)} />
+                        <CountdownTimer timestamp={new Date(detailResponse.auctionStartDate)} />
                         </Value>
                     </StatusBody>
                     </TwoSection>
@@ -862,7 +788,7 @@ const CreateAuction:FC = () => {
                         Visibility
                         </StatusTitle>
                         <Value>
-                        {detailResponse.isMemberAuction ? "Gold Members" : "All Users"}
+                        {detailResponse.isMemberAuction ? "Godl Members" : "All Users"}
                         </Value>
                     </StatusBody>
                 </StatusContainer>

@@ -1,4 +1,4 @@
-import {FC, Fragment, useState} from 'react';
+import {FC, Fragment, useState, useEffect} from 'react';
 import ViewHeader from '../../../components/ViewHeader/ViewHeader';
 
 import ImageUploader from '../../../components/ImageUploader/ImageUploader'
@@ -8,10 +8,15 @@ import Button from '../../../components/UI/Button/Button';
 import {updateFormInputState, validateForm, updateFormSelectState, updateFormTimeState, updateFormDate} from '../../../Utility/Utility';
 import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement} from '../../../Utility/InterFacesAndEnum';
 
-import {adminRouts} from '../../../routs'
+import {adminRouts} from '../../../routs';
+import {createAuction, toggleAuctionCreation} from '../../../features/auctionList';
+import {useSelector, useDispatch} from 'react-redux';
+import {RootState} from '../../../app/Store';
+import {useNavigate} from 'react-router-dom';
 
 import {CreateLotteryFirstSection, CreateLotterySecondSection} from '../../Forms/Lottery/CreateLottery/RepeatedLottery/StyledCreateLottery';
-import {HeaderView,FormContainer, FormWrapper, SectionTitle, FormBody, TwoSections, ActionBtn} from './StyledCreateAuction';
+import {HeaderView,FormContainer, FormWrapper, SectionTitle, FormBody, TwoSections, ActionBtn, CheckboxContainer, CheckboxDesc} from './StyledCreateAuction';
+import {SelectedCheckbox, EmptyCheckbox} from './StyledCreateAuction';
 
 interface FormState {
     form: FormElement[],
@@ -30,29 +35,10 @@ enum ButtonVariant {
 }
 
 const AuctionDetail: FormState = {
-    form:[{
-        elementType:FormElementType.input,
-            value:"",
-            id:"auctionId",
-            isRequired:true,
-            fullWidth: true,
-            isCustomValidationRequred: true,
-            inputVariant: InputVariant.outlined,
-            inputType: InputTypes.text,
-            customValidationType: customValidationType.numberValidation,
-            isValidInput:false,
-            isTouched:false,
-            errorMessage:"",
-            label:"Auction Id",
-            radioGroupValues:[],
-            isPasswordHidden:true,
-            dropdownValues:[],
-            selectedTime: null,
-            slectedDate: null
-    }, 
+    form:[ 
     {elementType:FormElementType.input,
         value:"",
-        id:"title",
+        id:"auctionTitle",
         isRequired:true,
         fullWidth: true,
         isCustomValidationRequred: true,
@@ -71,7 +57,7 @@ const AuctionDetail: FormState = {
 },
 {elementType:FormElementType.input,
     value:"",
-    id:"description",
+    id:"auctionDesc",
     isRequired:true,
     fullWidth: true,
     isCustomValidationRequred: true,
@@ -100,13 +86,33 @@ const AuctionDetail: FormState = {
     isValidInput:false,
     isTouched:false,
     errorMessage:"",
-    label:"Number",
+    label:"Auction Price",
     radioGroupValues:[],
     isPasswordHidden:true,
     dropdownValues:[],
     selectedTime: null,
     slectedDate: null
-}],
+},
+{elementType:FormElementType.input,
+    value:"",
+    id:"auctionProposedPrice",
+    isRequired:true,
+    fullWidth: true,
+    isCustomValidationRequred: true,
+    inputVariant: InputVariant.outlined,
+    inputType: InputTypes.number,
+    customValidationType: customValidationType.numberValidation,
+    isValidInput:false,
+    isTouched:false,
+    errorMessage:"",
+    label:"Proposed Price",
+    radioGroupValues:[],
+    isPasswordHidden:true,
+    dropdownValues:[],
+    selectedTime: null,
+    slectedDate: null
+}
+],
     isValidForm: true
 };
 
@@ -114,7 +120,7 @@ const ScheduleDays: FormState = {
     form:[{
         elementType:FormElementType.datePicker,
             value:"",
-            id:"startDate",
+            id:"auctionStartDate",
             isRequired:true,
             fullWidth: true,
             isCustomValidationRequred: true,
@@ -133,7 +139,7 @@ const ScheduleDays: FormState = {
     }, 
     {elementType:FormElementType.datePicker,
         value:"",
-        id:"endDate",
+        id:"auctionEndDate",
         isRequired:true,
         fullWidth: true,
         isCustomValidationRequred: true,
@@ -157,7 +163,7 @@ const AddressDetails: FormState = {
     form:[{
         elementType:FormElementType.input,
             value:"",
-            id:"location",
+            id:"address",
             isRequired:true,
             fullWidth: true,
             isCustomValidationRequred: true,
@@ -176,7 +182,26 @@ const AddressDetails: FormState = {
     }, 
     {elementType:FormElementType.input,
         value:"",
-        id:"State",
+        id:"city",
+        isRequired:true,
+        fullWidth: true,
+        isCustomValidationRequred: true,
+        inputVariant: InputVariant.outlined,
+        inputType: InputTypes.text,
+        customValidationType: customValidationType.numberValidation,
+        isValidInput:false,
+        isTouched:false,
+        errorMessage:"",
+        label:"City",
+        radioGroupValues:[],
+        isPasswordHidden:true,
+        dropdownValues:[],
+        selectedTime: null,
+        slectedDate: null
+},
+    {elementType:FormElementType.input,
+        value:"",
+        id:"state",
         isRequired:true,
         fullWidth: true,
         isCustomValidationRequred: true,
@@ -211,6 +236,24 @@ const AddressDetails: FormState = {
     dropdownValues:[],
     selectedTime: null,
     slectedDate: null
+}, {elementType:FormElementType.input,
+    value:"",
+    id:"pincode",
+    isRequired:true,
+    fullWidth: true,
+    isCustomValidationRequred: true,
+    inputVariant: InputVariant.outlined,
+    inputType: InputTypes.number,
+    customValidationType: customValidationType.numberValidation,
+    isValidInput:false,
+    isTouched:false,
+    errorMessage:"",
+    label:"Pin/Zip code",
+    radioGroupValues:[],
+    isPasswordHidden:true,
+    dropdownValues:[],
+    selectedTime: null,
+    slectedDate: null
 }],
     isValidForm: true
 };
@@ -219,7 +262,7 @@ const UserDetails: FormState = {
     form:[{
         elementType:FormElementType.input,
             value:"",
-            id:"name",
+            id:"userName",
             isRequired:true,
             fullWidth: true,
             isCustomValidationRequred: true,
@@ -238,7 +281,7 @@ const UserDetails: FormState = {
     }, 
     {elementType:FormElementType.input,
         value:"",
-        id:"mobile",
+        id:"userMobile",
         isRequired:true,
         fullWidth: true,
         isCustomValidationRequred: true,
@@ -257,7 +300,7 @@ const UserDetails: FormState = {
 },
 {elementType:FormElementType.input,
     value:"",
-    id:"emailAddress",
+    id:"userEmailId",
     isRequired:true,
     fullWidth: true,
     isCustomValidationRequred: true,
@@ -281,13 +324,13 @@ const TicketDetail: FormState = {
     form:[{
         elementType:FormElementType.input,
             value:"",
-            id:"bronze",
+            id:"bronzeTicketPrice",
             isRequired:true,
             fullWidth: true,
             isCustomValidationRequred: true,
             inputVariant: InputVariant.outlined,
             inputType: InputTypes.number,
-            customValidationType: customValidationType.characterValidation,
+            customValidationType: customValidationType.numberValidation,
             isValidInput:false,
             isTouched:false,
             errorMessage:"",
@@ -300,13 +343,13 @@ const TicketDetail: FormState = {
     }, 
     {elementType:FormElementType.input,
         value:"",
-        id:"silver",
+        id:"silverTicketPrice",
         isRequired:true,
         fullWidth: true,
         isCustomValidationRequred: true,
         inputVariant: InputVariant.outlined,
         inputType: InputTypes.number,
-        customValidationType: customValidationType.characterValidation,
+        customValidationType: customValidationType.numberValidation,
         isValidInput:false,
         isTouched:false,
         errorMessage:"",
@@ -319,13 +362,13 @@ const TicketDetail: FormState = {
 },
 {elementType:FormElementType.input,
     value:"",
-    id:"gold",
+    id:"goldTicketPrice",
     isRequired:true,
     fullWidth: true,
     isCustomValidationRequred: true,
     inputVariant: InputVariant.outlined,
     inputType: InputTypes.number,
-    customValidationType: customValidationType.characterValidation,
+    customValidationType: customValidationType.numberValidation,
     isValidInput:false,
     isTouched:false,
     errorMessage:"",
@@ -337,13 +380,13 @@ const TicketDetail: FormState = {
     slectedDate: null
 }, {elementType:FormElementType.input,
     value:"",
-    id:"platinum",
+    id:"platinumTicketPrice",
     isRequired:true,
     fullWidth: true,
     isCustomValidationRequred: true,
     inputVariant: InputVariant.outlined,
     inputType: InputTypes.number,
-    customValidationType: customValidationType.characterValidation,
+    customValidationType: customValidationType.numberValidation,
     isValidInput:false,
     isTouched:false,
     errorMessage:"",
@@ -367,7 +410,7 @@ const subTicketDetails: FormState = {
             isCustomValidationRequred: true,
             inputVariant: InputVariant.outlined,
             inputType: InputTypes.number,
-            customValidationType: customValidationType.characterValidation,
+            customValidationType: customValidationType.numberValidation,
             isValidInput:false,
             isTouched:false,
             errorMessage:"",
@@ -386,7 +429,7 @@ const subTicketDetails: FormState = {
         isCustomValidationRequred: true,
         inputVariant: InputVariant.outlined,
         inputType: InputTypes.number,
-        customValidationType: customValidationType.characterValidation,
+        customValidationType: customValidationType.numberValidation,
         isValidInput:false,
         isTouched:false,
         errorMessage:"",
@@ -405,7 +448,7 @@ const subTicketDetails: FormState = {
     isCustomValidationRequred: true,
     inputVariant: InputVariant.outlined,
     inputType: InputTypes.number,
-    customValidationType: customValidationType.characterValidation,
+    customValidationType: customValidationType.numberValidation,
     isValidInput:false,
     isTouched:false,
     errorMessage:"",
@@ -423,7 +466,7 @@ const subTicketDetails: FormState = {
     isCustomValidationRequred: true,
     inputVariant: InputVariant.outlined,
     inputType: InputTypes.number,
-    customValidationType: customValidationType.characterValidation,
+    customValidationType: customValidationType.numberValidation,
     isValidInput:false,
     isTouched:false,
     errorMessage:"",
@@ -441,7 +484,7 @@ const productDetails: FormState = {
     form:[{
         elementType:FormElementType.select,
             value:"select",
-            id:"type",
+            id:"productType",
             isRequired:true,
             fullWidth: true,
             isCustomValidationRequred: false,
@@ -454,13 +497,13 @@ const productDetails: FormState = {
             label:"Type",
             radioGroupValues:[],
             isPasswordHidden:true,
-            dropdownValues:["select", "category one"],
+            dropdownValues:["select", "Vehicle"],
             selectedTime: null,
             slectedDate: null
     }, 
     {elementType:FormElementType.select,
         value:"select",
-        id:"category",
+        id:"productCategory",
         isRequired:true,
         fullWidth: true,
         isCustomValidationRequred: false,
@@ -473,7 +516,7 @@ const productDetails: FormState = {
         label:"Category",
         radioGroupValues:[],
         isPasswordHidden:true,
-        dropdownValues:["select", "category"],
+        dropdownValues:["select", "car"],
         selectedTime: null,
         slectedDate: null
 }],
@@ -481,13 +524,33 @@ const productDetails: FormState = {
 };
 
 const CreateAuction:FC = () => {
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const [auctionDetail, setauctoinDetail] = useState<FormState>(AuctionDetail);
     const [scheduleDetail, setScheduleDetail] = useState<FormState>(ScheduleDays);
     const [addressDetail, setAddressDetail] = useState<FormState>(AddressDetails);
     const [userDetail, setUserDetail] = useState<FormState>(UserDetails);
     const [ticketdetail, setTicketDetail] = useState<FormState>(TicketDetail);
     const [subTicketDetail, setSubTicketDetail] = useState<FormState>(subTicketDetails);
-    const [productDetail, setProductDetails] = useState<FormState>(productDetails)
+    const [productDetail, setProductDetails] = useState<FormState>(productDetails);
+    const [isForGoldMembers, setStatus] = useState<boolean>(false);
+
+    const isAuctionCreated = useSelector((state:RootState) => state.auction.isAuctionCreated)
+
+    useEffect(() => {
+        if (isAuctionCreated === true) {
+            navigate(adminRouts.auctionList);
+        }
+
+        return () => {
+            dispatch(toggleAuctionCreation({
+                isAuctionCreated: false
+            }))
+        }
+
+    },[isAuctionCreated]);
 
     // ---------- auction detail form ------
 
@@ -547,7 +610,7 @@ const CreateAuction:FC = () => {
         });
     }
 
-    const useDetailView = <FormBuilder formElements={addressDetail.form} 
+    const useDetailView = <FormBuilder formElements={userDetail.form} 
     onInputChange = {handleUserDeailState} 
     onSelectValueChange={() => {}} 
     onChangeDate={() => {}} onChangeTime={() => {}} />;
@@ -598,7 +661,29 @@ const CreateAuction:FC = () => {
     onChangeDate={() => {}} onChangeTime={() => {}} />;
     // --------- set product details ------
 
-    const validateForm = () => {};
+    const validateForm = () => {
+
+    let formElementsArray = [
+        ...auctionDetail.form,
+        ...scheduleDetail.form,
+        ...addressDetail.form,
+        ...userDetail.form,
+        ...ticketdetail.form,
+        ...subTicketDetail.form,
+        ...productDetail.form,
+    ];
+
+    let requestObj = {};
+
+    for (let formElement of formElementsArray) {
+        requestObj[formElement.id] = formElement.value
+    }
+
+    requestObj["isMemberAuction"] = isForGoldMembers;
+
+    dispatch(createAuction(requestObj));
+
+    };
 
     return <Fragment>
         <HeaderView>
@@ -612,6 +697,12 @@ const CreateAuction:FC = () => {
                     </SectionTitle>
                     <FormBody>
                         {auctionDetailView}
+                        <CheckboxContainer onClick={() => {setStatus(!isForGoldMembers)}} >
+                            {isForGoldMembers ? <SelectedCheckbox /> : <EmptyCheckbox />}
+                            <CheckboxDesc>
+                                For Gold members
+                            </CheckboxDesc>
+                        </CheckboxContainer>
                     </FormBody>
                 </FormWrapper>
                 <FormWrapper>

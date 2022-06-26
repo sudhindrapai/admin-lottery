@@ -83,11 +83,12 @@ const FormBuilder:React.FC<FormbuilderProps> = (props) => {
                         </StyledFormElement>
                         break;
                     case FormElementType.datePicker:
+                        console.log(formElement.value,"form builder")
                         element = <StyledFormElement key={`${formElement.id}_${index}`} >
                             <DatePicker 
                             label={formElement.label} 
                             name={formElement.id} 
-                            value={formElement.slectedDate? formElement.slectedDate : null} 
+                            value={new Date(formElement.value)} 
                             onChangeDate={onChangeDate}
                              />
                         </StyledFormElement>
