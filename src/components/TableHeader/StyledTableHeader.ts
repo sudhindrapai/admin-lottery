@@ -17,6 +17,7 @@ color: #687182;
 align-items: center;
 justify-content: space-between;
 border-bottom: 1px solid #E9EDF5;
+text-transform:upperCase;
 `;
 
 export const SortWrapper = styled.div`

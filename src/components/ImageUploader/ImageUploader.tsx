@@ -1,5 +1,5 @@
 import {FC, useMemo, useRef} from 'react';
-import {Wrapper, Container, TitleWrapper, Title, AddBtn, EmptyImgSection} from './StyledImageUploader';
+import {Wrapper, Container, TitleWrapper, Title, AddBtn, EmptyImgSection, Image, ImageWrapper} from './StyledImageUploader';
 import {RootState} from '../../app/Store';
 import {uploadImage} from '../../features/imageUploaderSlice';
 import {useSelector, useDispatch} from 'react-redux';
@@ -12,13 +12,25 @@ const ImageUploader:FC = () => {
 
     const images = useSelector((state:RootState) => state.images.images);
 
+
     let imagesView = useMemo(() => {
         if (images.length === 0) {
             return <EmptyImgSection>
                 <div>No Images Found</div>
             </EmptyImgSection>
+        } else{
+            
         }
     },[images]);
+
+    let imageList = null;
+
+    if (images.length > 0) {
+        imageList = images.map((imgUrl:string) =>{
+            return <Image src={imgUrl} alt={"Image"} />
+        });
+    }
+
 
     const triggerImageUploader = () => {
         inputRef.current?.click();
@@ -51,7 +63,7 @@ const ImageUploader:FC = () => {
                     Add images
                 </AddBtn>
             </TitleWrapper>
-            {imagesView}
+            {images.length === 0 ? imagesView: <ImageWrapper>{imageList}</ImageWrapper>}
         </Container>
     </Wrapper>
 };

@@ -157,8 +157,8 @@ console.log(requestList,"requestList")
             <TableStyle.Tbody>
                 {tableBody}
             </TableStyle.Tbody>
-            <TableFooter totalCount={requestList.length} currentPageNumber={page} updatePageNumber={updatePageNumber} />
             </TableStyle.Table>
+            <TableFooter totalCount={requestList.length} currentPageNumber={page} updatePageNumber={updatePageNumber} />
         </TableStyle.TableWrapper>
         </TableStyle.ContentSection>
     </Fragment>

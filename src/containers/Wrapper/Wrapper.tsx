@@ -4,6 +4,10 @@ import {StyledAppWrapper, LeftMenuSection, ContentWrapper, Content} from './Styl
 import LeftMenu from '../LeftMenu/Leftmenu';
 import TopBar from '../../components/AppTopbar/AppTopBar';
 
+import {adminRouts} from '../../routs';
+
+let excludeLeftMenusPath = [adminRouts.login, adminRouts];
+
 interface AppWrapper {
     children: any
 }

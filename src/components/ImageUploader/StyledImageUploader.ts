@@ -54,3 +54,27 @@ font-size: 18px;
 line-height: 20px;
 color: #ADB5BD;
 `;
+
+export const Image = styled.img`
+height: 80px;
+width: 80px;
+min-height: 80px;
+min-width: 80px;
+object-fit: contain;
+border: 1px solid #ccc;
+border-radius: 4px;
+`;
+
+export const ImageWrapper = styled.div`
+width: 100%;
+box-sizing: border-box;
+padding: 24px;
+background-color: #ffffff;
+border-bottom-right-radius: 6px;
+border-bottom-left-radius: 6px;
+display: flex;
+flex-flow: row nowrap;
+align-items: flex-start;
+justify-content: flex-start;
+gap: 15px;
+`;

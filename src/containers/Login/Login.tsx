@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC, useState, useEffect} from 'react';
 import {Wrapper, Container, BrandLogo,LoginForm} from './StyledLogin';
 import LogoSrc from '../../assets/images/headerLogo.svg';
 
@@ -10,7 +10,10 @@ import {updateFormInputState, validateForm} from '../../Utility/Utility';
 
 import { RootState } from '../../app/Store';
 import {useSelector, useDispatch} from 'react-redux';
-import {createLogin} from '../../features/loginSlice';
+import {createLogin, toggleLogin} from '../../features/loginSlice';
+
+import {useNavigate} from 'react-router-dom';
+import {adminRouts} from '../../routs'
 
 interface LoginForm {
     form: FormElement[],
@@ -80,10 +83,26 @@ const loginFormState:LoginForm = {
 }
 
 const Login:FC = () => {
+    const navigate = useNavigate();
 
     const dispatch = useDispatch();
 
+    const isLogedIn = useSelector((state:RootState) => state.login.isLoggedin);
+
     const [valeu, setValue] = useState<LoginForm>(loginFormState);
+
+    useEffect(() => {
+        if (isLogedIn === true) {
+            navigate(adminRouts.dashboard);
+            window.location.reload();
+        }
+        return() => {
+            dispatch(toggleLogin({
+                isLoggedin: false,
+                isAuthenticated: true
+            }));
+        }
+    },[isLogedIn])
 
     const handleInputChange = (event:React.ChangeEvent <HTMLTextAreaElement | HTMLInputElement>):void => {
         let updatedStateArray = updateFormInputState(event, loginFormState.form);

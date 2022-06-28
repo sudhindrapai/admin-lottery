@@ -1,6 +1,9 @@
 import {FC} from 'react';
 import {Routes, Route} from 'react-router-dom';
 
+import * as localStorageActionType from './LocalStorage/ActionTypes';
+import {getLocalStorage} from './LocalStorage/GetLocalStorage';
+
 // import of views
 import Dashboard from './containers/Dashboard/Dashboard';
 import LotteryList from './containers/Lottery/LotteryList/LotteryList';
@@ -17,6 +20,11 @@ import AuctionRequests from './containers/Auction/NewAuctionsList/NewAuctionList
 import CreateAuction from './containers/Auction/CreateAuction/CreateAuction';
 import AuctionDetail from './containers/Auction/AuctionDetail/AuctionDetail';
 import ApproveAuction from './containers/Auction/ApproveAuction/AuctionDetail';
+
+
+let accessToken = getLocalStorage(localStorageActionType.GET_ACCESS_TOKEN);
+
+let rootView = accessToken ? <Dashboard /> : <LoginForm />
 
 const routeToAuctionDetail = (id:number | null) => {
     if (id === null) {
@@ -61,8 +69,8 @@ export const adminRouts = {
 
 const AppRoute:FC = () => {
     return(
-        <Routes>
-            <Route path={adminRouts.rootPath} element={<Dashboard />} />
+        accessToken ? <Routes>
+            <Route path={adminRouts.rootPath} element={rootView} />
             <Route path={adminRouts.dashboard} element={<Dashboard />} />
             <Route path={adminRouts.lotteryList} element={<LotteryList />} />
             <Route path={adminRouts.gamesList} element={<GamesList />} />
@@ -79,6 +87,9 @@ const AppRoute:FC = () => {
             <Route path={adminRouts.updateAuction(null)} element={<AuctionDetail />} />
             <Route path={adminRouts.approveAuction(null)} element={<ApproveAuction />} />
             <Route path={"*"} element={<h3>404</h3>} />
+        </Routes> : <Routes>
+        <Route path={adminRouts.login} element={<LoginForm />} />
+        <Route path={"*"} element={<h3>404</h3>} />
         </Routes>
     )
 }

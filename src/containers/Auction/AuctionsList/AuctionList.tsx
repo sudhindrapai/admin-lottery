@@ -4,6 +4,7 @@ import ViewHeader from '../../../components/ViewHeader/ViewHeader';
 import Button from '../../../components/UI/Button/Button';
 import TableHeaderComponent from '../../../components/TableHeader/TableHeader';
 import TableFooter from '../../../components/TableFooter/TableFooter';
+import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 
 import {RootState} from '../../../app/Store';
 import {useSelector, useDispatch} from 'react-redux';
@@ -42,32 +43,39 @@ let tableHeaders = [
 
 let tabMenuViewList = [
     {
-        label: "All",
-        id: "all_1",
-        queryParam:"A",
+        label: "Live Auctions",
+        id: "winnerAuctions_2",
+        queryParam:"C",
         isActive: true,
-        isSerarchViewActive: true
+        isSerarchViewActive: false
     },
     {
-        label: "Winner Auctions",
-        id: "winnerAuctions_2",
+        label: "Upcoming Auctions",
+        id: "cancelledAuctions_3",
+        queryParam:"U",
+        isActive: false,
+        isSerarchViewActive: false
+    },
+    {
+        label: "Excuted Auctions",
+        id: "pendingAuctons_4",
         queryParam:"E",
         isActive: false,
         isSerarchViewActive: false
     },
     {
-        label: "Cancelled Auctions",
-        id: "cancelledAuctions_3",
+        label: "Cancelled",
+        id: "CancelledAuctons_5",
         queryParam:"D",
         isActive: false,
         isSerarchViewActive: false
     },
     {
-        label: "Pending Auctions",
-        id: "pendingAuctons_3",
-        queryParam:"U",
+        label: "All",
+        id: "all_1",
+        queryParam:"A",
         isActive: false,
-        isSerarchViewActive: false
+        isSerarchViewActive: true
     }
 ]
 
@@ -110,7 +118,7 @@ const AuctionList = () => {
             return tabObj.isActive
         })[0];
 
-        dispatch(getAuctions("auctionStatus=U"));
+        dispatch(getAuctions(`auctionStatus=${selectedObj.queryParam}`));
     }
 
     const updatePageNumber = (pageNumber) => {};
@@ -139,7 +147,7 @@ const AuctionList = () => {
             {idBtn}
             </td>
             <td>
-                &#x24; {tableRowObj.auctionPrice}
+                &#x24; {tableRowObj.auctionPrice? tableRowObj.auctionPrice : 0}
             </td>
             <td>
                 {transformDate(tableRowObj.auctionStartDate)}
@@ -148,7 +156,10 @@ const AuctionList = () => {
                 {transformDate(tableRowObj.auctionEndDate)}
             </td>
             <td>
-            &#x24; {tableRowObj.amountCollected}
+            <TrafficLight 
+            maxAmount={tableRowObj.auctionPrice? tableRowObj.auctionPrice : 0} 
+            compareAmount={tableRowObj.amountCollected? tableRowObj.amountCollected : 0} />
+            &#x24; {tableRowObj.amountCollected? tableRowObj.amountCollected : 0}
             </td>
             <td>
                 <TableStyle.NumberOfUsers>
@@ -182,8 +193,8 @@ const AuctionList = () => {
             <TableStyle.Tbody>
                 {tableBody}
             </TableStyle.Tbody>
-            <TableFooter totalCount={auctionList.length} currentPageNumber={page} updatePageNumber={updatePageNumber} />
             </TableStyle.Table>
+            <TableFooter totalCount={auctionList.length} currentPageNumber={page} updatePageNumber={updatePageNumber} />
         </TableStyle.TableWrapper>
         </TableStyle.ContentSection>
     </Fragment>
