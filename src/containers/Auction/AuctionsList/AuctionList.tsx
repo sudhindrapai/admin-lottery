@@ -1,5 +1,5 @@
 import {FC,Fragment, useState, useEffect} from 'react';
-import {transformDate} from '../../../Utility/Utility'
+import {transformDate,tablePagination,searchTableData} from '../../../Utility/Utility'
 import ViewHeader from '../../../components/ViewHeader/ViewHeader';
 import Button from '../../../components/UI/Button/Button';
 import TableHeaderComponent from '../../../components/TableHeader/TableHeader';
@@ -85,14 +85,27 @@ const AuctionList = () => {
 
     const dispatch = useDispatch();
     let auctionList = useSelector((state:RootState) => state.auction.auctions);
-    let page = useSelector((state: RootState) => state.lotteryList.page);
 
     const [tabMenu, setTabMenu] = useState(tabMenuViewList);
     const [tableHeaderValues, setHeaderValues] = useState(tableHeaders);
+    const [responseData, setResponseData] = useState([]);
+    const [pageNumber, setPageNumber] = useState(1);
+    const [totalResponseLength, setResponseLength] = useState(0)
+    const [tableSearch, setSearch] = useState("")
 
     useEffect(() => {
         getTableData(tabMenu);
-    },[])
+    },[]);
+
+    useEffect(() => {
+        if (auctionList.length > 0) {
+            setResponseLength(auctionList.length);
+            let pagedResponse = tablePagination(auctionList,1);
+            if (pagedResponse.isValidResponse) {
+                setResponseData(pagedResponse.data);
+            }
+        }
+    },[auctionList])
 
     const redirectToView = (path: string) => {
         navigate(path);
@@ -121,7 +134,15 @@ const AuctionList = () => {
         dispatch(getAuctions(`auctionStatus=${selectedObj.queryParam}`));
     }
 
-    const updatePageNumber = (pageNumber) => {};
+    const updatePageNumber = (pageNumber) => {
+        if (auctionList.length > 0) {
+            let pagedResponse = tablePagination(auctionList,pageNumber);
+            if (pagedResponse.isValidResponse) {
+                setPageNumber(pagedResponse.pageNumber);
+                setResponseData(pagedResponse.data);
+            }
+        }
+    };
 
     let tabMenuView = tabMenu.map((menuObj) => {
         return <TableStyle.MenuOption onClick={() => {updateTabMenuOption(menuObj.id)}} 
@@ -130,7 +151,7 @@ const AuctionList = () => {
 
 
 
-    let tableBody = auctionList.map((tableRowObj) => {
+    let tableBody = responseData.map((tableRowObj:any) => {
 
         let idBtn =  <Button title={`#${tableRowObj.auctionId}`} 
         btnSize={ButtonSize.sm} btnVariant={ButtonVariant.primaryLink} 
@@ -170,7 +191,22 @@ const AuctionList = () => {
                 {status}
             </td>
         </tr>
-    })
+    });
+
+    const setTableSearchValue = (event:React.ChangeEvent<HTMLInputElement>) => {
+        setSearch(event.target.value)
+    }
+
+    const triggerSearch = (event:React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === "Enter") {
+            let searchResponse = searchTableData(auctionList,tableSearch);
+           if (searchResponse.length > 0) {
+            setResponseData(searchResponse);
+            setPageNumber(1);
+            setResponseLength(searchResponse.length)
+           }
+        }
+    }
 
     
     return <Fragment>
@@ -182,7 +218,8 @@ const AuctionList = () => {
         </TableStyle.BreadcrumbSection>
         <TableStyle.ContentSection>
             <TableStyle.SearchSectionContainer>
-                <TableStyle.Input placeholder={"Search"} />
+                <TableStyle.Input value={tableSearch} onKeyDown={triggerSearch} 
+                onChange={setTableSearchValue}  placeholder={"Search"} />
             </TableStyle.SearchSectionContainer>
         <TableStyle.TabMenuContainer>
         {tabMenuView}
@@ -194,7 +231,7 @@ const AuctionList = () => {
                 {tableBody}
             </TableStyle.Tbody>
             </TableStyle.Table>
-            <TableFooter totalCount={auctionList.length} currentPageNumber={page} updatePageNumber={updatePageNumber} />
+            <TableFooter totalCount={totalResponseLength} currentPageNumber={pageNumber} updatePageNumber={updatePageNumber} />
         </TableStyle.TableWrapper>
         </TableStyle.ContentSection>
     </Fragment>

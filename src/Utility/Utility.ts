@@ -115,7 +115,6 @@ export const updateFormDate = (date: Date|null, name: string, formValues:FormEle
     let updatedArray = formValues.map((formObj) => {
         if (formObj.id === name) {
             let obj = Object.assign(formObj);
-            console.log(date, "updateFormDate")
             obj["value"] = date;
             obj["isTouched"] = true;
             obj["errorMessage"] = "";
@@ -161,7 +160,6 @@ const validateFormElement = (validationType:customValidationType, value:string, 
                     }
                     case customValidationType.mobileValidation:
                         let mobileValidateObj = mobileNumberValidation(updatedValue);
-                        console.log(mobileValidateObj,"mobile")
                         return{
                             value: mobileValidateObj.value,
                             isValidInput: mobileValidateObj.errorMessage.length > 0,
@@ -229,4 +227,40 @@ export const transformDate = (dateObj:Date): string => {
     return `${date.getDate()} ${monthNames(date.getMonth())} ${date.getFullYear()}`
 };
 
-export const sortTableValues = () => {}
+export const sortTableValues = () => {};
+
+// method to create pagination
+export const tablePagination = (response: any, pageNumber:number) => {
+    let startPageNumber = (pageNumber * 10) - 10;
+    let endPageNumber = pageNumber * 10;
+
+    let totalPageNumbers = Math.ceil((response.length)/10);
+
+    let responseObj = {
+        isValidResponse: false,
+        pageNumber: pageNumber,
+        data:[]
+    }
+
+    if (totalPageNumbers >= pageNumber) {
+        responseObj["pageNumber"] = pageNumber;
+        responseObj["isValidResponse"] = true;
+        responseObj["data"] = response.slice(startPageNumber,endPageNumber);
+    }
+
+    return responseObj;
+}
+
+export const searchTableData = (response: any, searchKey:string) => {
+    if (response.length > 0) {
+        let filteredResponse:any = [];
+        for (let rowObj of response) {
+            let values = Object.values(rowObj).join(" ")
+            var re = new RegExp(searchKey, 'gi');
+            if (values.match(re) !== null) {
+                filteredResponse.push(rowObj)
+            }
+        }
+        return filteredResponse;
+    }
+}

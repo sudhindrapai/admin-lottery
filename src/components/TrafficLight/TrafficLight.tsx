@@ -10,8 +10,6 @@ const TrafficLight:FC<TrafficLightProps> = ({maxAmount, compareAmount}) => {
     let Inidicator = <Nutral />;
     if (maxAmount !== 0) {
         let halfAmount = maxAmount/2;
-        console.log(halfAmount < compareAmount, halfAmount,compareAmount)
-        console.log(halfAmount < compareAmount, halfAmount ,compareAmount)
         if (compareAmount < halfAmount) {
             Inidicator = <RedDot />;
         } else if (compareAmount > halfAmount && compareAmount < maxAmount) {
