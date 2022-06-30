@@ -1,11 +1,13 @@
 import {FC} from 'react';
-import {Wrapper, ProfielWapper, DropdownContainer, DropdownOption} from './StyledAppTopBar';
+import {Wrapper, ProfielWapper, DropdownContainer, DropdownOption, ProfileImage} from './StyledAppTopBar';
+import ProfileImageSrc from '../../assets/images/profileavtar.webp';
 
 import * as localStorageActionType from '../../LocalStorage/ActionTypes';
 import {setLocalStorage} from '../../LocalStorage/SetLocalStorage';
 
 import {adminRouts} from '../../routs';
 import {useNavigate} from 'react-router-dom';
+
 
 const AppTopBar:FC = () => {
 
@@ -18,7 +20,7 @@ const AppTopBar:FC = () => {
 
     return (<Wrapper>
         <ProfielWapper>
-            Profile
+            <ProfileImage src={ProfileImageSrc} />
         <DropdownContainer>
             <DropdownOption onClick={clearLocalStorage} >
                 Logout

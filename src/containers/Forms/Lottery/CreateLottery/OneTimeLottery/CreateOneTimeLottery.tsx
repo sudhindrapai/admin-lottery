@@ -1,11 +1,14 @@
-import {FC,useState, useRef} from 'react';
+import {FC,useState} from 'react';
 import Button from '../../../../../components/UI/Button/Button';
 import ImageUploader from '../../../../../components/ImageUploader/ImageUploader';
 
 import FormBuilder from '../../../../FormBuilder/FormBuilder';
 import {updateFormInputState, validateForm, updateFormSelectState, updateFormTimeState, updateFormDate} from '../../../../../Utility/Utility';
 import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement} from '../../../../../Utility/InterFacesAndEnum';
-import {WeekNames, FormSectionContainer,LotteryTypeTitle,LotteryTypeValue,CreateLotteryContainer, SectionTitle,UploadImageBtnSection, FormElementTitle, CreateLotteryFirstSection, CreateLotterySecondSection, TwoFormSection, FormView, Action} from '../RepeatedLottery/StyledCreateLottery';
+import {FormSectionContainer,LotteryTypeTitle,LotteryTypeValue,CreateLotteryContainer, SectionTitle,UploadImageBtnSection, FormElementTitle, CreateLotteryFirstSection, CreateLotterySecondSection, TwoFormSection, FormView, Action} from '../RepeatedLottery/StyledCreateLottery';
+
+import {RootState} from '../../../../../app/Store'
+import {useSelector} from 'react-redux';
 
 interface CreateLottery {
     form: FormElement[],
@@ -432,8 +435,6 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
 
     const {onCreateLottery,onCancel} = props;
 
-    const uploadImageRef = useRef<HTMLInputElement>(null);
-
     const [lotteryName, setLotteryName] = useState<CreateLottery>(LotteryNameForm)
     const [lotterySettingForm, setLotterySettingForm] = useState<CreateLottery>(lotterySettingsForm);
     const [ticketsType, setTicketType] = useState<CreateLottery>(ticketTypeForm);
@@ -441,7 +442,9 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
     const [lotteryMoneyFormValues, setLotteryMoneyForm] = useState<CreateLottery>(lotteryMoneyForm);
     const [lotteryTicketPriceValues, setLotteryTicketPriceValueForm] = useState<CreateLottery>(lotteryTicketPriceForm);
     const [scheduleFormValues, setScheduleFormValues] = useState<CreateLottery>(scheduleDaysForm);
-    const [selectedLotteryType, setLotteryType] = useState(3)
+    const [selectedLotteryType, setLotteryType] = useState(3);
+
+    const imagesList = useSelector((state:RootState) => state.images.images);
 
      // lottery name form start here
      const handleLotteryNameInput = (event:React.ChangeEvent <HTMLTextAreaElement | HTMLInputElement>):void => {
@@ -572,7 +575,7 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
     // end schedule days form
 
     const createTicketHandler = () => {
-        let completeObject = {
+        let completeObject:any = {
         };
         
         let completeFormArray = [
@@ -586,14 +589,26 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
         for (let formObj of completeFormArray) {
             if (formObj.id === "lotteryStartDate" || formObj.id === "lotteryEndDate") {
                 completeObject[formObj.id] = new Date(formObj.value);
+                if (formObj.id === "lotteryStartDate") {
+                    completeObject["lotteryStartTime"] = new Date(formObj.value);
+                } else if (formObj.id === "lotteryEndDate") {
+                    completeObject["lotteryEndTime"] = new Date(formObj.value);
+                }
             } else {
                 completeObject[formObj.id] = formObj.value;
             }
         }
-
+        
         completeObject["rewardGiftDesc"] = "";
         completeObject["isRepeat"] = false;
         completeObject["isMemberLottery"] = false;
+        completeObject["rewardImages"] = imagesList;
+
+        if (completeObject.rewardType === "Money Lottery") {
+            completeObject.rewardType = "M"
+        } else {
+            completeObject.rewardType = "G"
+        }
 
         console.log(completeObject);
         onCreateLottery(completeObject)
@@ -601,10 +616,6 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
 
     const redirectToLotteryList = () => {
         onCancel();
-    };
-
-    const triggerUploadImage = () => {
-        uploadImageRef?.current?.click();
     };
 
     return(
@@ -629,10 +640,6 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
                 </FormSectionContainer>
             </form>}
             {selectedLotteryType === 2 && <form>
-                {/* <UploadImageBtnSection>
-                    <input type={"file"} hidden={true} ref={uploadImageRef} />
-                    <div onClick={triggerUploadImage} >Upload Image</div>
-                </UploadImageBtnSection> */}
                 <ImageUploader />
             </form>}
             {selectedLotteryType != 3 && <form name={"Customer Registration"} html-for={"customer resgistraion"} autoComplete="off">

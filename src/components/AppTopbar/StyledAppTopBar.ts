@@ -1,5 +1,12 @@
 import styled from 'styled-components';
 
+export const ProfileImage = styled.img`
+height: 70px;
+width: 70px;
+object-fit: contain;
+border-radius: 50%;
+`;
+
 export const Wrapper = styled.div`
 width: 100%;
 box-sizing: border-box;
@@ -16,7 +23,7 @@ border-bottom: 1px solid #F6F6F6;
 
 export const DropdownContainer = styled.div`
 position: absolute;
-top: auto;
+top: 60px;
 right: -30px;
 width: 140px;
 z-index: 1;

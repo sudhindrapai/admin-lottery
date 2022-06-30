@@ -6,7 +6,7 @@ import ViewHeader from '../../../components/ViewHeader/ViewHeader';
 import Button from '../../../components/UI/Button/Button';
 import {useNavigate} from 'react-router-dom';
 import {adminRouts} from '../../../routs';
-import {transformDate} from '../../../Utility/Utility';
+import {transformDate,tablePagination,searchTableData, sortTableValues} from '../../../Utility/Utility';
 import Modal from '../../../components/Modal/Modal';
 import TableHeaderComponent from '../../../components/TableHeader/TableHeader';
 import TableFooter from '../../../components/TableFooter/TableFooter';
@@ -48,12 +48,12 @@ class TableHeader{
 }
 
 let tableHeaders = [
-    new TableHeader("Lottery ID", true, true, false, 'Lottery_ID'),
-    new TableHeader("Lottery price", true, false, false, 'Lottery_price'),
+    new TableHeader("Lottery ID", true, true, false, 'lotteryGameId'),
+    new TableHeader("Lottery price", true, false, false, 'rewardAmount'),
     new TableHeader("Start date", false, false, false, 'Start_date'),
     new TableHeader("End date", false, false, false, 'End_date'),
-    new TableHeader("Received amount", true, false, false, 'Received_amount'),
-    new TableHeader("users joined", true, false, false, 'users_joined'),
+    new TableHeader("Received amount", true, false, false, 'amountCollected'),
+    new TableHeader("users joined", true, false, false, 'noOfUsersJoined'),
     new TableHeader("Status", false, false, false, 'Status')
 ]
 
@@ -99,12 +99,28 @@ const LotteryList:FC = () => {
 
     const [tableHeaderValues, setHeaderValues] = useState(tableHeaders);
 
+    const [originalResponse, setOriginalResponse] = useState<any>([]);
+    const [responseData, setResponseData] = useState([]);
+    const [pageNumber, setPageNumber] = useState(1);
+    const [totalResponseLength, setResponseLength] = useState(0)
+    const [tableSearch, setSearch] = useState("")
+
     let lotteryList = useSelector((state: RootState) => state.lotteryList.lotteryList);
-    let page = useSelector((state: RootState) => state.lotteryList.page);
 
     useEffect(() => {
         getLotteryData(tabMenu);
     },[]);
+
+    useEffect(() => {
+        if (lotteryList.length > 0) {
+            setResponseLength(lotteryList.length);
+            setOriginalResponse(lotteryList);
+            let pagedResponse = tablePagination(lotteryList,1);
+            if (pagedResponse.isValidResponse) {
+                setResponseData(pagedResponse.data);
+            }
+        }
+    },[lotteryList]);
 
     const redirectToCreateLottery = (type: number):void => {
         if (type === 1) {
@@ -117,30 +133,6 @@ const LotteryList:FC = () => {
     const redirectToLotteryDetail = (lotteryId:number):void => {
         navigate(`/admin/lottery/view/${lotteryId}`, {state:lotteryId});
     };
-
-    // const toggleActiveStateOfDropdown = (selectedMenuId:string) => {
-    //     let updateMenu = tabMenu.map((menuObj) => {
-    //         return {
-    //             ...menuObj,
-    //             isSerarchViewActive: menuObj.id === selectedMenuId
-    //         }
-    //     });
-    //     setTabMenu(updateMenu);
-    // }
-
-    // let searchDropdown = tabMenu.map((menuObj) => {
-    //     return <DropdownOption onClick={() => {toggleActiveStateOfDropdown(menuObj.id)}}>
-    //         {menuObj.label}
-    //     </DropdownOption>
-    // });
-
-    // let activeDropdownOptionObj = tabMenu.filter((menuObj) => {
-    //     return menuObj.isSerarchViewActive;
-    // })[0];
-
-    // let activeDropdownLabel = <DropdownActiveOption>
-    //     {activeDropdownOptionObj.label} 
-    // </DropdownActiveOption>
 
     const updateTabMenuOption = (selectedMenuId) => {
         let updatedMenuArray = tabMenu.map((menuObj) => {
@@ -161,12 +153,67 @@ const LotteryList:FC = () => {
         dispatch(getLotteryList(selectedObj.queryParam));
     }
 
+    const updatePageNumber = (pageNumber) => {
+        if (originalResponse.length > 0) {
+            let pagedResponse = tablePagination(originalResponse,pageNumber);
+            if (pagedResponse.isValidResponse) {
+                setPageNumber(pagedResponse.pageNumber);
+                setResponseData(pagedResponse.data);
+            }
+        }
+    };
+
+    const sortTable = (id:string, isSortAsc:boolean) => {
+        let sortedArray:any = sortTableValues(originalResponse, id, !isSortAsc);
+        setPageNumber(1);
+        setOriginalResponse(sortedArray);
+        // tableHeaderValues, setHeaderValues
+        let pagedResponse = tablePagination(sortedArray,1);
+        setResponseData(pagedResponse.data);
+        let updatedTableHeaders:any = [];
+        for (let headerObj of tableHeaderValues) {
+            if (headerObj.id === id) {
+               
+                let updatedObj = {
+                    ...headerObj,
+                    isAscSorted: !isSortAsc,
+                    isDscSorted: isSortAsc
+                }
+                updatedTableHeaders.push(updatedObj);
+            } else {
+                let updatedObj = {
+                    ...headerObj,
+                    isAscSorted: false,
+                    isDscSorted: false
+                } 
+                updatedTableHeaders.push(updatedObj)
+            }
+        }
+        setHeaderValues(updatedTableHeaders);
+    }
+
+    const setTableSearchValue = (event:React.ChangeEvent<HTMLInputElement>) => {
+        setSearch(event.target.value)
+    }
+
+    const triggerSearch = (event:React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === "Enter") {
+            let searchResponse = searchTableData(originalResponse,tableSearch);
+           if (searchResponse.length > 0) {
+            setResponseData(searchResponse);
+            setPageNumber(1);
+            setResponseLength(searchResponse.length)
+           }
+        }
+    }
+
+
     let tabMenuView = tabMenu.map((menuObj) => {
         return <MenuOption onClick={() => {updateTabMenuOption(menuObj.id)}} 
         isActive={menuObj.isActive} key={menuObj.id} >{menuObj.label}</MenuOption>
     });
 
-    let lotteries = lotteryList.map((lotteryObj) => {
+    let lotteries = responseData.map((lotteryObj:any) => {
         let lotterIdBtn =  <Button title={`#${lotteryObj.lotteryGameId}`} 
         btnSize={ButtonSize.sm} btnVariant={ButtonVariant.primaryLink} 
         clicked={() => {redirectToLotteryDetail(lotteryObj.lotteryGameId)}} />;
@@ -181,18 +228,14 @@ const LotteryList:FC = () => {
             <td>
                 {lotterIdBtn}
                 </td>
-            <td>&#x24; {lotteryObj.lotteryGameId}</td>
+            <td>&#x24; {lotteryObj.rewardAmount? lotteryObj.rewardAmount : 0}</td>
             <td>{transformDate(lotteryObj.lotteryGameStartDate)}</td>
             <td>{transformDate(lotteryObj.lotteryGameEndDate)}</td>
-            <td>&#x24; {lotteryObj.rewardAmount}</td>
+            <td>&#x24; {lotteryObj.amountCollected? lotteryObj.amountCollected : 0}</td>
             <td><NumberOfUsers>{lotteryObj.noOfUsersJoined}</NumberOfUsers></td>
             <td>{lotteryStatusTag}</td>
             </tr>
     });
-
-    const updatePageNumber = (pageNumber:number) => {
-        console.log(pageNumber)
-    }
 
     return <Fragment>
         <Modal isOpen={createLotteryModal} 
@@ -221,13 +264,8 @@ const LotteryList:FC = () => {
      </BreadcrumbSection>
      <ContentSection>
          <SearchSectionContainer>
-         {/* <DropdownContainer>
-         <FilterIcon /> {activeDropdownLabel} <ChevronDownIcon/>
-             <DropdownOptionsContainer>
-                 {searchDropdown}
-             </DropdownOptionsContainer>
-        </DropdownContainer> */}
-        <Input placeholder={"Search"} />
+        <Input value={tableSearch} onKeyDown={triggerSearch} 
+                onChange={setTableSearchValue}  placeholder={"Search"} />
         </SearchSectionContainer>
          <TabMenuContainer>
              {tabMenuView}
@@ -235,13 +273,13 @@ const LotteryList:FC = () => {
      <TableWrapper>
          <Table>
          <thead>
-             <TableHeaderComponent headers={tableHeaderValues} onToggleSort={() => {}} />
+             <TableHeaderComponent headers={tableHeaderValues} onToggleSort={sortTable} />
          </thead>
          <Tbody>
              {lotteries}
          </Tbody>
          </Table>
-         <TableFooter totalCount={lotteries.length} currentPageNumber={1} updatePageNumber={updatePageNumber} />
+         <TableFooter totalCount={totalResponseLength} currentPageNumber={pageNumber} updatePageNumber={updatePageNumber} />
      </TableWrapper>
      </ContentSection>
     </Fragment>
