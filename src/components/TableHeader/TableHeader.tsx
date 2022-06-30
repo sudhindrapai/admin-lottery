@@ -27,12 +27,16 @@ const TableHeader:FC<TablehHeaderProps> = (props) => {
         </SortIcon>
     }
 
+    const toggleSort = (id:string, isSortAsc:boolean ) => {
+        onToggleSort(id,isSortAsc);
+    }
+
     return(<tr>
         {headers.map((headerObj) => {
             return <th>
                 <LabelWrapper>
                     {headerObj.label}
-                    <SortWrapper>
+                    <SortWrapper onClick={() => {toggleSort(headerObj.id, headerObj.isAscSorted)}}>
                         {headerObj.isSortRequired && sortView(headerObj.isAscSorted, headerObj.isDscSorted)}
                     </SortWrapper>
                     </LabelWrapper>

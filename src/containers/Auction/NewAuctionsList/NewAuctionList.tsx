@@ -1,5 +1,5 @@
 import {FC,Fragment, useState, useEffect} from 'react';
-import {transformDate, tablePagination, searchTableData} from '../../../Utility/Utility'
+import {transformDate, tablePagination, searchTableData,sortTableValues} from '../../../Utility/Utility'
 import ViewHeader from '../../../components/ViewHeader/ViewHeader';
 import Button from '../../../components/UI/Button/Button';
 import TableHeaderComponent from '../../../components/TableHeader/TableHeader';
@@ -29,12 +29,12 @@ class TableHeader{
 }
 
 let tableHeaders = [
-    new TableHeader("Auction ID", true, true, false, 'Auction_ID'),
-    new TableHeader("Auction price", true, false, false, 'Aucton_price'),
+    new TableHeader("Auction ID", true, true, false, 'auctionId'),
+    new TableHeader("Auction price", true, false, false, 'auctionProposedPrice'),
     new TableHeader("Requested date", false, false, false, 'Requested_date'),
     new TableHeader("Category", false, false, false, 'category'),
-    new TableHeader("User Name", true, false, false, 'UserName'),
-    new TableHeader("Email Address", true, false, false, 'emailAddress'),
+    new TableHeader("User Name", false, false, false, 'userName'),
+    new TableHeader("Email Address", false, false, false, 'emailAddress'),
 ]
 
 let tabMenuViewList = [
@@ -64,6 +64,7 @@ const AuctionList = () => {
     const [tabMenu, setTabMenu] = useState(tabMenuViewList);
     const [tableHeaderValues, setHeaderValues] = useState(tableHeaders);
     const [pageNumber, setPageNumber] = useState(1);
+    const [originalResponse, setOriginalResponse] = useState<any>([]);
     const [responseData, setResponse] = useState([]);
     const [totalResponseLength, setResponseLength] = useState(0)
     const [tableSearch, setSearch] = useState("")
@@ -75,6 +76,7 @@ const AuctionList = () => {
     useEffect(() => {
         if (requestList.length > 0) {
             setResponseLength(requestList.length);
+            setOriginalResponse(requestList);
             let pagedResponse = tablePagination(requestList,1);
             if (pagedResponse.isValidResponse) {
                 setResponse(pagedResponse.data);
@@ -106,8 +108,8 @@ const AuctionList = () => {
     }
 
     const updatePageNumber = (pageNumber) => {
-        if (requestList.length > 0) {
-            let pagedResponse = tablePagination(requestList,pageNumber);
+        if (originalResponse.length > 0) {
+            let pagedResponse = tablePagination(originalResponse,pageNumber);
             if (pagedResponse.isValidResponse) {
                 setPageNumber(pagedResponse.pageNumber);
                 setResponse(pagedResponse.data);
@@ -120,6 +122,34 @@ const AuctionList = () => {
         isActive={menuObj.isActive} key={menuObj.id} >{menuObj.label}</TableStyle.MenuOption>
     });
 
+    const sortTable = (id:string, isSortAsc:boolean) => {
+        let sortedArray:any = sortTableValues(originalResponse, id, !isSortAsc);
+        setPageNumber(1);
+        setOriginalResponse(sortedArray);
+        // tableHeaderValues, setHeaderValues
+        let pagedResponse = tablePagination(sortedArray,1);
+        setResponse(pagedResponse.data);
+        let updatedTableHeaders:any = [];
+        for (let headerObj of tableHeaderValues) {
+            if (headerObj.id === id) {
+               
+                let updatedObj = {
+                    ...headerObj,
+                    isAscSorted: !isSortAsc,
+                    isDscSorted: isSortAsc
+                }
+                updatedTableHeaders.push(updatedObj);
+            } else {
+                let updatedObj = {
+                    ...headerObj,
+                    isAscSorted: false,
+                    isDscSorted: false
+                } 
+                updatedTableHeaders.push(updatedObj)
+            }
+        }
+        setHeaderValues(updatedTableHeaders);
+    }
 
 
     let tableBody = responseData.map((tableRowObj:any) => {
@@ -161,7 +191,7 @@ const AuctionList = () => {
 
     const triggerSearch = (event:React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Enter") {
-            let searchResponse = searchTableData(requestList,tableSearch);
+            let searchResponse = searchTableData(originalResponse,tableSearch);
            if (searchResponse.length > 0) {
             setResponse(searchResponse);
             setPageNumber(1);
@@ -185,7 +215,7 @@ const AuctionList = () => {
         </TableStyle.TabMenuContainer>
         <TableStyle.TableWrapper>
             <TableStyle.Table>
-            <TableHeaderComponent headers={tableHeaderValues} onToggleSort={() => {}} />
+            <TableHeaderComponent headers={tableHeaderValues} onToggleSort={sortTable} />
             <TableStyle.Tbody>
                 {tableBody}
             </TableStyle.Tbody>

@@ -1,5 +1,5 @@
 import {FC,Fragment, useState, useEffect} from 'react';
-import {transformDate,tablePagination,searchTableData} from '../../../Utility/Utility'
+import {transformDate,tablePagination,searchTableData, sortTableValues} from '../../../Utility/Utility'
 import ViewHeader from '../../../components/ViewHeader/ViewHeader';
 import Button from '../../../components/UI/Button/Button';
 import TableHeaderComponent from '../../../components/TableHeader/TableHeader';
@@ -32,12 +32,12 @@ class TableHeader{
 }
 
 let tableHeaders = [
-    new TableHeader("Auction ID", true, true, false, 'Auction_ID'),
-    new TableHeader("Auction price", true, false, false, 'Aucton_price'),
+    new TableHeader("Auction ID", true, true, false, 'auctionId'),
+    new TableHeader("Auction price", true, false, false, 'auctionPrice'),
     new TableHeader("Start date", false, false, false, 'Start_date'),
     new TableHeader("End date", false, false, false, 'End_date'),
-    new TableHeader("Received amount", true, false, false, 'Received_amount'),
-    new TableHeader("users joined", true, false, false, 'users_joined'),
+    new TableHeader("Received amount", true, false, false, 'amountCollected'),
+    new TableHeader("users joined", true, false, false, 'noOfUsersJoined'),
     new TableHeader("Status", false, false, false, 'Status')
 ]
 
@@ -88,6 +88,7 @@ const AuctionList = () => {
 
     const [tabMenu, setTabMenu] = useState(tabMenuViewList);
     const [tableHeaderValues, setHeaderValues] = useState(tableHeaders);
+    const [originalResponse, setOriginalResponse] = useState<any>([]);
     const [responseData, setResponseData] = useState([]);
     const [pageNumber, setPageNumber] = useState(1);
     const [totalResponseLength, setResponseLength] = useState(0)
@@ -100,12 +101,13 @@ const AuctionList = () => {
     useEffect(() => {
         if (auctionList.length > 0) {
             setResponseLength(auctionList.length);
+            setOriginalResponse(auctionList);
             let pagedResponse = tablePagination(auctionList,1);
             if (pagedResponse.isValidResponse) {
                 setResponseData(pagedResponse.data);
             }
         }
-    },[auctionList])
+    },[auctionList]);
 
     const redirectToView = (path: string) => {
         navigate(path);
@@ -135,8 +137,8 @@ const AuctionList = () => {
     }
 
     const updatePageNumber = (pageNumber) => {
-        if (auctionList.length > 0) {
-            let pagedResponse = tablePagination(auctionList,pageNumber);
+        if (originalResponse.length > 0) {
+            let pagedResponse = tablePagination(originalResponse,pageNumber);
             if (pagedResponse.isValidResponse) {
                 setPageNumber(pagedResponse.pageNumber);
                 setResponseData(pagedResponse.data);
@@ -149,7 +151,34 @@ const AuctionList = () => {
         isActive={menuObj.isActive} key={menuObj.id} >{menuObj.label}</TableStyle.MenuOption>
     });
 
-
+    const sortTable = (id:string, isSortAsc:boolean) => {
+        let sortedArray:any = sortTableValues(originalResponse, id, !isSortAsc);
+        setPageNumber(1);
+        setOriginalResponse(sortedArray);
+        // tableHeaderValues, setHeaderValues
+        let pagedResponse = tablePagination(sortedArray,1);
+        setResponseData(pagedResponse.data);
+        let updatedTableHeaders:any = [];
+        for (let headerObj of tableHeaderValues) {
+            if (headerObj.id === id) {
+               
+                let updatedObj = {
+                    ...headerObj,
+                    isAscSorted: !isSortAsc,
+                    isDscSorted: isSortAsc
+                }
+                updatedTableHeaders.push(updatedObj);
+            } else {
+                let updatedObj = {
+                    ...headerObj,
+                    isAscSorted: false,
+                    isDscSorted: false
+                } 
+                updatedTableHeaders.push(updatedObj)
+            }
+        }
+        setHeaderValues(updatedTableHeaders);
+    }
 
     let tableBody = responseData.map((tableRowObj:any) => {
 
@@ -199,7 +228,7 @@ const AuctionList = () => {
 
     const triggerSearch = (event:React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Enter") {
-            let searchResponse = searchTableData(auctionList,tableSearch);
+            let searchResponse = searchTableData(originalResponse,tableSearch);
            if (searchResponse.length > 0) {
             setResponseData(searchResponse);
             setPageNumber(1);
@@ -226,7 +255,7 @@ const AuctionList = () => {
         </TableStyle.TabMenuContainer>
         <TableStyle.TableWrapper>
             <TableStyle.Table>
-            <TableHeaderComponent headers={tableHeaderValues} onToggleSort={() => {}} />
+            <TableHeaderComponent headers={tableHeaderValues} onToggleSort={sortTable} />
             <TableStyle.Tbody>
                 {tableBody}
             </TableStyle.Tbody>

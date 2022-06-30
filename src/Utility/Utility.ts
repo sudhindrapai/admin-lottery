@@ -1,4 +1,4 @@
-import {FormElement, customValidationType, FormElementType} from './InterFacesAndEnum';
+import {FormElement, customValidationType} from './InterFacesAndEnum';
 
 
 const emailRegex = new RegExp(/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/);
@@ -174,7 +174,7 @@ const validateFormElement = (validationType:customValidationType, value:string, 
 }
 
 // method to validate complete form
-export const validateForm = (formElements:FormElement[]):boolean => {
+export const validateForm = (formElements:FormElement[]) => {
     let isValidForm = true;
     for (let element of formElements) {
         if (element.isRequired || element.isCustomValidationRequred && element.errorMessage.length > 0) {
@@ -184,6 +184,8 @@ export const validateForm = (formElements:FormElement[]):boolean => {
     }
     return isValidForm
 } 
+
+// export const validateCompleteForm = (formElements: ) => {}
 
 // method to add padding zero to the incoming digit 
 // incoming value 8 it will return 08
@@ -227,7 +229,19 @@ export const transformDate = (dateObj:Date): string => {
     return `${date.getDate()} ${monthNames(date.getMonth())} ${date.getFullYear()}`
 };
 
-export const sortTableValues = () => {};
+export const sortTableValues = (response:any, objeckKey:string, isSortAsc:boolean) => {
+    console.log(response,objeckKey,isSortAsc);
+    let arrayForSort  = [...response]
+    let sortedResponse = arrayForSort.sort((obj1:any, obj2:any) => {
+        if (isSortAsc) {
+            return obj1[objeckKey] - obj2[objeckKey];
+        } else {
+            return obj2[objeckKey] - obj1[objeckKey];
+        }
+    });
+
+    return sortedResponse;
+};
 
 // method to create pagination
 export const tablePagination = (response: any, pageNumber:number) => {
