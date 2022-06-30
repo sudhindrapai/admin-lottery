@@ -3,6 +3,7 @@ import {RootState} from '../../../app/Store';
 import {useSelector, useDispatch} from 'react-redux';
 import {getLotteryList} from '../../../features/lotteryListSlice';
 import ViewHeader from '../../../components/ViewHeader/ViewHeader';
+import EmptyTableView from '../../../components/EmptyTableView/EmptyTableView';
 import Button from '../../../components/UI/Button/Button';
 import {useNavigate} from 'react-router-dom';
 import {adminRouts} from '../../../routs';
@@ -100,7 +101,7 @@ const LotteryList:FC = () => {
     const [tableHeaderValues, setHeaderValues] = useState(tableHeaders);
 
     const [originalResponse, setOriginalResponse] = useState<any>([]);
-    const [responseData, setResponseData] = useState([]);
+    const [responseData, setResponseData] = useState<any>([]);
     const [pageNumber, setPageNumber] = useState(1);
     const [totalResponseLength, setResponseLength] = useState(0)
     const [tableSearch, setSearch] = useState("")
@@ -119,6 +120,8 @@ const LotteryList:FC = () => {
             if (pagedResponse.isValidResponse) {
                 setResponseData(pagedResponse.data);
             }
+        } else {
+            setResponseData([]);
         }
     },[lotteryList]);
 
@@ -279,6 +282,7 @@ const LotteryList:FC = () => {
              {lotteries}
          </Tbody>
          </Table>
+         {responseData.length === 0 && <EmptyTableView />}
          <TableFooter totalCount={totalResponseLength} currentPageNumber={pageNumber} updatePageNumber={updatePageNumber} />
      </TableWrapper>
      </ContentSection>

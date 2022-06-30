@@ -4,6 +4,7 @@ import ViewHeader from '../../../components/ViewHeader/ViewHeader';
 import Button from '../../../components/UI/Button/Button';
 import TableHeaderComponent from '../../../components/TableHeader/TableHeader';
 import TableFooter from '../../../components/TableFooter/TableFooter';
+import EmptyTableView from '../../../components/EmptyTableView/EmptyTableView';
 
 import {RootState} from '../../../app/Store';
 import {useSelector, useDispatch} from 'react-redux';
@@ -220,6 +221,7 @@ const AuctionList = () => {
                 {tableBody}
             </TableStyle.Tbody>
             </TableStyle.Table>
+            {responseData.length === 0 && <EmptyTableView />}
             <TableFooter totalCount={totalResponseLength} currentPageNumber={pageNumber} updatePageNumber={updatePageNumber} />
         </TableStyle.TableWrapper>
         </TableStyle.ContentSection>
