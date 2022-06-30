@@ -6,7 +6,8 @@ import {UserSolidCircle} from '@styled-icons/zondicons/UserSolidCircle';
 import {Speakerphone} from '@styled-icons/heroicons-outline/Speakerphone';
 import {Notification} from '@styled-icons/zondicons/Notification';
 import {SettingsSuggest} from '@styled-icons/material/SettingsSuggest';
-import {DotSingle} from '@styled-icons/entypo/DotSingle';
+import {DotFill} from '@styled-icons/octicons/DotFill';
+
 
 interface NavItemProps {
     isActive: boolean
@@ -15,6 +16,7 @@ interface NavItemProps {
 interface SubmenuProps {
     isSubmenuVisible: boolean
 }
+
 
 export const StyledWrapper =styled.nav`
 width: 100%;
@@ -90,7 +92,11 @@ font-size: 16px;
 export const Option = styled.div`
 font-size: 14px;
 color: #979797;
-padding: 10px 0 10px 44px;
+padding: 10px 0 10px 10px;
+margin-left: 34px;
+border-radius: 4px;
+background-color: ${(props:NavItemProps) => props.isActive ? '#3a57e81a' : '#ffffff' };
+color: ${(props:NavItemProps) => props.isActive ? '#3a57e8' : "#000000" };
 `;
 
 export const SubmenuContainer = styled.div`
@@ -136,6 +142,7 @@ color:${(props:NavItemProps) => props.isActive ? '#3a57e8' : '#000000'};
 height: 18px;
 `;
 
-export const DotSingleIcon = styled(DotSingle)`
-height: 18px
+export const DotSingleIcon = styled(DotFill)`
+height: 10px;
+margin-right: 4px;
 `;
