@@ -158,7 +158,7 @@ const LeftMenu:FC = () => {
             routePath:adminRouts.settings,
             isSubmenuExists: false,
             isSubmenuExpanded: false,
-            activeRoutePaths:[],
+            activeRoutePaths:[adminRouts.settings],
         }
     ]
 

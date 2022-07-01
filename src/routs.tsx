@@ -20,7 +20,7 @@ import AuctionRequests from './containers/Auction/NewAuctionsList/NewAuctionList
 import CreateAuction from './containers/Auction/CreateAuction/CreateAuction';
 import AuctionDetail from './containers/Auction/AuctionDetail/AuctionDetail';
 import ApproveAuction from './containers/Auction/ApproveAuction/AuctionDetail';
-
+import Settings from './containers/Settings/Settings';
 
 let accessToken = getLocalStorage(localStorageActionType.GET_ACCESS_TOKEN);
 
@@ -86,6 +86,7 @@ const AppRoute:FC = () => {
             <Route path={adminRouts.createAuction} element={<CreateAuction />} />
             <Route path={adminRouts.updateAuction(null)} element={<AuctionDetail />} />
             <Route path={adminRouts.approveAuction(null)} element={<ApproveAuction />} />
+            <Route path={adminRouts.settings} element={<Settings />} />
             <Route path={"*"} element={<h3>404</h3>} />
         </Routes> : <Routes>
         <Route path={adminRouts.login} element={<LoginForm />} />
