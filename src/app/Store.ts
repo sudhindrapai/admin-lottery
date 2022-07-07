@@ -7,6 +7,7 @@ import TemplateList from '../features/templateListslice';
 import UpdateTemplate from '../features/updateTemplateSlice';
 import Auction from '../features/auctionList';
 import ImageUploader from '../features/imageUploaderSlice';
+import UsersSlice from '../features/Users'
 
 const store = configureStore({
     reducer:{
@@ -16,7 +17,8 @@ const store = configureStore({
        templateList: TemplateList,
        updateTemplate: UpdateTemplate,
        auction:Auction,
-       images:ImageUploader
+       images:ImageUploader,
+       users: UsersSlice
     }
 })
 

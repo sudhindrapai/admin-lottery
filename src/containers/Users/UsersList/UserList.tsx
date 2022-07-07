@@ -1,21 +1,21 @@
-import {FC,Fragment, useState, useEffect} from 'react';
+
+import {FC, useState, useEffect} from 'react';
 import {transformDate,tablePagination,searchTableData, sortTableValues} from '../../../Utility/Utility'
 import ViewHeader from '../../../components/ViewHeader/ViewHeader';
 import Button from '../../../components/UI/Button/Button';
 import TableHeaderComponent from '../../../components/TableHeader/TableHeader';
 import TableFooter from '../../../components/TableFooter/TableFooter';
-import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 import EmptyTableView from '../../../components/EmptyTableView/EmptyTableView';
 
 import {RootState} from '../../../app/Store';
 import {useSelector, useDispatch} from 'react-redux';
-import {getAuctions} from '../../../features/auctionList';
+import {getUserList} from '../../../features/Users'
+
+import {Wrapper, Container} from './StyledUserList';
+import * as TableStyle from '../../Lottery/LotteryList/StyledLottery';
 
 import {useNavigate} from 'react-router-dom';
 import {adminRouts} from '../../../routs';
-
-import * as TableStyle from '../../Lottery/LotteryList/StyledLottery';
-
 
 enum ButtonSize {
     sm = "small",
@@ -33,59 +33,44 @@ class TableHeader{
 }
 
 let tableHeaders = [
-    new TableHeader("Auction ID", true, true, false, 'auctionId'),
-    new TableHeader("Auction price", true, false, false, 'auctionPrice'),
-    new TableHeader("Start date", false, false, false, 'Start_date'),
-    new TableHeader("End date", false, false, false, 'End_date'),
-    new TableHeader("Received amount", true, false, false, 'amountCollected'),
-    new TableHeader("users joined", true, false, false, 'noOfUsersJoined'),
-    new TableHeader("Status", false, false, false, 'Status')
+    new TableHeader("User ID", true, true, false, 'userId'),
+    new TableHeader("User Name", true, false, false, 'userName'),
+    new TableHeader("Joined date", false, false, false, 'joinedDate'),
+    new TableHeader("Total Purchased", false, false, false, 'totalPurchased'),
+    new TableHeader("Joined Lotteries", true, false, false, 'joinedLotteries'),
+    new TableHeader("Joined Auction", true, false, false, 'joinedAuction'),
+    new TableHeader("Membership", false, false, false, 'membership')
 ]
 
 let tabMenuViewList = [
     {
-        label: "Live Auctions",
+        label: "All",
         id: "winnerAuctions_2",
         queryParam:"C",
         isActive: true,
         isSerarchViewActive: false
     },
     {
-        label: "Upcoming Auctions",
+        label: "Gold Members",
         id: "cancelledAuctions_3",
         queryParam:"U",
         isActive: false,
         isSerarchViewActive: false
     },
     {
-        label: "Excuted Auctions",
+        label: "Regular Members",
         id: "pendingAuctons_4",
         queryParam:"E",
         isActive: false,
         isSerarchViewActive: false
-    },
-    {
-        label: "Cancelled",
-        id: "CancelledAuctons_5",
-        queryParam:"D",
-        isActive: false,
-        isSerarchViewActive: false
-    },
-    {
-        label: "All",
-        id: "all_1",
-        queryParam:"A",
-        isActive: false,
-        isSerarchViewActive: true
     }
 ]
 
 
-const AuctionList = () => {
+const UserList:FC = () => {
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
-    let auctionList = useSelector((state:RootState) => state.auction.auctions);
 
     const [tabMenu, setTabMenu] = useState(tabMenuViewList);
     const [tableHeaderValues, setHeaderValues] = useState(tableHeaders);
@@ -93,32 +78,32 @@ const AuctionList = () => {
     const [responseData, setResponseData] = useState([]);
     const [pageNumber, setPageNumber] = useState(1);
     const [totalResponseLength, setResponseLength] = useState(0)
-    const [tableSearch, setSearch] = useState("")
+    const [tableSearch, setSearch] = useState("");
+
+    const userList = useSelector((state:RootState) => state.users.users)
+
+    const redirectToDetailView = (auctionId:number) => {
+        navigate(adminRouts.updateAuction(auctionId));
+    }
 
     useEffect(() => {
-        getTableData(tabMenu);
+        if (userList.length === 0) {
+            getTableData(tabMenu);
+        }
     },[]);
 
     useEffect(() => {
-        if (auctionList.length > 0) {
-            setResponseLength(auctionList.length);
-            setOriginalResponse(auctionList);
-            let pagedResponse = tablePagination(auctionList,1);
+        if (userList.length > 0) {
+            setResponseLength(userList.length);
+            setOriginalResponse(userList);
+            let pagedResponse = tablePagination(userList,1);
             if (pagedResponse.isValidResponse) {
                 setResponseData(pagedResponse.data);
             }
         } else {
             setResponseData([]);
         }
-    },[auctionList]);
-
-    const redirectToView = (path: string) => {
-        navigate(path);
-    };
-
-    const redirectToDetailView = (auctionId:number) => {
-        navigate(adminRouts.updateAuction(auctionId));
-    }
+    },[userList]);
 
     const updateTabMenuOption = (selectedMenuId) => {
         let updatedMenuArray = tabMenu.map((menuObj) => {
@@ -136,7 +121,7 @@ const AuctionList = () => {
             return tabObj.isActive
         })[0];
 
-        dispatch(getAuctions(`auctionStatus=${selectedObj.queryParam}`));
+        dispatch(getUserList(`auctionStatus=${selectedObj.queryParam}`));
     }
 
     const updatePageNumber = (pageNumber) => {
@@ -158,7 +143,6 @@ const AuctionList = () => {
         let sortedArray:any = sortTableValues(originalResponse, id, !isSortAsc);
         setPageNumber(1);
         setOriginalResponse(sortedArray);
-        // tableHeaderValues, setHeaderValues
         let pagedResponse = tablePagination(sortedArray,1);
         setResponseData(pagedResponse.data);
         let updatedTableHeaders:any = [];
@@ -183,48 +167,6 @@ const AuctionList = () => {
         setHeaderValues(updatedTableHeaders);
     }
 
-    let tableBody = responseData.map((tableRowObj:any) => {
-
-        let idBtn =  <Button title={`#${tableRowObj.auctionId}`} 
-        btnSize={ButtonSize.sm} btnVariant={ButtonVariant.primaryLink} 
-        clicked={() => {redirectToDetailView(tableRowObj.auctionId)}} />;
-
-        let status = tableRowObj.auctionStatus === "C" ? <TableStyle.Live>
-            Live
-        </TableStyle.Live> : tableRowObj.auctionStatus === "U" ? <TableStyle.Upcoming>
-            Not Live
-        </TableStyle.Upcoming> : null;
-
-        return <tr>
-            <td>
-            {idBtn}
-            </td>
-            <td>
-                &#x24; {tableRowObj.auctionPrice? tableRowObj.auctionPrice : 0}
-            </td>
-            <td>
-                {transformDate(tableRowObj.auctionStartDate)}
-            </td>
-            <td>
-                {transformDate(tableRowObj.auctionEndDate)}
-            </td>
-            <td>
-            <TrafficLight 
-            maxAmount={tableRowObj.auctionPrice? tableRowObj.auctionPrice : 0} 
-            compareAmount={tableRowObj.amountCollected? tableRowObj.amountCollected : 0} />
-            &#x24; {tableRowObj.amountCollected? tableRowObj.amountCollected : 0}
-            </td>
-            <td>
-                <TableStyle.NumberOfUsers>
-                    {tableRowObj.noOfUsersJoined}
-                </TableStyle.NumberOfUsers>
-            </td>
-            <td>
-                {status}
-            </td>
-        </tr>
-    });
-
     const setTableSearchValue = (event:React.ChangeEvent<HTMLInputElement>) => {
         setSearch(event.target.value)
     }
@@ -240,34 +182,67 @@ const AuctionList = () => {
         }
     }
 
-    
-    return <Fragment>
-        <TableStyle.BreadcrumbSection>
-        <ViewHeader title={"Auctions"} isNeedCreateButton={true} btnText={"Test button"}
-     routePath={adminRouts.createAuction} />
-     <Button title={"+ Create Auction"} btnSize={ButtonSize.md} btnVariant={ButtonVariant.primaryFilled} 
-     clicked={() => {redirectToView(adminRouts.createAuction)}} />
-        </TableStyle.BreadcrumbSection>
+        let tableBody = responseData.map((tableRowObj:any) => {
+
+            let idBtn =  <Button title={`#${tableRowObj.userId}`} 
+        btnSize={ButtonSize.sm} btnVariant={ButtonVariant.primaryLink} 
+        clicked={() => {redirectToDetailView(tableRowObj.userId)}} />;
+
+            return <tr>
+            <td>
+            {idBtn}
+            </td>
+            <td>
+                {tableRowObj.userName}
+            </td>
+            <td>
+                {transformDate(tableRowObj.joinedDate)}
+            </td>
+            <td>
+                {tableRowObj.totalPurchase}
+            </td>
+            <td>
+            <TableStyle.NumberOfUsers>
+            {tableRowObj.joinedLotteries? tableRowObj.joinedLotteries : 0}
+            </TableStyle.NumberOfUsers>
+            </td>
+            <td>
+            <TableStyle.NumberOfUsers>
+            {tableRowObj.joinedAuction? tableRowObj.joinedAuction : 0}
+            </TableStyle.NumberOfUsers>
+            </td>
+            <td>
+                {tableRowObj.isGoldMember === true ? "Gold members" : "Regular Member"}
+            </td>
+        </tr>
+        });
+
+    return <Wrapper>
+        <Container>
+            <TableStyle.BreadcrumbSection>
+                <ViewHeader title={"Users"} />
+            </TableStyle.BreadcrumbSection>
+        </Container>
         <TableStyle.ContentSection>
-            <TableStyle.SearchSectionContainer>
+        <TableStyle.SearchSectionContainer>
                 <TableStyle.Input value={tableSearch} onKeyDown={triggerSearch} 
                 onChange={setTableSearchValue}  placeholder={"Search"} />
             </TableStyle.SearchSectionContainer>
-        <TableStyle.TabMenuContainer>
+            <TableStyle.TabMenuContainer>
         {tabMenuView}
         </TableStyle.TabMenuContainer>
         <TableStyle.TableWrapper>
-            <TableStyle.Table>
-            <TableHeaderComponent headers={tableHeaderValues} onToggleSort={sortTable} />
-            <TableStyle.Tbody>
-                {tableBody}
-            </TableStyle.Tbody>
-            </TableStyle.Table>
-            {responseData.length === 0 && <EmptyTableView />}
+        <TableStyle.Table>
+        <TableHeaderComponent headers={tableHeaderValues} onToggleSort={sortTable} />
+        <TableStyle.Tbody>
+            {tableBody}
+        </TableStyle.Tbody>
+        </TableStyle.Table>
+        {userList.length === 0 && <EmptyTableView />}
             <TableFooter totalCount={totalResponseLength} currentPageNumber={pageNumber} updatePageNumber={updatePageNumber} />
         </TableStyle.TableWrapper>
         </TableStyle.ContentSection>
-    </Fragment>
+    </Wrapper>
 };
 
-export default AuctionList
+export default UserList

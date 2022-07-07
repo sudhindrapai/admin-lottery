@@ -88,6 +88,14 @@ width: 100%;
 box-sizing: border-box;
 text-align: right;
 margin-bottom: 50px;
+display: flex;
+flex-flow: row;
+align-items: center;
+justify-content: flex-end;
+column-gap: 15px;
+Button{
+    border-radius: 8px;
+}
 `;
 
 export const CheckboxContainer = styled.div`

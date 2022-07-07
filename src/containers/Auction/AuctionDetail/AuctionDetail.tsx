@@ -12,9 +12,9 @@ import {updateFormInputState, validateForm, updateFormSelectState, updateFormTim
 import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement} from '../../../Utility/InterFacesAndEnum';
 
 import {adminRouts} from '../../../routs';
-import {getAuctionDetailById} from '../../../features/auctionList';
+import {getAuctionDetailById, deleteAuction, toggleAuctionDeletionState} from '../../../features/auctionList';
 import {useSelector, useDispatch} from 'react-redux';
-import {useParams} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 
 import {CreateLotteryFirstSection, CreateLotterySecondSection} from '../../Forms/Lottery/CreateLottery/RepeatedLottery/StyledCreateLottery';
 import {HeaderView,FormContainer, FormWrapper, FormBody, TwoSections, ActionBtn} from '../CreateAuction/StyledCreateAuction';
@@ -27,11 +27,11 @@ class TableHeader{
 }
 
 let winnerDetailTableHeaders = [
-    new TableHeader("Users", true, true, false, 'users'),
-    new TableHeader("Purchase Date", true, false, false, 'purchaseDate'),
+    new TableHeader("Users", false, true, false, 'users'),
+    new TableHeader("Purchase Date", false, false, false, 'purchaseDate'),
     new TableHeader("Ticket type", false, false, false, 'ticketType'),
     new TableHeader("No Of Tickets", false, false, false, 'noOfTickets'),
-    new TableHeader("Total amount", true, false, false, 'totalAmount')
+    new TableHeader("Total amount", false, false, false, 'totalAmount')
 ];
 
 let purchaseDetailTableHeaders = [
@@ -549,6 +549,7 @@ const productDetails: FormState = {
 
 const CreateAuction:FC = () => {
 
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const {auctionId} = useParams();
 
@@ -564,9 +565,21 @@ const CreateAuction:FC = () => {
     const [purchaseTableHeaders, setPurchaseTableHeaders] = useState(purchaseDetailTableHeaders);
 
     const detailResponse = useSelector((state:RootState) => state.auction.auctionDetail);
+    const isAuctionDeleted = useSelector((state:RootState) => state.auction.isAuctionDeleted);
 
     useEffect(() => {
         dispatch(getAuctionDetailById(auctionId?auctionId:""))
+    },[]);
+
+    useEffect(() => {
+        if (isAuctionDeleted === true) {
+            navigate(adminRouts.auctionList);
+        }
+        return () => {
+            dispatch(toggleAuctionDeletionState({
+                isDeleted:false
+            }))
+        }
     },[])
 
     useEffect(() => {
@@ -737,6 +750,11 @@ const CreateAuction:FC = () => {
     onChangeDate={() => {}} onChangeTime={() => {}} />;
     // --------- set product details ------
 
+
+    const deleteAuctionDetails = () => {
+        dispatch(deleteAuction(`auctionId=${auctionId}`));
+    }
+
     const validateForm = () => {};
 
     return <Fragment>
@@ -814,9 +832,14 @@ const CreateAuction:FC = () => {
                 </FormWrapper>
                 <ActionBtn>
                 <Button
+                title={"Delete"}
+            btnSize ={ButtonSize.md} 
+            btnVariant={ButtonVariant.secondary} clicked={deleteAuctionDetails} />
+                <Button
                 title={"Update"}
             btnSize ={ButtonSize.md} 
             btnVariant={ButtonVariant.primaryFilled} clicked={validateForm} />
+            
         </ActionBtn>
             </CreateLotteryFirstSection>
             <CreateLotterySecondSection>

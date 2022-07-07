@@ -68,7 +68,8 @@ interface AuctoinInitiaStateProps {
     auctionDetail:any 
     page: number,
     isAuctionCreated: boolean,
-    isNewAuctionApproved: boolean
+    isNewAuctionApproved: boolean,
+    isAuctionDeleted:boolean,
 }
 
 const auctionInitialState: AuctoinInitiaStateProps = {
@@ -79,11 +80,16 @@ const auctionInitialState: AuctoinInitiaStateProps = {
     isNewAuctionCreated: false,
     page:1,
     isAuctionCreated: false,
-    isNewAuctionApproved: false
+    isNewAuctionApproved: false,
+    isAuctionDeleted:false
 }
 
 interface ToggleNewAuctionApproveState {
     isAuctionApproved:boolean
+}
+
+interface ToggleAuctionDeletion {
+    isDeleted:boolean
 }
 
 interface setAuctionDetail {
@@ -97,33 +103,6 @@ interface SetAuctonsProps {
 interface SetAuctionRequest {
     result: AuctionRequestObj[] | []
 }
-
-let auctionRequestData = [
-    {
-    auctionId: 1,
-    auctionPrice: 1000,
-    requestedDate: new Date(),
-    category: "CAR",
-    name: "Sudhindra",
-    email: "name@domain.com"
-    },
-    {
-        auctionId: 1,
-        auctionPrice: 1000,
-        requestedDate: new Date(),
-        category: "CAR",
-        name: "Sudhindra",
-        email: "name@domain.com"
-        },
-        {
-            auctionId: 1,
-            auctionPrice: 1000,
-            requestedDate: new Date(),
-            category: "CAR",
-            name: "Sudhindra",
-            email: "name@domain.com"
-            }
-]
 
 export const getAuctions = createAsyncThunk(
     'get all auctions',
@@ -250,6 +229,28 @@ export const approveUserAuction = createAsyncThunk(
     }
 );
 
+export const deleteAuction = createAsyncThunk(
+    'delete auction',
+    async(payload:string,{dispatch}) => {
+        await fetch(`${endpoints.deleteAuction}?${payload}`,{
+            method:'DELETE',
+            headers:{
+                Authorization: `Bearer ${getLocalStorage(localStorageActiontype.GET_ACCESS_TOKEN)}`,
+                "Content-type": "application/json; charset=UTF-8",
+            },
+        })
+        .then((response) => {
+            return response.json()
+        })
+        .then((response) => {
+            console.log(response);
+            dispatch(toggleAuctionDeletionState({
+                isDeleted: true
+            }))
+        })
+    }
+);
+
 const auctionSlice = createSlice({
     name: 'Auction Slice',
     initialState: auctionInitialState,
@@ -283,9 +284,16 @@ const auctionSlice = createSlice({
                 ...state,
                 isAuctionApproved: action.payload.isAuctionApproved
             }
+        },
+        toggleAuctionDeletionState: (state, action:PayloadAction<ToggleAuctionDeletion>) => {
+            return{
+                ...state,
+                isAuctionDeleted: action.payload.isDeleted
+            }
         }
     }
 });
 
-export const {setAuctionList, setAuctionRequestList, toggleAuctionCreation, setAuctionDetail, toggleAuctionApproveState} = auctionSlice.actions
+export const {setAuctionList, setAuctionRequestList, toggleAuctionCreation, setAuctionDetail, 
+    toggleAuctionApproveState, toggleAuctionDeletionState} = auctionSlice.actions
 export default auctionSlice.reducer;

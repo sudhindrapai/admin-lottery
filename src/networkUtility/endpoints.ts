@@ -12,3 +12,5 @@ export const areateAuction = `${baseUrl}/kingsrings/api/v1/auction/admincreate`;
 export const getAuctionById = `${baseUrl}/kingsrings/api/v1/auction/list/`; /** userId */
 export const uploadImage = `${baseUrl}/kingsrings/api/v1/file/upload`;
 export const approveUserAuction = `${baseUrl}/kingsrings/api/v1/auction/updatestatus`;
+export const deleteAuction = `/kingsrings/api/v1/auction/delete`;/** ?auctionId=2 */
+export const getUserList = `${baseUrl}/kingsrings/api/v1/user/list`

@@ -122,7 +122,7 @@ const LeftMenu:FC = () => {
             routePath: adminRouts.usersList,
             isSubmenuExists: false,
             isSubmenuExpanded: false,
-            activeRoutePaths:[],
+            activeRoutePaths:[adminRouts.usersList],
         },
         {
             label: "Promotions",
