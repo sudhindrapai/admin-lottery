@@ -20,8 +20,11 @@ import AuctionRequests from './containers/Auction/NewAuctionsList/NewAuctionList
 import CreateAuction from './containers/Auction/CreateAuction/CreateAuction';
 import AuctionDetail from './containers/Auction/AuctionDetail/AuctionDetail';
 import ApproveAuction from './containers/Auction/ApproveAuction/AuctionDetail';
-import Settings from './containers/Settings/Settings';
+import MasterValues from './containers/Settings/MasterValueSetting/Settings';
 import UsersList from './containers/Users/UsersList/UserList';
+import EmailNotificationList from './containers/Notifications/EmailNotifications/EmailNotifications';
+import PushNotificationList from './containers/Notifications/PushNotifications/PushNotifications';
+import UserSettings from './containers/Settings/UserSettings/UserSettings';
 
 let accessToken = getLocalStorage(localStorageActionType.GET_ACCESS_TOKEN);
 
@@ -58,12 +61,15 @@ export const adminRouts = {
     modifyAuction:"/admin/auction/update",
     usersList:"/admin/users",
     viewUser:"/admin/users/view",
-    settings:"/admin/settings",
+    masterValue:"/admin/settings/masterValue",
+    userSettings:"/admin/settings/user-details",
     gamesList:"/admin/games/list",
     login:"/admin/login",
     updateLottery: "/admin/lottery/update-lottery",
     updateTemplate: "/admin/lottery/update-template/:lotteryId",
     updateOneTimeTemplate: "/admin/lottery/update-onetime-template/:lotteryId",
+    emailNotificationList:"/admin/notifications/email-notifications/list",
+    pushNotificationList:"/admin/notifications/push-notifications/list",
     updateAuction:routeToAuctionDetail,
     approveAuction:routeToGetAuctionApproveDetail
 }
@@ -87,8 +93,11 @@ const AppRoute:FC = () => {
             <Route path={adminRouts.createAuction} element={<CreateAuction />} />
             <Route path={adminRouts.updateAuction(null)} element={<AuctionDetail />} />
             <Route path={adminRouts.approveAuction(null)} element={<ApproveAuction />} />
-            <Route path={adminRouts.settings} element={<Settings />} />
+            <Route path={adminRouts.masterValue} element={<MasterValues />} />
+            <Route path={adminRouts.userSettings} element={<UserSettings />} />
             <Route path={adminRouts.usersList} element={<UsersList />} />
+            <Route path={adminRouts.emailNotificationList} element={<EmailNotificationList />} />
+            <Route path={adminRouts.pushNotificationList} element={<PushNotificationList />} />
             <Route path={"*"} element={<h3>404</h3>} />
         </Routes> : <Routes>
         <Route path={adminRouts.login} element={<LoginForm />} />

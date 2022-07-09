@@ -1,14 +1,13 @@
 import {FC, useState} from 'react';
-import ViewHeader from '../../components/ViewHeader/ViewHeader';
-import FormBuilder from '../FormBuilder/FormBuilder';
-import Button from '../../components/UI/Button/Button';
+import ViewHeader from '../../../components/ViewHeader/ViewHeader';
+import FormBuilder from '../../FormBuilder/FormBuilder';
+import Button from '../../../components/UI/Button/Button';
 
-import {updateFormInputState, validateForm, updateFormSelectState, updateFormTimeState, updateFormDate} from '../../Utility/Utility';
-import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement} from '../../Utility/InterFacesAndEnum';
+import {updateFormInputState, validateForm, updateFormSelectState, updateFormTimeState, updateFormDate} from '../../../Utility/Utility';
+import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement} from '../../../Utility/InterFacesAndEnum';
 
-
-import {Wrapper,Container,BreadCrumbSection,Section, SectionTitle,
-     SectionBody, TwoSectonView, FormBody, AuctionView} from './StyledSettings';
+import {Wrapper,Container,BreadCrumbSection,Section, SectionTitle, 
+    SectionBody, TwoSectonView, FormBody, AuctionView} from './StyledSettings';
 
 interface FormState {
     form: FormElement[],

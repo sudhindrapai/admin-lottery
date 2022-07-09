@@ -28,7 +28,7 @@ color: #000000;
 
 export const StyledBox = styled(Box)`
 position: absolute;
-  top: 30%;
+  top: 19%;
   left: 30%;
   min: 400px;
   background-color: #ffffff;

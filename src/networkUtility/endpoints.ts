@@ -13,4 +13,6 @@ export const getAuctionById = `${baseUrl}/kingsrings/api/v1/auction/list/`; /** 
 export const uploadImage = `${baseUrl}/kingsrings/api/v1/file/upload`;
 export const approveUserAuction = `${baseUrl}/kingsrings/api/v1/auction/updatestatus`;
 export const deleteAuction = `/kingsrings/api/v1/auction/delete`;/** ?auctionId=2 */
-export const getUserList = `${baseUrl}/kingsrings/api/v1/user/list`
+export const getUserList = `${baseUrl}/kingsrings/api/v1/user/list`;
+export const getEmailNotifications = `${baseUrl}/kingsrings/api/v1/emaillNotificatioin/list`;
+export const getPushNotifications = `${baseUrl}/kingsrings/api/v1/pushNotification/list`;

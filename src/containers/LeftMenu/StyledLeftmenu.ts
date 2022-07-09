@@ -44,7 +44,7 @@ border-bottom: 1px solid #E9ECEF;
 export const NavItems = styled.div`
 width: 100%;
 box-sizing: border-box;
-padding: 0 10px;
+padding: 0 10px 50px 10px;
 margin-top: 30px;
 overflow-y: scroll;
 `;
