@@ -25,6 +25,7 @@ import UsersList from './containers/Users/UsersList/UserList';
 import EmailNotificationList from './containers/Notifications/EmailNotifications/EmailNotifications';
 import PushNotificationList from './containers/Notifications/PushNotifications/PushNotifications';
 import UserSettings from './containers/Settings/UserSettings/UserSettings';
+import CreateNotification from './containers/Notifications/CreateNotification/CreateNotification';
 
 let accessToken = getLocalStorage(localStorageActionType.GET_ACCESS_TOKEN);
 
@@ -70,6 +71,7 @@ export const adminRouts = {
     updateOneTimeTemplate: "/admin/lottery/update-onetime-template/:lotteryId",
     emailNotificationList:"/admin/notifications/email-notifications/list",
     pushNotificationList:"/admin/notifications/push-notifications/list",
+    createNotification:"/admin/notification/create-notification",
     updateAuction:routeToAuctionDetail,
     approveAuction:routeToGetAuctionApproveDetail
 }
@@ -98,6 +100,7 @@ const AppRoute:FC = () => {
             <Route path={adminRouts.usersList} element={<UsersList />} />
             <Route path={adminRouts.emailNotificationList} element={<EmailNotificationList />} />
             <Route path={adminRouts.pushNotificationList} element={<PushNotificationList />} />
+            <Route path={adminRouts.createNotification} element={<CreateNotification />} />
             <Route path={"*"} element={<h3>404</h3>} />
         </Routes> : <Routes>
         <Route path={adminRouts.login} element={<LoginForm />} />

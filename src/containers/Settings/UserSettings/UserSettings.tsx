@@ -9,7 +9,6 @@ import {updateFormInputState, validateForm, updateFormSelectState, updateFormTim
 import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement} from '../../../Utility/InterFacesAndEnum';
 
 import {adminRouts} from '../../../routs';
-import {createAuction, toggleAuctionCreation} from '../../../features/auctionList';
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState} from '../../../app/Store';
 import {useNavigate} from 'react-router-dom';
