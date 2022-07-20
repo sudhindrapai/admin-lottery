@@ -16,7 +16,6 @@ interface DatepickerProps {
 const DatePickerComponent:React.FC<DatepickerProps> = ({label, name, value, onChangeDate}) => {
 
   const handleChange = (newValue: any | Date | null) => {
-    // const { _d } = newValue;
     onChangeDate(new Date(newValue?._d).toString(), name);
   };
 console.log(value,"date picker")

@@ -278,3 +278,27 @@ export const searchTableData = (response: any, searchKey:string) => {
         return filteredResponse;
     }
 }
+
+
+export const transformGMTToUTC = (dateString:string) => {
+    let datesArray = dateString.split(" ");
+    // ['Thu', 'Jul', '21', '2022', '17:29:58', 'GMT+0530', '(India', 'Standard', 'Time)']
+    let date = parseInt(datesArray[2]);
+    let year = parseInt(datesArray[3]);
+    let timeString = datesArray[4];
+    
+    let timesArray = timeString.split(":");
+    let hours = parseInt(timesArray[0]);
+    let minutes = parseInt(timesArray[1]);
+    let seconds = parseInt(timesArray[2]);
+
+    let tranformatedDate = new Date();
+    tranformatedDate.setDate(date);
+    tranformatedDate.setFullYear(year);
+
+    tranformatedDate.setHours(hours + 5);
+    tranformatedDate.setMinutes(minutes + 30);
+    tranformatedDate.setSeconds(seconds);
+
+    return tranformatedDate;
+}

@@ -2,7 +2,9 @@ import {FC,useState, useRef} from 'react';
 import Button from '../../../../../components/UI/Button/Button';
 import ImageUploader from '../../../../../components/ImageUploader/ImageUploader';
 import FormBuilder from './../../../../FormBuilder/FormBuilder';
-import {updateFormInputState, validateForm, updateFormSelectState, updateFormTimeState} from '../../../../../Utility/Utility';
+import {RootState} from '../../../../../app/Store'
+import {useSelector} from 'react-redux'
+import {updateFormInputState, validateForm, updateFormSelectState, updateFormTimeState, updateFormDate, transformGMTToUTC} from '../../../../../Utility/Utility';
 import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement} from '../../../../../Utility/InterFacesAndEnum';
 import {WeekNames, FormSectionContainer,LotteryTypeTitle,LotteryTypeValue,
     CreateLotteryContainer, SectionTitle, FormElementTitle, 
@@ -315,9 +317,9 @@ const scheduleDaysForm: CreateLottery = {
             slectedDate: null
         },
         {
-            elementType:FormElementType.timePicker,
+            elementType:FormElementType.datePicker,
             value:"",
-            id:"startTime",
+            id:"lotteryStartTime",
             isRequired:true,
             fullWidth: true,
             isCustomValidationRequred: false,
@@ -335,9 +337,9 @@ const scheduleDaysForm: CreateLottery = {
             slectedDate: null
         },
         {
-            elementType:FormElementType.timePicker,
+            elementType:FormElementType.datePicker,
             value:"",
-            id:"endTime",
+            id:"lotteryEndTime",
             isRequired:true,
             fullWidth: true,
             isCustomValidationRequred: false,
@@ -351,6 +353,46 @@ const scheduleDaysForm: CreateLottery = {
             radioGroupValues:[],
             isPasswordHidden:true,
             dropdownValues:[""],
+            selectedTime: null,
+            slectedDate: null
+        },
+        {
+            elementType:FormElementType.select,
+            value:"Sunday",
+            id:"lotteryStartDay",
+            isRequired:true,
+            fullWidth: true,
+            isCustomValidationRequred: true,
+            inputVariant: InputVariant.outlined,
+            inputType: InputTypes.number,
+            customValidationType: customValidationType.numberValidation,
+            isValidInput:false,
+            isTouched:false,
+            errorMessage:"",
+            label:"Lottery Start Day",
+            radioGroupValues:[],
+            isPasswordHidden:true,
+            dropdownValues:["Sunday","Monday","Tuesday","Wednesday","Thrusday","Friday","Saturday"],
+            selectedTime: null,
+            slectedDate: null
+        },
+        {
+            elementType:FormElementType.select,
+            value:"Sunday",
+            id:"lotteryEndDay",
+            isRequired:true,
+            fullWidth: true,
+            isCustomValidationRequred: true,
+            inputVariant: InputVariant.outlined,
+            inputType: InputTypes.number,
+            customValidationType: customValidationType.numberValidation,
+            isValidInput:false,
+            isTouched:false,
+            errorMessage:"",
+            label:"Lottery End Day",
+            radioGroupValues:[],
+            isPasswordHidden:true,
+            dropdownValues:["Sunday","Monday","Tuesday","Wednesday","Thrusday","Friday","Saturday"],
             selectedTime: null,
             slectedDate: null
         }
@@ -477,6 +519,9 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
         new RepeatLotteryWeeObj("Saturday", "saturday_7",false, false, false)
     ]);
 
+    const imagesList = useSelector((state:RootState) => state.images.images);
+
+
     // lottery name form start here
     const handleLotteryNameInput = (event:React.ChangeEvent <HTMLTextAreaElement | HTMLInputElement>):void => {
         let updatedStateArray = updateFormInputState(event, lotteryName.form);
@@ -582,20 +627,19 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
         });
     }
 
-    const handleScheduleDaysFormTimeInput = (date: Date, name: string) => {
-        let updatedArray = updateFormTimeState(date, name, scheduleFormValues.form);
+    const handleScheduleDaysTimeInput = (date: Date, name: string) => {
+        let updatedArray = updateFormDate(date, name, scheduleFormValues.form);
         setScheduleFormValues({
             ...scheduleFormValues,
             form:updatedArray
         });
-        console.log("handleScheduleDaysFormTimeInput",date,name)
     };
     
     let scheduleDaysFormView = 
     <FormBuilder formElements={scheduleFormValues.form} 
     onInputChange = {handleLotteryTicketPriceInputChange} 
     onSelectValueChange={handleSheduleDaysformSelectInput} 
-    onChangeDate={handleScheduleDaysFormTimeInput} onChangeTime={handleScheduleDaysFormTimeInput}  />
+    onChangeDate={handleScheduleDaysTimeInput} onChangeTime={() => {}}  />
 
     // end schedule days form
 
@@ -637,6 +681,7 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
             ...lotterySettingForm.form,
             ...ticketsType.form,
             ...subTicket.form,
+            ...scheduleDaysForm.form
         ];
 
         for (let formObj of completeFormArray) {
@@ -646,18 +691,26 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
         completeObject["rewardGiftDesc"] = "";
         completeObject["isRepeat"] = true;
         completeObject["isMemberLottery"] = false;
-        completeObject["lotteryStartDay"] = "monday";
-        completeObject["lotteryEndDay"] = "friday";
+    
+        for (let objKey in completeObject) {
+            if (objKey === "lotteryEndTime" || objKey === "lotteryStartTime") {
+                completeObject[objKey] = new Date(transformGMTToUTC(completeObject[objKey]));
+                
+            }
+            if (objKey === "rewardType") {
+                completeObject[objKey] = completeObject[objKey] === "Money Lottery" ? "M" : "G"
+            }
+        }
+
+        completeObject["rewardImages"] = imagesList;
         
+        console.log(completeObject,"completeObject")
+        // fixme
         onCreateLottery(completeObject);
     };
 
     const redirectToLotteryList = () => {
         onCancel();
-    };
-
-    const triggerUploadImage = () => {
-            uploadImageRef?.current?.click();
     };
 
     return(
@@ -690,10 +743,6 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
                 Scheduled days
                 </SectionTitle>
                 {scheduleDaysFormView}
-                <FormElementTitle>
-                Select the weekdays
-                </FormElementTitle>
-                {weeksView}
                 </FormSectionContainer>
         </form>}
         <Action>
