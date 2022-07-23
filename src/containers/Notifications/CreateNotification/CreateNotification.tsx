@@ -3,6 +3,7 @@ import ViewHeader from '../../../components/ViewHeader/ViewHeader';
 
 import FormBuilder from '../../FormBuilder/FormBuilder';
 import Button from '../../../components/UI/Button/Button';
+import RichTextEditor from '../../../components/RichTextEditor/RichTextEditor';
 
 import {updateFormInputState, validateForm, updateFormSelectState, updateFormTimeState, updateFormDate} from '../../../Utility/Utility';
 import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement} from '../../../Utility/InterFacesAndEnum';
@@ -140,6 +141,7 @@ const CreateNotification = () => {
                     {auctionDetailView}
                 </FormBody>
             </FormSection>
+            <RichTextEditor />
         </Container>
     </Wrapper>
 };
