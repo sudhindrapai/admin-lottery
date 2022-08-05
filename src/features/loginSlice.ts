@@ -47,8 +47,7 @@ export const createLogin = createAsyncThunk(
             }
         })
         .then((response) => {
-            return response.json()
-            
+            return response.json() 
         })
         .then((data) => {
             if (data.statusCode === 200) {

@@ -121,7 +121,7 @@ let leftMenuResponse: NavResponse[] = [
         routePath:"/admin/promotions",
         isSubmenuExists: false,
         isSubmenuExpanded: false,
-        activeRoutePaths:[],
+        activeRoutePaths:[adminRouts.promotions],
     },
     {
         label: "Notfications",
