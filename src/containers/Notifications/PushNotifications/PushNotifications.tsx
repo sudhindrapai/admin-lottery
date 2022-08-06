@@ -83,7 +83,11 @@ const UserList:FC = () => {
     const userList = useSelector((state:RootState) => state.users.users)
 
     const redirectToDetailView = (auctionId:number) => {
-        navigate(adminRouts.updateAuction(auctionId));
+        redirectToView(adminRouts.updateAuction(auctionId));
+    }
+
+    const redirectToView = (pathName:string) => {
+        navigate(pathName);
     }
 
     useEffect(() => {
@@ -221,6 +225,9 @@ const UserList:FC = () => {
         <Container>
             <TableStyle.BreadcrumbSection>
                 <ViewHeader title={"Push Notifications"} />
+                <Button title={"Create Notification"} 
+        btnSize={ButtonSize.md} btnVariant={ButtonVariant.primaryFilled} 
+        clicked={() => {redirectToView(adminRouts.createNotification)}} />
             </TableStyle.BreadcrumbSection>
         </Container>
         <TableStyle.ContentSection>

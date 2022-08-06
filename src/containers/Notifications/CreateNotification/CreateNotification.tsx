@@ -12,7 +12,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {RootState} from '../../../app/Store';
 import {useNavigate} from 'react-router-dom';
 
-import {Wrapper, Container, FormSection, SectionTitle, FormBody} from './StyledCreateNotification'
+import {Wrapper, Container, FormSection, SectionTitle, FormBody, RichTextEditorContainer} from './StyledCreateNotification'
 
 interface FormState {
     form: FormElement[],
@@ -34,7 +34,7 @@ const AuctionDetail: FormState = {
     form:[ 
     {elementType:FormElementType.input,
         value:"",
-        id:"userName",
+        id:"subject",
         isRequired:true,
         fullWidth: true,
         isCustomValidationRequred: true,
@@ -44,54 +44,16 @@ const AuctionDetail: FormState = {
         isValidInput:false,
         isTouched:false,
         errorMessage:"",
-        label:"User Name",
+        label:"Subject",
         radioGroupValues:[],
         isPasswordHidden:true,
         dropdownValues:[],
         selectedTime: null,
         slectedDate: null
 },
-{elementType:FormElementType.input,
-    value:"",
-    id:"emailAddress",
-    isRequired:true,
-    fullWidth: true,
-    isCustomValidationRequred: true,
-    inputVariant: InputVariant.outlined,
-    inputType: InputTypes.email,
-    customValidationType: customValidationType.emailValidation,
-    isValidInput:false,
-    isTouched:false,
-    errorMessage:"",
-    label:"Email Address",
-    radioGroupValues:[],
-    isPasswordHidden:true,
-    dropdownValues:[],
-    selectedTime: null,
-    slectedDate: null
-},
-{elementType:FormElementType.input,
-    value:"",
-    id:"mobileNumber",
-    isRequired:true,
-    fullWidth: true,
-    isCustomValidationRequred: true,
-    inputVariant: InputVariant.outlined,
-    inputType: InputTypes.number,
-    customValidationType: customValidationType.mobileValidation,
-    isValidInput:false,
-    isTouched:false,
-    errorMessage:"",
-    label:"Mobile Number",
-    radioGroupValues:[],
-    isPasswordHidden:true,
-    dropdownValues:[],
-    selectedTime: null,
-    slectedDate: null
-},
-{elementType:FormElementType.input,
-    value:"",
-    id:"accountType",
+{elementType:FormElementType.select,
+    value:"Custom",
+    id:"userType",
     isRequired:true,
     fullWidth: true,
     isCustomValidationRequred: true,
@@ -101,10 +63,10 @@ const AuctionDetail: FormState = {
     isValidInput:false,
     isTouched:false,
     errorMessage:"",
-    label:"Account Type",
+    label:"Custome Type",
     radioGroupValues:[],
     isPasswordHidden:true,
-    dropdownValues:[],
+    dropdownValues:["Custom","Gold Members","General Users"],
     selectedTime: null,
     slectedDate: null
 }
@@ -140,8 +102,10 @@ const CreateNotification = () => {
                 <FormBody>
                     {auctionDetailView}
                 </FormBody>
+                <RichTextEditorContainer>
+                <RichTextEditor />
+                </RichTextEditorContainer>
             </FormSection>
-            <RichTextEditor />
         </Container>
     </Wrapper>
 };

@@ -41,3 +41,8 @@ width: 100%;
 box-sizing: border-box;
 padding: 30px;
 `;
+
+export const RichTextEditorContainer = styled.div`
+width: 100%;
+box-sizing: border-box;
+`;
