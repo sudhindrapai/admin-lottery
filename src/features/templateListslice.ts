@@ -4,6 +4,9 @@ import * as endpoints from '../networkUtility/endpoints';
 import * as localStorageActiontype from '../LocalStorage/ActionTypes';
 import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 
+import {toggleNotificationVisibility} from './networkNotification';
+import {NotificationType} from '../Utility/InterFacesAndEnum';
+
 const initialState = {
     templateList: []
 }
@@ -30,6 +33,11 @@ export const getTemplateList = createAsyncThunk(
                 dispatch(setTemplateList({
                     templateList:[]
                 }))
+                dispatch(toggleNotificationVisibility({
+                    isVisible: true,
+                    status: NotificationType.error,
+                    message: data.errorMsg
+                }));
             } else if (data.statusCode === 200) {
                 let resultList = data.result;
                 let updatedArray = resultList.map((templateObj) => {
@@ -50,11 +58,26 @@ export const getTemplateList = createAsyncThunk(
                 });
                 dispatch(setTemplateList({
                     templateList: updatedArray
-                }))
+                }));
+                dispatch(toggleNotificationVisibility({
+                    isVisible: true,
+                    status: NotificationType.success,
+                    message: data.errorMsg
+                }));
+            } else {
+                dispatch(toggleNotificationVisibility({
+                    isVisible: true,
+                    status: NotificationType.error,
+                    message: data.errorMsg
+                }));
             }
         })
         .catch((error) => {
-            console.log(error)
+            dispatch(toggleNotificationVisibility({
+                isVisible: true,
+                status: NotificationType.error,
+                message: "Something went wrong"
+            }));
         })
     }
 );

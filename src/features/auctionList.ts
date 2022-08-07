@@ -2,6 +2,8 @@ import {createSlice, PayloadAction, createAsyncThunk} from '@reduxjs/toolkit';
 import * as endpoints from '../networkUtility/endpoints';
 import * as localStorageActiontype from '../LocalStorage/ActionTypes';
 import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
+import {toggleNotificationVisibility} from './networkNotification';
+import {NotificationType} from '../Utility/InterFacesAndEnum';
 
 interface AuctonObj{
     auctionId: number,
@@ -121,12 +123,35 @@ export const getAuctions = createAsyncThunk(
             if (response.statusCode === 200) {
                 dispatch(setAuctionList({
                     result: response.result
-                }))
+                }));
+                dispatch(toggleNotificationVisibility({
+                    isVisible: true,
+                    status: NotificationType.success,
+                    message: response.errorMsg
+                }));
             } else if (response.statusCode === 504) {
                 dispatch(setAuctionList({
                     result: []
-                }))
+                }));
+                dispatch(toggleNotificationVisibility({
+                    isVisible: true,
+                    status: NotificationType.error,
+                    message: response.errorMsg
+                }));
+            } else {
+                dispatch(toggleNotificationVisibility({
+                    isVisible: true,
+                    status: NotificationType.error,
+                    message: response.errorMsg
+                }));
             }
+        })
+        .catch((error) => {
+            dispatch(toggleNotificationVisibility({
+                isVisible: true,
+                status: NotificationType.error,
+                message: "Something went wrong"
+            }));
         })
     }
 );
@@ -149,8 +174,26 @@ export const getAuctionRequest = createAsyncThunk(
             if (response.statusCode === 200) {
                 dispatch(setAuctionRequestList({
                     result: response.result
-                }))
+                }));
+                dispatch(toggleNotificationVisibility({
+                    isVisible: true,
+                    status: NotificationType.success,
+                    message: response.errorMsg
+                }));
+            } else {
+                dispatch(toggleNotificationVisibility({
+                    isVisible: true,
+                    status: NotificationType.error,
+                    message: response.errorMsg
+                }));
             }
+        })
+        .catch((error) => {
+            dispatch(toggleNotificationVisibility({
+                isVisible: true,
+                status: NotificationType.error,
+                message: "Someting went wrong"
+            }));
         })
     }
 );
@@ -175,7 +218,25 @@ export const createAuction = createAsyncThunk(
                 dispatch(toggleAuctionCreation({
                     isAuctionCreated: true
                 }));
+                dispatch(toggleNotificationVisibility({
+                    isVisible: true,
+                    status: NotificationType.success,
+                    message: response.errorMsg
+                }));
+            } else {
+                dispatch(toggleNotificationVisibility({
+                    isVisible: true,
+                    status: NotificationType.error,
+                    message: response.errorMsg
+                }));
             }
+        })
+        .catch((error) => {
+            dispatch(toggleNotificationVisibility({
+                isVisible: true,
+                status: NotificationType.success,
+                message: "Something went wrong!"
+            }));
         })
     }
 );
@@ -194,12 +255,29 @@ export const getAuctionDetailById = createAsyncThunk(
             return response.json();
         })
         .then((response) => {
-            console.log(response);
             if (response.statusCode === 200) {
                 dispatch(setAuctionDetail({
                     data: response.result
-                }))
+                }));
+                dispatch(toggleNotificationVisibility({
+                    isVisible: true,
+                    status: NotificationType.success,
+                    message: response.errorMsg
+                }));
+            } else {
+                dispatch(toggleNotificationVisibility({
+                    isVisible: true,
+                    status: NotificationType.error,
+                    message: response.errorMsg
+                }));
             }
+        })
+        .catch((error) => {
+            dispatch(toggleNotificationVisibility({
+                isVisible: true,
+                status: NotificationType.success,
+                message: "Something went wrong!"
+            }));
         })
     }
 );
@@ -224,7 +302,20 @@ export const approveUserAuction = createAsyncThunk(
                 dispatch(toggleAuctionApproveState({
                     isAuctionApproved: true
                 }))
+            } else {
+                dispatch(toggleNotificationVisibility({
+                    isVisible: true,
+                    status: NotificationType.error,
+                    message: response.errorMsg
+                }));
             }
+        })
+        .catch((error) => {
+            dispatch(toggleNotificationVisibility({
+                isVisible: true,
+                status: NotificationType.error,
+                message: "Something went wrong!"
+            }));
         })
     }
 );
@@ -243,10 +334,24 @@ export const deleteAuction = createAsyncThunk(
             return response.json()
         })
         .then((response) => {
-            console.log(response);
-            dispatch(toggleAuctionDeletionState({
-                isDeleted: true
-            }))
+            if (response.statusCode === 200) {
+                dispatch(toggleAuctionDeletionState({
+                    isDeleted: true
+                }))
+            } else {
+                dispatch(toggleNotificationVisibility({
+                    isVisible: true,
+                    status: NotificationType.error,
+                    message: response.errorMsg
+                }));
+            }
+        })
+        .catch((error) => {
+            dispatch(toggleNotificationVisibility({
+                isVisible: true,
+                status: NotificationType.error,
+                message: "Something went wrong"
+            }));
         })
     }
 );

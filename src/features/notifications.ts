@@ -3,6 +3,9 @@ import * as endpoints from '../networkUtility/endpoints';
 import * as localStorageActiontype from '../LocalStorage/ActionTypes';
 import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 
+import {toggleNotificationVisibility} from './networkNotification';
+import {NotificationType} from '../Utility/InterFacesAndEnum';
+
 interface NotificationStateProps {
     emailNotifications: any,
     pushNotifications:any,
@@ -39,9 +42,29 @@ export const getEmailNotifications = createAsyncThunk(
             return response.json();
         })
         .then((response) => {
+            if (response.data === 200) {
            dispatch(setEmailNotificatons({
                data:[]
-           }))
+           }));
+           dispatch(toggleNotificationVisibility({
+            isVisible: true,
+            status: NotificationType.success,
+            message: response.errorMsg
+        }));
+    } else {
+        dispatch(toggleNotificationVisibility({
+            isVisible: true,
+            status: NotificationType.error,
+            message: response.errorMsg
+        }));
+    }
+        })
+        .catch((error) => {
+            dispatch(toggleNotificationVisibility({
+                isVisible: true,
+                status: NotificationType.error,
+                message: "something went wrong"
+            }));
         })
     }
 );
@@ -60,9 +83,29 @@ export const getPushNotifications = createAsyncThunk(
             return response.json();
         })
         .then((response) => {
+            if (response.data === 200) {
             dispatch(setPushNotificatons({
                 data: []
-            }))
+            }));
+            dispatch(toggleNotificationVisibility({
+                isVisible: true,
+                status: NotificationType.success,
+                message: response.errorMsg
+            }));
+        } else {
+            dispatch(toggleNotificationVisibility({
+                isVisible: true,
+                status: NotificationType.error,
+                message: response.errorMsg
+            }));
+        }
+        })
+        .catch((error)=> {
+            dispatch(toggleNotificationVisibility({
+                isVisible: true,
+                status: NotificationType.error,
+                message: "something went wrong"
+            }));
         })
     }
 );

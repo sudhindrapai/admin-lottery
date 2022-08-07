@@ -7,7 +7,8 @@ import TemplateList from '../features/templateListslice';
 import UpdateTemplate from '../features/updateTemplateSlice';
 import Auction from '../features/auctionList';
 import ImageUploader from '../features/imageUploaderSlice';
-import UsersSlice from '../features/Users'
+import UsersSlice from '../features/Users';
+import NetworkNotification from '../features/networkNotification';
 
 const store = configureStore({
     reducer:{
@@ -18,7 +19,8 @@ const store = configureStore({
        updateTemplate: UpdateTemplate,
        auction:Auction,
        images:ImageUploader,
-       users: UsersSlice
+       users: UsersSlice,
+       networkNotification:NetworkNotification
     }
 })
 

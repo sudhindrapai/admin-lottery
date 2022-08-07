@@ -4,6 +4,8 @@ import * as endpoints from '../networkUtility/endpoints'
 import * as localStorageActiontype from '../LocalStorage/ActionTypes';
 import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 
+import {toggleNotificationVisibility} from './networkNotification';
+import {NotificationType} from '../Utility/InterFacesAndEnum';
 
 let updateTemplateInitialState = {
     templateObj:{}
@@ -24,9 +26,15 @@ export const getUpdateTemplateDetail = createAsyncThunk(
                 return response.json();
             })
             .then((data) => {
-                console.log(data);
                 dispatch(setUpdateTemplate({
                     templateObj: data.result
+                }));
+            })
+            .catch(() => {
+                dispatch(toggleNotificationVisibility({
+                    isVisible: true,
+                    status: NotificationType.error,
+                    message: "Something went wrong"
                 }));
             })
         }

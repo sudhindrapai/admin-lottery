@@ -4,6 +4,8 @@ import * as endpoints from '../networkUtility/endpoints';
 import * as localStorageActiontype from '../LocalStorage/ActionTypes';
 import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 
+import {toggleNotificationVisibility} from './networkNotification';
+import {NotificationType} from '../Utility/InterFacesAndEnum';
 
 interface UploaderState{
     images: any
@@ -51,6 +53,13 @@ export const uploadImage = createAsyncThunk(
                     data:responseArray
                 }))
             // }
+        })
+        .catch(() => {
+            dispatch(toggleNotificationVisibility({
+                isVisible: true,
+                status: NotificationType.error,
+                message: "something went wrong!"
+            }));
         })
     }
 )

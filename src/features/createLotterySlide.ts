@@ -4,6 +4,9 @@ import * as endpoints from '../networkUtility/endpoints'
 import * as localStorageActiontype from '../LocalStorage/ActionTypes';
 import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 
+import {toggleNotificationVisibility} from './networkNotification';
+import {NotificationType} from '../Utility/InterFacesAndEnum';
+
 interface CreateLottery{
     errorMessage: string,
     isLotteryCreated: boolean
@@ -33,6 +36,11 @@ export const createLottery = createAsyncThunk(
             if (data.statusCode === 200){
                 dispatch(toggleLotteryCreateState({
                     isCreated: true
+                }));
+                dispatch(toggleNotificationVisibility({
+                    isVisible: true,
+                    status: NotificationType.success,
+                    message: data.errorMsg
                 }));
             }
         })

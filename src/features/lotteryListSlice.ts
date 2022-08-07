@@ -5,6 +5,9 @@ import * as endpoint from '../networkUtility/endpoints';
 import * as localStorageActiontype from '../LocalStorage/ActionTypes';
 import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 
+import {toggleNotificationVisibility} from './networkNotification';
+import {NotificationType} from '../Utility/InterFacesAndEnum';
+
 interface getLotteriesInitialState {
     lotteryList:LotteryDetail[],
     page: number,
@@ -35,16 +38,38 @@ export const getLotteryList = createAsyncThunk(
             return response.json();
         })
         .then((response) => {
-            console.log(response)
             if (response.statusCode === 200) {
                 dispatch(setLotteryList({
                     lotteryList:response.result
+                }));
+                dispatch(toggleNotificationVisibility({
+                    isVisible: true,
+                    status: NotificationType.success,
+                    message: response.errorMsg
                 }));
             } else if (response.statusCode === 504) {
                 dispatch(setLotteryList({
                     lotteryList:[]
                 }));
+                dispatch(toggleNotificationVisibility({
+                    isVisible: true,
+                    status: NotificationType.error,
+                    message: response.errorMsg
+                }));
+            } else {
+                dispatch(toggleNotificationVisibility({
+                    isVisible: true,
+                    status: NotificationType.error,
+                    message: response.errorMsg
+                }));
             }
+        })
+        .catch((error) => {
+            dispatch(toggleNotificationVisibility({
+                isVisible: true,
+                status: NotificationType.error,
+                message: "Something went wrong"
+            }));
         })
     }
 );
