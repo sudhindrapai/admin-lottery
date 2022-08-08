@@ -60,7 +60,7 @@ export const getLotteryList = createAsyncThunk(
                 dispatch(toggleNotificationVisibility({
                     isVisible: true,
                     status: NotificationType.error,
-                    message: response.errorMsg
+                    message: "Something went wrong"
                 }));
             }
         })

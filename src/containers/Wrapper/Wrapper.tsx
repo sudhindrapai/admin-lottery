@@ -6,6 +6,8 @@ import TopBar from '../../components/AppTopbar/AppTopBar';
 
 import {adminRouts} from '../../routs';
 
+import NetworkErrorNotifier from '../NetworkNotification/NetworkNotification'
+
 let excludeLeftMenusPath = [adminRouts.login, adminRouts];
 
 interface AppWrapper {
@@ -16,6 +18,7 @@ const Wrapper:FC<AppWrapper> = ({children}) => {
     const location = useLocation();
     let pathName = location.pathname;
     return <StyledAppWrapper>
+        <NetworkErrorNotifier />
             {pathName !== "/admin/login" &&<LeftMenuSection>
                 <LeftMenu />
             </LeftMenuSection>}
