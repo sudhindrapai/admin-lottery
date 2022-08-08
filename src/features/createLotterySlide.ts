@@ -32,7 +32,6 @@ export const createLottery = createAsyncThunk(
             return response.json();
         })
         .then((data) => {
-            console.log(data);
             if (data.statusCode === 200){
                 dispatch(toggleLotteryCreateState({
                     isCreated: true
@@ -42,7 +41,20 @@ export const createLottery = createAsyncThunk(
                     status: NotificationType.success,
                     message: data.errorMsg
                 }));
+            } else {
+                dispatch(toggleNotificationVisibility({
+                    isVisible: true,
+                    status: NotificationType.error,
+                    message: data.errorMsg
+                }));
             }
+        })
+        .catch((error) => {
+            dispatch(toggleNotificationVisibility({
+                isVisible: true,
+                status: NotificationType.error,
+                message: "Something went wrong"
+            }));
         })
     }
 );

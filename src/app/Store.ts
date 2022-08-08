@@ -9,6 +9,7 @@ import Auction from '../features/auctionList';
 import ImageUploader from '../features/imageUploaderSlice';
 import UsersSlice from '../features/Users';
 import NetworkNotification from '../features/networkNotification';
+import PromotinsReducer from '../features/promotions';
 
 const store = configureStore({
     reducer:{
@@ -20,7 +21,8 @@ const store = configureStore({
        auction:Auction,
        images:ImageUploader,
        users: UsersSlice,
-       networkNotification:NetworkNotification
+       networkNotification:NetworkNotification,
+       promotions:PromotinsReducer
     }
 })
 

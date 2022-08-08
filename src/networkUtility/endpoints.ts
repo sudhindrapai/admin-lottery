@@ -16,3 +16,4 @@ export const deleteAuction = `/kingsrings/api/v1/auction/delete`;/** ?auctionId=
 export const getUserList = `${baseUrl}/kingsrings/api/v1/user/list`;
 export const getEmailNotifications = `${baseUrl}/kingsrings/api/v1/emaillNotificatioin/list`;
 export const getPushNotifications = `${baseUrl}/kingsrings/api/v1/pushNotification/list`;
+export const getPromotionList = `${baseUrl}/kingsrings/api/v1/promotion/adminlist`;/** ?promotionPage=LOTTERY */
