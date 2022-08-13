@@ -12,7 +12,7 @@ interface UploaderState{
 }
 
 interface ImageObj {
-    documentName: string
+documentName: string
 fileDownloadUri: string
 fileId: string
 fileName: string

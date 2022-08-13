@@ -9,7 +9,7 @@ const Lottery:FC = () => {
         <SlidingImgUploader />
     </Wrapper>
     <Wrapper title={"Static Banners"}>
-        <StaticImageUploader />
+        {/* <StaticImageUploader /> */}
     </Wrapper>
     </Fragment>
 };

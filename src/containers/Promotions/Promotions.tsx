@@ -73,7 +73,7 @@ const Promotions = () => {
    for (let menuObj of tabmenuArray) {
        if (menuObj.isSelected) {
            if (menuObj.id === "homme") {
-            view = <HomeSection />;
+            view = <HomeSection details={homePromotionList} />;
            } else if (menuObj.id === "lottery") {
                view = <Lottery />
            } else {

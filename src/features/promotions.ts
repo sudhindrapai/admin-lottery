@@ -10,9 +10,26 @@ const promotionInitialState = {
     isLoading:false,
     home:[],
     lottery:[],
-    auction:[]
+    auction:[],
+    desktopImagUrl:"",
+    desktopFileName:"",
+    mobileImgUrl:"",
+    mobileFileName:""
 }
 
+interface ImageObj {
+    documentName: string
+    fileDownloadUri: string
+    fileId: string
+    fileName: string
+    fileSize: number
+    fileType: string
+    }
+
+interface SetImgDetails {
+    fileName:string,
+    imgUrl:string
+}
 
 export const getPromotionList = createAsyncThunk(
     'get promotion list',
@@ -56,6 +73,49 @@ export const getPromotionList = createAsyncThunk(
     }
 )
 
+export const uploadPromotionImages = createAsyncThunk(
+    'upload image',
+    async (payload:any, {dispatch}) => {
+        await fetch(endpoints.uploadImage,{
+            method: "POST",
+            headers:{
+                Authorization: `Bearer ${getLocalStorage(localStorageActiontype.GET_ACCESS_TOKEN)}`,
+            },
+            body:payload.formObj
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then((response) => {
+            let image:ImageObj = response
+                    let imageUrl = image.fileDownloadUri;
+                    let fileName = image.fileName;
+                    if (payload.isForDesktop){
+                        dispatch(setDesktopImgDetails(
+                            {
+                                fileName:fileName,
+                                imgUrl:imageUrl
+                            }
+                        ))
+                    } else {
+                        dispatch(setMobileImgDetails(
+                            {
+                                fileName:fileName,
+                                imgUrl:imageUrl
+                            }
+                        ))
+                    }
+        })
+        .catch(() => {
+            dispatch(toggleNotificationVisibility({
+                isVisible: true,
+                status: NotificationType.error,
+                message: "something went wrong!"
+            }));
+        })
+    }
+)
+
 const promotionReducer = createSlice({
     name:'Promotion reducer',
     initialState:promotionInitialState,
@@ -80,9 +140,28 @@ const promotionReducer = createSlice({
                     auction:action.payload.response
                 }
             }
+        },
+        setDesktopImgDetails:(state, action:PayloadAction<SetImgDetails>) => {
+            return {
+                ...state,
+                desktopImagUrl:action.payload.imgUrl,
+                desktopFileName:action.payload.fileName
+            }
+        },
+        setMobileImgDetails:(state, action:PayloadAction<SetImgDetails>) => {
+            return {
+                ...state,
+                mobileImgUrl: action.payload.imgUrl,
+                mobileFileName:action.payload.fileName
+            }
+        },
+        resetPromotion:(state) => {
+            return{
+                ...state,
+            }
         }
     }
 })
 
-export const {setDesktopBanners} = promotionReducer.actions;
+export const {setDesktopBanners,setDesktopImgDetails,setMobileImgDetails} = promotionReducer.actions;
 export default promotionReducer.reducer;

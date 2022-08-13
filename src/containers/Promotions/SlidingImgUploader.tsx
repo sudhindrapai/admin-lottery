@@ -62,7 +62,7 @@ const SlidingImgUploader = () => {
         {imagesListView}
     </SlidingImgList>
     <FormSection>
-        <StaticImageUploader />
+        {/* <StaticImageUploader /> */}
     </FormSection>
     </SlidingImgUploaderSection>
 };

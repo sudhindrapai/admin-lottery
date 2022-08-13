@@ -9,7 +9,7 @@ const Auction:FC = () => {
         <SlidingImgUploader />
     </Wrapper>
     <Wrapper title={"Static Banners"}>
-        <StaticImageUploader />
+        {/* <StaticImageUploader /> */}
     </Wrapper>
     </Fragment>
 };

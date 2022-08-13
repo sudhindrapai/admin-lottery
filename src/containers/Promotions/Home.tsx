@@ -1,9 +1,15 @@
 import {FC} from 'react';
 import Wrapper from './SectionWrapper';
 import StaticImageUploader from './StaticImageUploader';
-const Home:FC = () => {
+
+interface HomeProps{
+    details:any
+}
+
+const Home:FC<HomeProps> = ({details}) => {
+
     return <Wrapper title={"Static Banner"}>
-        <StaticImageUploader />
+        <StaticImageUploader details={details[0]} />
     </Wrapper>
 };
 
