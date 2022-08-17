@@ -14,7 +14,8 @@ const promotionInitialState = {
     desktopImagUrl:"",
     desktopFileName:"",
     mobileImgUrl:"",
-    mobileFileName:""
+    mobileFileName:"",
+    homeBannerRedirectionUrl:"https://www.kundapura.com"
 }
 
 interface ImageObj {

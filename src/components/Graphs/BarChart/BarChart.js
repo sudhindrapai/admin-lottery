@@ -1,13 +1,27 @@
+import {useState} from 'react';
 import Chart from 'chart.js/auto';
 import { Bar } from "react-chartjs-2";
 
-export const BarChart = () => {
+const BarChart = (props) => {
+  const {label, detail} = props;
+
+  const [graphLabel, setLabel] = useState([]);
+  const [values, setData] = useState([]);
+  if (detail !== undefined && detail !== null && graphLabel.length === 0) {
+    let labelsList = Object.keys(detail);
+    let graphValues = [];
+    for (let key of labelsList) {
+      graphValues.push(detail[key])
+    }
+    setLabel(labelsList);
+    setData(graphValues);
+  }
 
     const data = {
-      labels: ['Jan', 'Feb', 'March', 'April', 'May', 'June'],
+      labels: graphLabel,
       datasets: [{
-          label: '# of Lotteries',
-          data: [12, 19, 3, 5, 2, 3],
+          label: label,
+          data: values,
           backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
               'rgba(54, 162, 235, 0.2)',
@@ -40,7 +54,7 @@ export const BarChart = () => {
           plugins: {
             title: {
               display: true,
-              text: "Lottery Details"
+              text: label
             },
             legend: {
               display: true,
@@ -52,3 +66,5 @@ export const BarChart = () => {
     </div>
   );
 };
+
+export default BarChart

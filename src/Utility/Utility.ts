@@ -302,3 +302,18 @@ export const transformGMTToUTC = (dateString:string) => {
 
     return tranformatedDate;
 }
+
+export const convertCamelCaseToReadableWord = (label:string) => {
+    let updatedString = "";
+    if (label !== undefined && label !== null && label.length > 0) {
+        for (let i = 0; i<label.length; i++) {
+            let character = label.charAt(i);
+            if (character === character.toUpperCase()) {
+                updatedString += " " + character;
+            } else {
+                updatedString +=character
+            }
+        }
+    }
+    return updatedString
+}

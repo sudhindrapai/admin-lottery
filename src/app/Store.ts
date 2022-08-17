@@ -10,6 +10,7 @@ import ImageUploader from '../features/imageUploaderSlice';
 import UsersSlice from '../features/Users';
 import NetworkNotification from '../features/networkNotification';
 import PromotinsReducer from '../features/promotions';
+import DashboardReducer from '../features/dashboard'
 
 const store = configureStore({
     reducer:{
@@ -22,7 +23,8 @@ const store = configureStore({
        images:ImageUploader,
        users: UsersSlice,
        networkNotification:NetworkNotification,
-       promotions:PromotinsReducer
+       promotions:PromotinsReducer,
+       dashboard:DashboardReducer
     }
 })
 

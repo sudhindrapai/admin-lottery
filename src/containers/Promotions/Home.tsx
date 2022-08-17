@@ -3,13 +3,14 @@ import Wrapper from './SectionWrapper';
 import StaticImageUploader from './StaticImageUploader';
 
 interface HomeProps{
-    details:any
+    details:any,
+    bannerRedirectionUrl:string
 }
 
-const Home:FC<HomeProps> = ({details}) => {
+const Home:FC<HomeProps> = ({details, bannerRedirectionUrl}) => {
 
     return <Wrapper title={"Static Banner"}>
-        <StaticImageUploader details={details[0]} />
+        <StaticImageUploader bannerRedirectionUrl={bannerRedirectionUrl} details={details[0]} />
     </Wrapper>
 };
 

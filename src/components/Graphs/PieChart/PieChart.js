@@ -1,13 +1,26 @@
+import {useState} from 'react';
 import Chart from 'chart.js/auto';
 import { Pie } from "react-chartjs-2";
 
-export const PieGraph = () => {
-
+export const PieGraph = (props) => {
+  const {detail,label} = props;
+  const [graphLabel, setLabel] = useState([]);
+  const [values, setData] = useState([]);
+  if (detail !== undefined && detail !== null && graphLabel.length === 0) {
+    let labelsList = Object.keys(detail);
+    let graphValues = [];
+    for (let key of labelsList) {
+      graphValues.push(detail[key])
+    }
+    console.log(detail,labelsList,graphValues)
+    setLabel(labelsList);
+    setData(graphValues);
+  }
     const data = {
-      labels: ['Jan', 'Feb', 'March', 'April', 'May', 'June'],
+      labels: graphLabel,
       datasets: [{
-          label: '# of Auction',
-          data: [12, 19, 3, 5, 2, 3],
+          label: label,
+          data: values,
           backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
               'rgba(54, 162, 235, 0.2)',
@@ -40,7 +53,7 @@ export const PieGraph = () => {
           plugins: {
             title: {
               display: true,
-              text: "Auction Details"
+              text: label
             },
             legend: {
               display: true,

@@ -15,6 +15,7 @@ const Promotions = () => {
     const dispatch = useDispatch();
 
     const homePromotionList = useSelector((state:RootState) => state.promotions.home);
+    const homePageRedirectionUrl = useSelector((state:RootState) => state.promotions.homeBannerRedirectionUrl);
     const lotteryPromotionList = useSelector((state:RootState) => state.promotions.lottery);
     const auctionPromotionList = useSelector((state:RootState) => state.promotions.auction);
 
@@ -73,7 +74,7 @@ const Promotions = () => {
    for (let menuObj of tabmenuArray) {
        if (menuObj.isSelected) {
            if (menuObj.id === "homme") {
-            view = <HomeSection details={homePromotionList} />;
+            view = <HomeSection bannerRedirectionUrl={homePageRedirectionUrl} details={homePromotionList} />;
            } else if (menuObj.id === "lottery") {
                view = <Lottery />
            } else {
