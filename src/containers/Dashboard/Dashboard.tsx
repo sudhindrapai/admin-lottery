@@ -2,6 +2,7 @@ import {FC, useEffect, useState} from 'react';
 import  BarChart from '../../components/Graphs/BarChart/BarChart';
 import ViewHeader from '../../components/ViewHeader/ViewHeader';
 import {PieGraph} from '../../components/Graphs/PieChart/PieChart';
+import {LineGraph} from '../../components/Graphs/LineGraph/LineGraph'
 import DashboardCard from '../../components/DashboardCard/DashboardCard';
 
 import {RootState} from '../../app/Store';
@@ -59,6 +60,9 @@ const Dashboard:FC = () => {
     <ViewHeader title={"Dashboard"} />
     </HeaderWrapper>
     <GraphList>
+        <GraphWrapper>
+            <LineGraph />
+        </GraphWrapper>
         <GraphWrapper>
         {Object.keys(useData).length > 0 && 
         <BarChart label={`Lottery details (total lotteries: ${dashboardData.totalLotteries})`} detail={lotteriesData} />}

@@ -10,7 +10,9 @@ import ImageUploader from '../features/imageUploaderSlice';
 import UsersSlice from '../features/Users';
 import NetworkNotification from '../features/networkNotification';
 import PromotinsReducer from '../features/promotions';
-import DashboardReducer from '../features/dashboard'
+import DashboardReducer from '../features/dashboard';
+import Settings from '../features/settingsSlice';
+import emailNotifications from '../features/emailNotifications';
 
 const store = configureStore({
     reducer:{
@@ -24,7 +26,9 @@ const store = configureStore({
        users: UsersSlice,
        networkNotification:NetworkNotification,
        promotions:PromotinsReducer,
-       dashboard:DashboardReducer
+       dashboard:DashboardReducer,
+       settings: Settings,
+       emailNotifications:emailNotifications
     }
 })
 

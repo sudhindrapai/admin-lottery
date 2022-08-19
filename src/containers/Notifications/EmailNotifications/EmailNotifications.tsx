@@ -9,7 +9,7 @@ import EmptyTableView from '../../../components/EmptyTableView/EmptyTableView';
 
 import {RootState} from '../../../app/Store';
 import {useSelector, useDispatch} from 'react-redux';
-import {getUserList} from '../../../features/Users'
+import {getEmailNotificationList} from '../../../features/emailNotifications'
 
 import {Wrapper, Container} from './StyledEmailNotifications';
 import * as TableStyle from '../../Lottery/LotteryList/StyledLottery';
@@ -33,13 +33,13 @@ class TableHeader{
 }
 
 let tableHeaders = [
-    new TableHeader("User ID", true, true, false, 'userId'),
-    new TableHeader("User Name", true, false, false, 'userName'),
-    new TableHeader("Joined date", false, false, false, 'joinedDate'),
-    new TableHeader("Total Purchased", false, false, false, 'totalPurchased'),
-    new TableHeader("Joined Lotteries", true, false, false, 'joinedLotteries'),
-    new TableHeader("Joined Auction", true, false, false, 'joinedAuction'),
-    new TableHeader("Membership", false, false, false, 'membership')
+    new TableHeader("Notification Id", true, true, false, 'emailNotificationId'),
+    new TableHeader("EmailS ubject", true, false, false, 'emailSubject'),
+    new TableHeader("Schedule Date", false, false, false, 'emailScheduleDate'),
+    new TableHeader("User Type", false, false, false, 'emailUserType'),
+    new TableHeader("CreatedCount", true, false, false, 'emailCreatedCount'),
+    new TableHeader("Sent Count", true, false, false, 'emailSentCount'),
+    new TableHeader("Status", false, false, false, 'isActive')
 ]
 
 let tabMenuViewList = [
@@ -49,25 +49,11 @@ let tabMenuViewList = [
         queryParam:"C",
         isActive: true,
         isSerarchViewActive: false
-    },
-    {
-        label: "Gold Members",
-        id: "cancelledAuctions_3",
-        queryParam:"U",
-        isActive: false,
-        isSerarchViewActive: false
-    },
-    {
-        label: "Regular Members",
-        id: "pendingAuctons_4",
-        queryParam:"E",
-        isActive: false,
-        isSerarchViewActive: false
     }
 ]
 
 
-const UserList:FC = () => {
+const EmailNotifications:FC = () => {
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
@@ -80,7 +66,7 @@ const UserList:FC = () => {
     const [totalResponseLength, setResponseLength] = useState(0)
     const [tableSearch, setSearch] = useState("");
 
-    const userList = useSelector((state:RootState) => state.users.users)
+    const notifications = useSelector((state:RootState) => state.emailNotifications.data)
 
     const redirectToDetailView = (auctionId:number) => {
         let pathName = adminRouts.updateAuction(auctionId);
@@ -92,23 +78,23 @@ const UserList:FC = () => {
      }
 
     useEffect(() => {
-        if (userList.length === 0) {
+        if (notifications.length === 0) {
             getTableData(tabMenu);
         }
     },[]);
 
     useEffect(() => {
-        if (userList.length > 0) {
-            setResponseLength(userList.length);
-            setOriginalResponse(userList);
-            let pagedResponse = tablePagination(userList,1);
+        if (notifications.length > 0) {
+            setResponseLength(notifications.length);
+            setOriginalResponse(notifications);
+            let pagedResponse = tablePagination(notifications,1);
             if (pagedResponse.isValidResponse) {
                 setResponseData(pagedResponse.data);
             }
         } else {
             setResponseData([]);
         }
-    },[userList]);
+    },[notifications]);
 
     const updateTabMenuOption = (selectedMenuId) => {
         let updatedMenuArray = tabMenu.map((menuObj) => {
@@ -126,7 +112,7 @@ const UserList:FC = () => {
             return tabObj.isActive
         })[0];
 
-        dispatch(getUserList(`auctionStatus=${selectedObj.queryParam}`));
+        dispatch(getEmailNotificationList());
     }
 
     const updatePageNumber = (pageNumber) => {
@@ -189,35 +175,35 @@ const UserList:FC = () => {
 
         let tableBody = responseData.map((tableRowObj:any) => {
 
-            let idBtn =  <Button title={`#${tableRowObj.userId}`} 
+            let idBtn =  <Button title={`#${tableRowObj.emailNotificationId}`} 
         btnSize={ButtonSize.sm} btnVariant={ButtonVariant.primaryLink} 
-        clicked={() => {redirectToDetailView(tableRowObj.userId)}} />;
+        clicked={() => {redirectToDetailView(tableRowObj.emailNotificationId)}} />;
 
             return <tr>
             <td>
             {idBtn}
             </td>
             <td>
-                {tableRowObj.userName}
+                {tableRowObj.emailSubject}
             </td>
             <td>
-                {transformDate(tableRowObj.joinedDate)}
+                {transformDate(tableRowObj.emailScheduleDate)}
             </td>
             <td>
-                {tableRowObj.totalPurchase}
+                {tableRowObj.emailUserType}
             </td>
             <td>
             <TableStyle.NumberOfUsers>
-            {tableRowObj.joinedLotteries? tableRowObj.joinedLotteries : 0}
+            {tableRowObj.emailCreatedCount? tableRowObj.emailCreatedCount : 0}
             </TableStyle.NumberOfUsers>
             </td>
             <td>
             <TableStyle.NumberOfUsers>
-            {tableRowObj.joinedAuction? tableRowObj.joinedAuction : 0}
+            {tableRowObj.emailSentCount? tableRowObj.emailSentCount : 0}
             </TableStyle.NumberOfUsers>
             </td>
             <td>
-                {tableRowObj.isGoldMember === true ? "Gold members" : "Regular Member"}
+                {tableRowObj.isActive ? "Active" : "Inactive"}
             </td>
         </tr>
         });
@@ -246,11 +232,11 @@ const UserList:FC = () => {
             {tableBody}
         </TableStyle.Tbody>
         </TableStyle.Table>
-        {userList.length === 0 && <EmptyTableView />}
+        {notifications.length === 0 && <EmptyTableView />}
             <TableFooter totalCount={totalResponseLength} currentPageNumber={pageNumber} updatePageNumber={updatePageNumber} />
         </TableStyle.TableWrapper>
         </TableStyle.ContentSection>
     </Wrapper>
 };
 
-export default UserList
+export default EmailNotifications

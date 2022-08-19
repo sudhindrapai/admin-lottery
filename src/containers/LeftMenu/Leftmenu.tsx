@@ -140,12 +140,6 @@ let leftMenuResponse: NavResponse[] = [
                 isActive: false,
                 routePath: adminRouts.emailNotificationList,
                 activeRoutePaths:[adminRouts.emailNotificationList]
-            },
-            {
-                submenuLabel: "Push Notifications",
-                isActive: false,
-                routePath: adminRouts.pushNotificationList,
-                activeRoutePaths:[adminRouts.pushNotificationList]
             }
         ]
     },
@@ -166,16 +160,24 @@ let leftMenuResponse: NavResponse[] = [
                 isActive: false,
                 routePath: adminRouts.masterValue,
                 activeRoutePaths:[adminRouts.masterValue]
-            },
-            {
-                submenuLabel: "User Settings",
-                isActive: false,
-                routePath: adminRouts.userSettings,
-                activeRoutePaths:[adminRouts.userSettings]
             }
         ]
     }
-]
+];
+
+// {
+//     submenuLabel: "Push Notifications",
+//     isActive: false,
+//     routePath: adminRouts.pushNotificationList,
+//     activeRoutePaths:[adminRouts.pushNotificationList]
+// }
+
+// {
+//     submenuLabel: "User Settings",
+//     isActive: false,
+//     routePath: adminRouts.userSettings,
+//     activeRoutePaths:[adminRouts.userSettings]
+// }
 
 const LeftMenu:FC = () => {
 

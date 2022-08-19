@@ -18,3 +18,6 @@ export const getEmailNotifications = `${baseUrl}/kingsrings/api/v1/emaillNotific
 export const getPushNotifications = `${baseUrl}/kingsrings/api/v1/pushNotification/list`;
 export const getPromotionList = `${baseUrl}/kingsrings/api/v1/promotion/adminlist`;/** ?promotionPage=LOTTERY */
 export const getDashboardData = `${baseUrl}/kingsrings/api/v1/dashboard/counts`;
+export const getSettingsData = `${baseUrl}/kingsrings/api/v1/setting/list`;
+export const updatedSettingsData = `${baseUrl}/kingsrings/api/v1/setting/update`;
+export const getEmailNotificationList = `${baseUrl}/kingsrings/api/v1/email/list`;
