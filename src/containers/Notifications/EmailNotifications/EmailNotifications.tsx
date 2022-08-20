@@ -69,7 +69,7 @@ const EmailNotifications:FC = () => {
     const notifications = useSelector((state:RootState) => state.emailNotifications.data)
 
     const redirectToDetailView = (auctionId:number) => {
-        let pathName = adminRouts.updateAuction(auctionId);
+        let pathName = adminRouts.emailNotificationDetail(auctionId);
         redirectToView(pathName)
     }
 

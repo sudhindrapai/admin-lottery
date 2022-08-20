@@ -27,6 +27,7 @@ import PushNotificationList from './containers/Notifications/PushNotifications/P
 import UserSettings from './containers/Settings/UserSettings/UserSettings';
 import CreateNotification from './containers/Notifications/CreateNotification/CreateNotification';
 import Promotions from './containers/Promotions/Promotions';
+import EmailNotificationDetail from './containers/Notifications/EmailNotificationDetails/NotificationDetails'
 
 let accessToken = getLocalStorage(localStorageActionType.GET_ACCESS_TOKEN);
 
@@ -45,6 +46,14 @@ const routeToGetAuctionApproveDetail = (id:number | null) => {
         return "/admin/auction/request-for-approve/auction-detail/:auctionId"
     } else {
         return `/admin/auction/request-for-approve/auction-detail/${id}`
+    }
+};
+
+const routeToGetEmailNotificationDetail = (id:number | null) => {
+    if (id === null) {
+        return "/admin/notification/email/detail/:notificationId"
+    } else {
+        return `/admin/notification/email/detail/${id}`
     }
 }
 
@@ -75,7 +84,8 @@ export const adminRouts = {
     createNotification:"/admin/notification/create-notification",
     promotions:"/admin/promotions",
     updateAuction:routeToAuctionDetail,
-    approveAuction:routeToGetAuctionApproveDetail
+    approveAuction:routeToGetAuctionApproveDetail,
+    emailNotificationDetail: routeToGetEmailNotificationDetail
 }
 
 const AppRoute:FC = () => {
@@ -104,6 +114,7 @@ const AppRoute:FC = () => {
             <Route path={adminRouts.pushNotificationList} element={<PushNotificationList />} />
             <Route path={adminRouts.createNotification} element={<CreateNotification />} />
             <Route path={adminRouts.promotions} element={<Promotions />} />
+            <Route path={adminRouts.emailNotificationDetail(null)} element={<EmailNotificationDetail />} />
             <Route path={"*"} element={<h3>404</h3>} />
         </Routes> : <Routes>
         <Route path={adminRouts.login} element={<LoginForm />} />
