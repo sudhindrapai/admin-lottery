@@ -34,12 +34,13 @@ class TableHeader{
 
 let tableHeaders = [
     new TableHeader("User ID", true, true, false, 'userId'),
-    new TableHeader("User Name", true, false, false, 'userName'),
-    new TableHeader("Joined date", false, false, false, 'joinedDate'),
-    new TableHeader("Total Purchased", false, false, false, 'totalPurchased'),
-    new TableHeader("Joined Lotteries", true, false, false, 'joinedLotteries'),
-    new TableHeader("Joined Auction", true, false, false, 'joinedAuction'),
-    new TableHeader("Membership", false, false, false, 'membership')
+    new TableHeader("User Name", false, false, false, 'userName'),
+    new TableHeader("Mobile Number", false, false, false, 'mobileNo'),
+    new TableHeader("Gender", false, false, false, 'gender'),
+    new TableHeader("City", false, false, false, 'city'),
+    new TableHeader("State", false, false, false, 'state'),
+    new TableHeader("Country", false, false, false, 'country'),
+    new TableHeader("Is 2FA enabled", false, false, false, 'using2FA')
 ]
 
 let tabMenuViewList = [
@@ -50,20 +51,20 @@ let tabMenuViewList = [
         isActive: true,
         isSerarchViewActive: false
     },
-    {
-        label: "Gold Members",
-        id: "cancelledAuctions_3",
-        queryParam:"U",
-        isActive: false,
-        isSerarchViewActive: false
-    },
-    {
-        label: "Regular Members",
-        id: "pendingAuctons_4",
-        queryParam:"E",
-        isActive: false,
-        isSerarchViewActive: false
-    }
+    // {
+    //     label: "Gold Members",
+    //     id: "cancelledAuctions_3",
+    //     queryParam:"U",
+    //     isActive: false,
+    //     isSerarchViewActive: false
+    // },
+    // {
+    //     label: "Regular Members",
+    //     id: "pendingAuctons_4",
+    //     queryParam:"E",
+    //     isActive: false,
+    //     isSerarchViewActive: false
+    // }
 ]
 
 
@@ -80,7 +81,7 @@ const UserList:FC = () => {
     const [totalResponseLength, setResponseLength] = useState(0)
     const [tableSearch, setSearch] = useState("");
 
-    const userList = useSelector((state:RootState) => state.users.users)
+    const userList = useSelector((state:RootState) => state.users.users);
 
     const redirectToDetailView = (auctionId:number) => {
         navigate(adminRouts.updateAuction(auctionId));
@@ -186,33 +187,32 @@ const UserList:FC = () => {
 
             let idBtn =  <Button title={`#${tableRowObj.userId}`} 
         btnSize={ButtonSize.sm} btnVariant={ButtonVariant.primaryLink} 
-        clicked={() => {redirectToDetailView(tableRowObj.userId)}} />;
+        clicked={() => {}} />;
 
             return <tr>
             <td>
             {idBtn}
             </td>
             <td>
-                {tableRowObj.userName}
+                {tableRowObj.firstName + " " + tableRowObj.lastName}
             </td>
             <td>
-                {transformDate(tableRowObj.joinedDate)}
+                {tableRowObj.mobileNo}
             </td>
             <td>
-                {tableRowObj.totalPurchase}
+                {tableRowObj.gender}
             </td>
             <td>
-            <TableStyle.NumberOfUsers>
-            {tableRowObj.joinedLotteries? tableRowObj.joinedLotteries : 0}
-            </TableStyle.NumberOfUsers>
+                {tableRowObj.city}
             </td>
             <td>
-            <TableStyle.NumberOfUsers>
-            {tableRowObj.joinedAuction? tableRowObj.joinedAuction : 0}
-            </TableStyle.NumberOfUsers>
+                {tableRowObj.state}
             </td>
             <td>
-                {tableRowObj.isGoldMember === true ? "Gold members" : "Regular Member"}
+                {tableRowObj.country}
+            </td>
+            <td>
+                {tableRowObj.using2FA === true ? "Yes" : "No"}
             </td>
         </tr>
         });

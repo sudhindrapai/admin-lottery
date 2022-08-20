@@ -73,7 +73,7 @@ export const getUserList = createAsyncThunk(
         })
         .then((response) => {
             dispatch(setUserList({
-                data:usersList
+                data:response.result
             }));
         })
         .catch((error) => {
