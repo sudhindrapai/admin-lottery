@@ -23,13 +23,13 @@ const ImageUploader:FC = () => {
         }
     },[images]);
 
-    let imageList = null;
+    // let imageList = <></>;
 
-    if (images.length > 0) {
-        imageList = images.map((imgUrl:string) =>{
+    // if (images.length > 0) {
+        let imageList = images.map((imgUrl:string) =>{
             return <Image src={imgUrl} alt={"Image"} />
         });
-    }
+    // }
 
 
     const triggerImageUploader = () => {

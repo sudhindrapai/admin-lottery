@@ -45,4 +45,5 @@ padding: 30px;
 export const RichTextEditorContainer = styled.div`
 width: 100%;
 box-sizing: border-box;
+padding: 0 30px 30px 30px;
 `;

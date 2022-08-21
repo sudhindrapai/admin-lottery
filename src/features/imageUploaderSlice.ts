@@ -8,7 +8,8 @@ import {toggleNotificationVisibility} from './networkNotification';
 import {NotificationType} from '../Utility/InterFacesAndEnum';
 
 interface UploaderState{
-    images: any
+    images: string[] | [],
+    imageNames: string[] | []
 }
 
 interface ImageObj {
@@ -21,11 +22,13 @@ fileType: string
 }
 
 interface SetImages {
-    data: string[]
+    data: string[] | [],
+    names: string[] | []
 }
 
 const imageUploaderInitialState: UploaderState = {
-    images:[]
+    images:[],
+    imageNames:[]
 }
 
 export const uploadImage = createAsyncThunk(
@@ -45,12 +48,15 @@ export const uploadImage = createAsyncThunk(
             let image:ImageObj = response
             // if (response.statusCode === 200) {
                 let responseArray:string[] = [];
-                
-                    let imageString = image.fileDownloadUri
-                    responseArray.push(imageString)
+                let names: string[] = [];
+                    let imageString = image.fileDownloadUri;
+                    let name = image.fileName;
+                    responseArray.push(imageString);
+                    names.push(name);
                 
                 dispatch(setImages({
-                    data:responseArray
+                    data:responseArray,
+                    names:names
                 }))
             // }
         })
@@ -69,9 +75,11 @@ const ImageUploaderSlice = createSlice({
     initialState: imageUploaderInitialState,
     reducers:{
         setImages:(state, action:PayloadAction<SetImages>) => {
+            let updatedArray = [...state.images].concat(action.payload.data)
             return {
                 ...state,
-                images: state.images.concat(action.payload.data)
+                images: updatedArray,
+                imageNames: action.payload.names
             }
         }
     }

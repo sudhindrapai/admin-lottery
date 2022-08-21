@@ -96,7 +96,7 @@ const StaticImgUploaderForm:FC<StaticImgProps> = ({details, bannerRedirectionUrl
     },[details]);
 
     const getValue = () => {
-        alert("K")
+        // alert("K")
         if (staticForm?.form?.length > 0) {
         let updatedFormElement = staticForm.form.map((element) => {
             let updatedElement = {
