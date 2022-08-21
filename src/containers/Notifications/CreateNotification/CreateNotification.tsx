@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC, useState, useEffect} from 'react';
 import ViewHeader from '../../../components/ViewHeader/ViewHeader';
 
 import ImageUploader from '../../../components/ImageUploader/ImageUploader';
@@ -11,9 +11,11 @@ import {FormElementType, customValidationType, InputVariant, InputTypes, FormEle
 
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState} from '../../../app/Store';
+import {createAndScheduleEmailNotification, setEmailNotificationCreationState} from '../../../features/emailNotifications'
 import {useNavigate} from 'react-router-dom';
 import {adminRouts} from '../../../routs'
 
+import {transformGMTToUTC} from '../../../Utility/Utility'
 import {Wrapper, Container, FormSection, SectionTitle, FormBody, RichTextEditorContainer} from './StyledCreateNotification'
 
 interface FormState {
@@ -35,7 +37,7 @@ enum ButtonVariant {
 const AuctionDetail: FormState = {
     form:[ 
         {elementType:FormElementType.select,
-            value:"Custom",
+            value:"REGULAR_MEMBER",
             id:"emailUserType",
             isRequired:true,
             fullWidth: true,
@@ -49,7 +51,7 @@ const AuctionDetail: FormState = {
             label:"Custome Type",
             radioGroupValues:[],
             isPasswordHidden:true,
-            dropdownValues:["Custom","Gold Members","General Users"],
+            dropdownValues:["GOLD_MEMBERS","REGULAR_MEMBER","CUSTOM"],
             selectedTime: null,
             slectedDate: null
         },
@@ -95,12 +97,25 @@ const AuctionDetail: FormState = {
     isValidForm: true
 };
 
-const CreateEmailNotification = () => {
+const CreateEmailNotification:FC = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [createNotification, setNotification] = useState<FormState>(AuctionDetail);
+    const [richtextEditer, setRichTextValue] = useState<string>("");
 
     const imageNames = useSelector((state:RootState) => state.images.imageNames);
+    const isNotificationCreated = useSelector((state:RootState) => state.emailNotifications.isNotificationCreated);
+
+    useEffect(() => {
+        if (isNotificationCreated) {
+            navigate(adminRouts.emailNotificationList);
+        }
+        return () => {
+            setEmailNotificationCreationState({
+                status: false
+            })
+        }
+    },[isNotificationCreated]);
 
     const handleAuctionDetailInput = (event:React.ChangeEvent <HTMLTextAreaElement | HTMLInputElement>):void => {
         let updatedStateArray = updateFormInputState(event, createNotification.form);
@@ -131,6 +146,10 @@ const CreateEmailNotification = () => {
     onSelectValueChange={handleProductDetails} 
     onChangeDate={handleScheduleDaysTimeInput} onChangeTime={() => {}} />;
 
+    const setRichText = (value:string) => {
+        setRichTextValue(value)
+    }
+
     const createEmailNotification = () => {
         let payload:any = {};
 
@@ -139,9 +158,12 @@ const CreateEmailNotification = () => {
             payload[elementObj.id] = elementObj["value"]
         }
 
-        payload["emailAttachments"] = imageNames;
+        payload["emailScheduleDate"] = transformGMTToUTC(payload.emailScheduleDate)
 
-        console.log(payload)
+        payload["emailAttachments"] = imageNames;
+        payload["emailBody"] = richtextEditer;
+
+        dispatch(createAndScheduleEmailNotification(payload))
     }
 
     return <Wrapper>
@@ -156,7 +178,7 @@ const CreateEmailNotification = () => {
                     {auctionDetailView}
                 </FormBody>
                 <RichTextEditorContainer>
-                <RichTextEditor />
+                <RichTextEditor onValueChange={setRichText} />
                 </RichTextEditorContainer>
                 <RichTextEditorContainer>
                 <ImageUploader />

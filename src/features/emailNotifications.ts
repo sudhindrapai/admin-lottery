@@ -17,16 +17,26 @@ interface EmailNotificationNode {
     emailCreatedCount: number
 }
 
+interface CreateEmailNotificationPayload {
+    emailSubject:string,
+    emailBody:string,
+    emailScheduleDate: string,
+    emailUserType: string,
+    emailAttachments: string[]
+}
+
 interface NotificationState {
     data: [] | EmailNotificationNode[],
     emailNotificationDetail: EmailNotificationNode | {},
-    isDeleted: boolean
+    isDeleted: boolean,
+    isNotificationCreated: boolean
 }
 
 const notificationInitialState:NotificationState = {
     data:[],
     emailNotificationDetail: {},
-    isDeleted:false
+    isDeleted:false,
+    isNotificationCreated: false
 }
 
 const emailNotificationSlice = createSlice({
@@ -49,6 +59,12 @@ const emailNotificationSlice = createSlice({
             return {
                 ...state,
                 isDeleted: action.payload.isDeleted
+            }
+        },
+        setEmailNotificationCreationState:(state,action:PayloadAction<{status:boolean}>) => {
+            return {
+                ...state,
+                isNotificationCreated: action.payload.status
             }
         }
     }
@@ -125,5 +141,29 @@ export const deleteEmailNotification = createAsyncThunk(
     }
     );
 
-export const {setData, setEmailNotificationDetail, updateDeleteStatus} = emailNotificationSlice.actions;
+    export const createAndScheduleEmailNotification = createAsyncThunk(
+        'Create and Schedules email notifications',
+        async(payload:CreateEmailNotificationPayload, {dispatch}) => {
+            await fetch(endpoints.createEmailNotification,{
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${getLocalStorage(localStorageActiontype.GET_ACCESS_TOKEN)}`,
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+                body:JSON.stringify(payload)
+            })
+            .then((response) => {
+                return response.json();
+            })
+            .then((response) => {
+                if (response.statusCode === 200) {
+                    dispatch(setEmailNotificationCreationState({
+                        status:true
+                    }))
+                }
+            })
+        }
+    );
+
+export const {setData, setEmailNotificationDetail, updateDeleteStatus, setEmailNotificationCreationState} = emailNotificationSlice.actions;
 export default emailNotificationSlice.reducer;

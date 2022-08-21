@@ -23,3 +23,4 @@ export const updatedSettingsData = `${baseUrl}/kingsrings/api/v1/setting/update`
 export const getEmailNotificationList = `${baseUrl}/kingsrings/api/v1/email/list`;
 export const getEmailNotificationDetail = `${baseUrl}/kingsrings/api/v1/email/list/`/**7; email notificationId */
 export const deleteEmailNotificationEndPoint = `${baseUrl}/kingsrings/api/v1/email/delete`; /** ?emailNotificationId=7 */
+export const createEmailNotification = `${baseUrl}/kingsrings/api/v1/email/create`;
