@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC, useState, useEffect} from 'react';
 import StaticImageUploader from './StaticImageUploader';
 import {SlidingImgUploaderSection, SlidingImgList, 
     SlidingImgItem, Count, ImgPlaceHolder, FormSection} from './StyledPromotions';
@@ -36,11 +36,43 @@ const imagesList = [
     }
 ];
 
-const SlidingImgUploader = () => {
+interface SlidingImgProps {
+    slidingImgs:any
+}
+
+const SlidingImgUploader:FC<SlidingImgProps> = (props) => {
+    const {slidingImgs} = props;
+
     const [images, setImgsList] = useState(imagesList);
+    const [activeSlidingObj, setActiveSlidingObj] = useState({});
+
+    useEffect(() => {
+        if (slidingImgs.length > 0) {
+            let updatedSlidingList = slidingImgs.map((imgObj,index) => {
+                let updateObj = {
+                    ...imgObj,
+                    isSelected: index === 0,
+                    position:index + 1
+                }
+                if (index === 0) {
+                    setActiveSlidingObj(updateObj)
+                }
+                return updateObj;
+            });
+            setImgsList(updatedSlidingList)
+            console.log(slidingImgs,"slidingImgs")
+        }
+    },[slidingImgs])
 
     const toggleSlidingItems = (position:number) => {
         setImgsList(images.map((imgObj) => {
+
+            let updatedObj = {};
+            if (imgObj.position === position) {
+                updatedObj["isSelected"] = true;
+                setActiveSlidingObj(updatedObj)
+            }
+
             return {
                 ...imgObj,
                 isSelected:imgObj.position === position
@@ -62,7 +94,7 @@ const SlidingImgUploader = () => {
         {imagesListView}
     </SlidingImgList>
     <FormSection>
-        {/* <StaticImageUploader /> */}
+        <StaticImageUploader details={activeSlidingObj} bannerRedirectionUrl={""} />
     </FormSection>
     </SlidingImgUploaderSection>
 };

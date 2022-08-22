@@ -1,4 +1,4 @@
-import {FC, useState, useRef} from 'react';
+import {FC, useState, useRef, useEffect} from 'react';
 import Button from '../../components/UI/Button/Button'
 
 import StaticForm from './staticImgUploaderForm'
@@ -9,6 +9,8 @@ import {StaticBannerSectionWrapper, DesktopBannerSection,
 import {RootState} from '../../app/Store'
 import {uploadPromotionImages} from '../../features/promotions';
 import {useSelector, useDispatch} from 'react-redux';
+
+import TestStaticForm from './TempStaticForm';
 
 interface StaticImgProps {
     details:any,
@@ -32,6 +34,20 @@ enum ButtonVariant {
 const StaticImageUploader:FC<StaticImgProps> = ({details, bannerRedirectionUrl}) => {
 
     const dispatch = useDispatch();
+
+    console.log(details,bannerRedirectionUrl,"[bannerRedirectionUrl]")
+
+    const [bannerUrl, setBannerUrl] = useState("");
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEnaDate] = useState(new Date());
+
+    useEffect(() => {
+        if (details && Object.keys(details).length > 0) {
+            setBannerUrl(details.promotionBannerUrl);
+            setStartDate(details.promotionStartDate);
+            setEnaDate(details.promotionEndDate);
+        }
+    },[details])
 
     const [isForDesktopImg, setDesktopImgStatus] = useState(false);
 
@@ -71,13 +87,32 @@ const StaticImageUploader:FC<StaticImgProps> = ({details, bannerRedirectionUrl})
 
     let createStaticImgObj = () => {
         let mobileBannerUrl = mobileImgUrl.length > 0 ? mobileImgUrl : desktopImgUrl
-        let requestObj = {};
+        let requestObj = {
+            ...details
+        };
+        requestObj["promotionStartDate"] = startDate;
+        requestObj["promotionEndDate"] = endDate;
+        requestObj["redirectionUrl"] = bannerUrl;
         requestObj["promotionPosition"] = "TOP";
         requestObj["promotionImages"] = [
             desktopImgUrl, 
             mobileBannerUrl
         ]
+        console.log(requestObj,"requestObj")
     };
+
+    const updateDateChange = (date:any,name:string) => {
+        if (name === "startDate") {
+            setStartDate(date)
+        } else {
+            setEnaDate(date)
+        }
+        console.log(date,name,"name")
+    }
+
+    const updateBannerRedirectionUrl = (url:string) => {
+        setBannerUrl(url)
+    }
 
     return <StaticBannerSectionWrapper>
         <input type={"file"} ref={inputRef} 
@@ -108,8 +143,9 @@ const StaticImageUploader:FC<StaticImgProps> = ({details, bannerRedirectionUrl})
         </DesktopBannerSection>
         {mobileImgUrl && <img src={mobileImgUrl} />}
         <StaticFormSection>
-            <StaticForm bannerRedirectionUrl={bannerRedirectionUrl} details={details} />
+            {/* <StaticForm bannerRedirectionUrl={bannerRedirectionUrl} details={details} /> */}
         </StaticFormSection>
+        <TestStaticForm startDate={startDate} endDate={endDate} url={bannerUrl} onDateChange = {updateDateChange} onUrlChange = {updateBannerRedirectionUrl} />
         <Button title={"Update"} btnSize={ButtonSize.md} 
         btnVariant={ButtonVariant.primaryFilled} 
         clicked={createStaticImgObj} >

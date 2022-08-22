@@ -436,7 +436,6 @@ const Settings:FC = () => {
             }
         });
 
-        // auctionBasePrice setAuctionBasePrice
         let updatedAuctionBasePrice = auctionBasePrice.form.map((ticketObj) => {
             return {
                 ...ticketObj,

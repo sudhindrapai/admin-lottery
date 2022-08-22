@@ -34,13 +34,13 @@ const Promotions = () => {
         {
             label:"Home",
             id:"homme",
-            isSelected:true,
+            isSelected:false,
             queryParam:"HOME"
         },
         {
             label:"Lottery",
             id:"lottery",
-            isSelected:false,
+            isSelected:true,
             queryParam:"LOTTERY"
         },
         {
@@ -76,9 +76,9 @@ const Promotions = () => {
            if (menuObj.id === "homme") {
             view = <HomeSection bannerRedirectionUrl={homePageRedirectionUrl} details={homePromotionList} />;
            } else if (menuObj.id === "lottery") {
-               view = <Lottery />
+               view = <Lottery lotteryPromotionList={lotteryPromotionList} />
            } else {
-            view = <Auction />
+            view = <Auction auctionPromotionList={auctionPromotionList} />
            }
            break;
        }

@@ -1,6 +1,8 @@
 import {FC, useState, useEffect} from 'react';
-
+import {RootState} from '../../app/Store';
+import {useSelector, useDispatch} from 'react-redux';
 import FormBuilder from '../FormBuilder/FormBuilder';
+import {getSettingsData, updateSettingsData} from '../../features/settingsSlice'
 import {updateFormInputState, validateForm, updateFormSelectState, updateFormTimeState, updateFormDate} from '../../Utility/Utility';
 import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement} from '../../Utility/InterFacesAndEnum';
 
@@ -79,9 +81,136 @@ const staticSectionForm: FormInterface = {
     isValidForm: true
 };
 
+const TicketDetail: FormInterface = {
+    form:[{
+        elementType:FormElementType.input,
+            value:"",
+            id:"bronzeTicketPrice",
+            isRequired:true,
+            fullWidth: true,
+            isCustomValidationRequred: true,
+            inputVariant: InputVariant.outlined,
+            inputType: InputTypes.number,
+            customValidationType: customValidationType.numberValidation,
+            isValidInput:false,
+            isTouched:false,
+            errorMessage:"",
+            label:"Bronze",
+            radioGroupValues:[],
+            isPasswordHidden:true,
+            dropdownValues:[],
+            selectedTime: null,
+            slectedDate: null
+    }, 
+    {elementType:FormElementType.input,
+        value:"",
+        id:"silverTicketPrice",
+        isRequired:true,
+        fullWidth: true,
+        isCustomValidationRequred: true,
+        inputVariant: InputVariant.outlined,
+        inputType: InputTypes.number,
+        customValidationType: customValidationType.numberValidation,
+        isValidInput:false,
+        isTouched:false,
+        errorMessage:"",
+        label:"Silver",
+        radioGroupValues:[],
+        isPasswordHidden:true,
+        dropdownValues:[],
+        selectedTime: null,
+        slectedDate: null
+},
+{elementType:FormElementType.input,
+    value:"",
+    id:"goldTicketPrice",
+    isRequired:true,
+    fullWidth: true,
+    isCustomValidationRequred: true,
+    inputVariant: InputVariant.outlined,
+    inputType: InputTypes.number,
+    customValidationType: customValidationType.numberValidation,
+    isValidInput:false,
+    isTouched:false,
+    errorMessage:"",
+    label:"Gold",
+    radioGroupValues:[],
+    isPasswordHidden:true,
+    dropdownValues:[],
+    selectedTime: null,
+    slectedDate: null
+}, {elementType:FormElementType.input,
+    value:"",
+    id:"platinumTicketPrice",
+    isRequired:true,
+    fullWidth: true,
+    isCustomValidationRequred: true,
+    inputVariant: InputVariant.outlined,
+    inputType: InputTypes.number,
+    customValidationType: customValidationType.numberValidation,
+    isValidInput:false,
+    isTouched:false,
+    errorMessage:"",
+    label:"Platinum",
+    radioGroupValues:[],
+    isPasswordHidden:true,
+    dropdownValues:[],
+    selectedTime: null,
+    slectedDate: null
+}],
+    isValidForm: true
+};
+
 const StaticImgUploaderForm:FC<StaticImgProps> = ({details, bannerRedirectionUrl}) => {
+const dispatch = useDispatch()
+    const [ticketDetail, setTicketDetail] = useState(TicketDetail);
+
     const [staticForm, setStaticForm] = useState<any>([]);
     const [isDataUpdated, setDataUpdateStatus] = useState(false)
+
+    const settingsData = useSelector((state:RootState) => state.settings.data);
+    useEffect(() => {
+        dispatch(getSettingsData());
+    }, []);
+
+    const setSettingsData = () => {
+        let lotteryData = {};
+        let auctionData = {};
+        for (let settingsObj of settingsData) {
+            if (settingsObj.settingFor === "LOTTERY") {
+                lotteryData = settingsObj;
+            }
+            if (settingsObj.settingFor === "AUCTION") {
+                auctionData = settingsObj;
+            }
+        }
+
+        let updatedSettings = ticketDetail.form.map((ticketObj) => {
+            return {
+                ...ticketObj,
+                value: lotteryData[ticketObj.id]
+            }
+        });
+        setTicketDetail({
+            ...ticketDetail,
+            form:updatedSettings
+        });
+    }
+
+    const handleAuctionTicketDetails = (event:React.ChangeEvent <HTMLTextAreaElement | HTMLInputElement>):void => {
+        let updatedStateArray = updateFormInputState(event, ticketDetail.form);
+        setTicketDetail({
+            ...ticketDetail,
+            form: updatedStateArray
+        });
+    }
+
+    const auctionTicketDetalView = <FormBuilder formElements={ticketDetail.form} 
+    onInputChange = {handleAuctionTicketDetails} 
+    onSelectValueChange={() => {}} 
+    onChangeDate={() => {}} onChangeTime={() => {}} />;
+
+
 
     useEffect(() => {
         if (details !== undefined && details.promotionId !== undefined && details.promotionId !== null 
@@ -114,7 +243,6 @@ const StaticImgUploaderForm:FC<StaticImgProps> = ({details, bannerRedirectionUrl
     }
 
     const handleInputChange = (event:React.ChangeEvent <HTMLTextAreaElement | HTMLInputElement>) => {
-        console.log(staticForm.form,"staticForm.form,handleInputChange")
         let updatedStateArray = updateFormInputState(event, staticForm.form);
         setStaticForm({
             ...staticForm,
@@ -139,7 +267,9 @@ const StaticImgUploaderForm:FC<StaticImgProps> = ({details, bannerRedirectionUrl
     onChangeDate={handleScheduleDaysTimeInput} onChangeTime={() => {}} />;
     }
 
-    return lotteryNameFormView
+    return <>{lotteryNameFormView}
+    {auctionTicketDetalView}
+    </>
 }
 
 export default StaticImgUploaderForm

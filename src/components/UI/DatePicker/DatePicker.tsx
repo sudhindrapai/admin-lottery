@@ -18,7 +18,6 @@ const DatePickerComponent:React.FC<DatepickerProps> = ({label, name, value, onCh
   const handleChange = (newValue: any | Date | null) => {
     onChangeDate(new Date(newValue?._d).toString(), name);
   };
-console.log(value,"date picker")
     return<LocalizationProvider dateAdapter={AdapterMoment}>
     <DateTimePicker
           label={label}

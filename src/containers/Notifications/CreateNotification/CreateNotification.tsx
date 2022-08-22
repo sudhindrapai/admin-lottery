@@ -105,6 +105,7 @@ const CreateEmailNotification:FC = () => {
 
     const imageNames = useSelector((state:RootState) => state.images.imageNames);
     const isNotificationCreated = useSelector((state:RootState) => state.emailNotifications.isNotificationCreated);
+    const usersList = useSelector((state:RootState) => state.users.users);
 
     useEffect(() => {
         if (isNotificationCreated) {
