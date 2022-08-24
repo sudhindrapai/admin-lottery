@@ -122,7 +122,9 @@ const UserList:FC = () => {
             return tabObj.isActive
         })[0];
 
-        dispatch(getUserList(`auctionStatus=${selectedObj.queryParam}`));
+        if (userList.length === 0) {
+            dispatch(getUserList(`auctionStatus=${selectedObj.queryParam}`));
+        }
     }
 
     const updatePageNumber = (pageNumber) => {

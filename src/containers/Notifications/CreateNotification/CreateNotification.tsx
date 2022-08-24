@@ -11,12 +11,15 @@ import {FormElementType, customValidationType, InputVariant, InputTypes, FormEle
 
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState} from '../../../app/Store';
-import {createAndScheduleEmailNotification, setEmailNotificationCreationState} from '../../../features/emailNotifications'
+import {createAndScheduleEmailNotification, setEmailNotificationCreationState} from '../../../features/emailNotifications';
+import {getUserList} from '../../../features/Users'
 import {useNavigate} from 'react-router-dom';
 import {adminRouts} from '../../../routs'
 
 import {transformGMTToUTC} from '../../../Utility/Utility'
-import {Wrapper, Container, FormSection, SectionTitle, FormBody, RichTextEditorContainer} from './StyledCreateNotification'
+import {Wrapper, Container, FormSection, SectionTitle,
+     FormBody, RichTextEditorContainer, UserListWrapper, UserListInput,
+      UsersListWrapper, UserDetail, TagsWrapper, TagWrapper, TagName,CloseWrapper} from './StyledCreateNotification'
 
 interface FormState {
     form: FormElement[],
@@ -102,6 +105,10 @@ const CreateEmailNotification:FC = () => {
     const navigate = useNavigate();
     const [createNotification, setNotification] = useState<FormState>(AuctionDetail);
     const [richtextEditer, setRichTextValue] = useState<string>("");
+    const [localUsersList, setLocalUseersList] = useState([]);
+    const [matchUserList, setMatchUsersList] = useState([]);
+    const [selectedUsers, setSelectedUsers] = useState<any>([]);
+    const [searchedEmailId, setEmailId] = useState("")
 
     const imageNames = useSelector((state:RootState) => state.images.imageNames);
     const isNotificationCreated = useSelector((state:RootState) => state.emailNotifications.isNotificationCreated);
@@ -114,9 +121,29 @@ const CreateEmailNotification:FC = () => {
         return () => {
             setEmailNotificationCreationState({
                 status: false
-            })
+            });
         }
     },[isNotificationCreated]);
+
+    useEffect(() => {
+        if (searchedEmailId.length > 0) {
+            let filteredEmails = localUsersList.filter((userObj:any) => {
+                let isEmailInclues = userObj.emailId.toUpperCase().includes(searchedEmailId.toUpperCase())
+                return isEmailInclues ? userObj : ""
+            });
+            setMatchUsersList(filteredEmails)
+        } else {
+            setMatchUsersList([])
+        }
+    },[searchedEmailId])
+
+    useEffect(() => {
+        if (usersList.length === 0) {
+            dispatch(getUserList(""))
+        } else {
+            setLocalUseersList(usersList);
+        }
+    },[usersList])
 
     const handleAuctionDetailInput = (event:React.ChangeEvent <HTMLTextAreaElement | HTMLInputElement>):void => {
         let updatedStateArray = updateFormInputState(event, createNotification.form);
@@ -154,6 +181,12 @@ const CreateEmailNotification:FC = () => {
     const createEmailNotification = () => {
         let payload:any = {};
 
+        let customEmailIds:string[] = [];
+
+        for (let customerObj of selectedUsers) {
+            customEmailIds.push(customerObj.emailId)
+        }
+
         for (let elementObj of createNotification.form) {
 
             payload[elementObj.id] = elementObj["value"]
@@ -163,9 +196,40 @@ const CreateEmailNotification:FC = () => {
 
         payload["emailAttachments"] = imageNames;
         payload["emailBody"] = richtextEditer;
+        payload["emailIds"] = customEmailIds;
 
         dispatch(createAndScheduleEmailNotification(payload))
     }
+
+    const addUserToSelectedList = (obj:any) => {
+        setSelectedUsers(selectedUsers.concat(obj));
+        setMatchUsersList([]);
+        setEmailId("");
+    }
+
+    const removeEmailId = (obj:any) => {
+        let updatedArray = selectedUsers.filter((userObj:any) => {
+            return userObj.emailId !== obj.emailId
+        });
+        setSelectedUsers(updatedArray);
+    }
+
+    let tagView = selectedUsers.map((tagObj: any) => {
+        return <TagWrapper>
+            <TagName>
+                {tagObj.emailId}
+            </TagName>
+            <CloseWrapper onClick={() => {removeEmailId(tagObj)}}>
+                X
+            </CloseWrapper>
+        </TagWrapper>
+    })
+
+    let usersListView = matchUserList.map((userObj:any) => {
+        return <UserDetail onClick={() => {addUserToSelectedList(userObj)}} >
+            {userObj.emailId}
+        </UserDetail>
+    })
 
     return <Wrapper>
         <ViewHeader title={"Create Notification"} isBackButtonRequired={true} 
@@ -178,6 +242,15 @@ const CreateEmailNotification:FC = () => {
                 <FormBody>
                     {auctionDetailView}
                 </FormBody>
+                {selectedUsers.length > 0 && <TagsWrapper>
+                    {tagView}
+                </TagsWrapper>}
+                <UserListWrapper>
+                    <UserListInput placeholder={"Search for user email Id"} value={searchedEmailId} onChange={(event) => {setEmailId(event.target.value)}} />
+                    <UsersListWrapper>
+                        {usersListView}
+                    </UsersListWrapper>
+                </UserListWrapper>
                 <RichTextEditorContainer>
                 <RichTextEditor onValueChange={setRichText} />
                 </RichTextEditorContainer>
@@ -186,7 +259,7 @@ const CreateEmailNotification:FC = () => {
                 </RichTextEditorContainer>
             </FormSection>
             <Button
-                title={"Create Auction"}
+                title={"Send or schedule email"}
             btnSize ={ButtonSize.md} 
             btnVariant={ButtonVariant.primaryFilled} clicked={createEmailNotification} />
         </Container>
