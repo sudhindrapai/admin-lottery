@@ -7,8 +7,8 @@ import { InputTypes, InputVariant } from '../../Utility/InterFacesAndEnum';
 import {InputElementWrapper} from './StyledTemp'
 
 interface StaticFormProps {
-    startDate: Date | "" | null,
-    endDate: Date | "" | null,
+    startDate: Date,
+    endDate: Date,
     url:string,
     onDateChange(date:any,name:string):void,
     onUrlChange(redirectionUrl:string):void
@@ -30,7 +30,7 @@ const StaticForm:FC<StaticFormProps> = (props) => {
         handleInputChange={hangelInputChange} />
         </InputElementWrapper>
         <InputElementWrapper>
-        <DatePicket label={"Start Date"} name={'startDate'} value={startDate} onChangeDate={onDateChange} />
+        <DatePicket label={"Start Date"} name={'startDate'} value={new Date(startDate)} onChangeDate={onDateChange} />
         </InputElementWrapper>
         <InputElementWrapper>
         <DatePicket label={"End Date"} name={'endDate'} value={endDate} onChangeDate={onDateChange} />

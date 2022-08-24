@@ -17,6 +17,7 @@ export const getUserList = `${baseUrl}/kingsrings/api/v1/user/list`;
 export const getEmailNotifications = `${baseUrl}/kingsrings/api/v1/emaillNotificatioin/list`;
 export const getPushNotifications = `${baseUrl}/kingsrings/api/v1/pushNotification/list`;
 export const getPromotionList = `${baseUrl}/kingsrings/api/v1/promotion/adminlist`;/** ?promotionPage=LOTTERY */
+export const updatePromotionSection = `${baseUrl}/kingsrings/api/v1/promotion/update`;
 export const getDashboardData = `${baseUrl}/kingsrings/api/v1/dashboard/counts`;
 export const getSettingsData = `${baseUrl}/kingsrings/api/v1/setting/list`;
 export const updatedSettingsData = `${baseUrl}/kingsrings/api/v1/setting/update`;

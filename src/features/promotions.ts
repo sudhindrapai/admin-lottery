@@ -72,7 +72,7 @@ export const getPromotionList = createAsyncThunk(
             }));
         })
     }
-)
+);
 
 export const uploadPromotionImages = createAsyncThunk(
     'upload image',
@@ -113,6 +113,25 @@ export const uploadPromotionImages = createAsyncThunk(
                 status: NotificationType.error,
                 message: "something went wrong!"
             }));
+        })
+    }
+);
+
+export const updatePromotion = createAsyncThunk(
+    'update promotion section',
+    async (payload:any, {dispatch}) => {
+        await fetch(endpoints.updatePromotionSection,{
+            method: 'PUT',
+            headers:{
+                Authorization: `Bearer ${getLocalStorage(localStorageActiontype.GET_ACCESS_TOKEN)}`,
+            },
+            body:JSON.stringify(payload)
+        })
+        .then((response) => {
+            return response.json()
+        })
+        .then((response) =>{
+            console.log(response)
         })
     }
 )

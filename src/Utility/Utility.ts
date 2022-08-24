@@ -1,5 +1,5 @@
 import {FormElement, customValidationType} from './InterFacesAndEnum';
-
+import moment from 'moment'
 
 const emailRegex = new RegExp(/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/);
 const characterRegex = new RegExp(/^[a-zA-Z. ]*$/);
@@ -281,26 +281,36 @@ export const searchTableData = (response: any, searchKey:string) => {
 
 
 export const transformGMTToUTC = (dateString:string) => {
-    let datesArray = dateString.split(" ");
-    // ['Thu', 'Jul', '21', '2022', '17:29:58', 'GMT+0530', '(India', 'Standard', 'Time)']
-    let date = parseInt(datesArray[2]);
-    let year = parseInt(datesArray[3]);
-    let timeString = datesArray[4];
+    let modifiedDate = moment.utc(dateString).format("YYYY-MM-DD HH:mm:ss Z")
+    return modifiedDate
+    // let datesArray = dateString.split(" ");
+    // console.log(dateString.includes("T"), "includes T?")
+// console.log(dateString,"dateString",moment.utc(dateString).format("YYYY-MM-DD HH:mm:ss Z"))
+// ['Sat', 'Oct', '08', '2022', '15:45:00', 'GMT+0530', '(India', 'Standard', 'Time)']
+// let splitedDateString = dateString.split("T")[0];
+// let splitedTimeString = dateString.split("T")[1].split(".")[0];
+// datesArray = splitedDateString.split("-")
+
+    // let date = parseInt(datesArray[2]);
+    // let year = parseInt(datesArray[0]);
+    // let month = parseInt(datesArray[1])
+    // let timeString = datesArray[4];
     
-    let timesArray = timeString.split(":");
-    let hours = parseInt(timesArray[0]);
-    let minutes = parseInt(timesArray[1]);
-    let seconds = parseInt(timesArray[2]);
+    // let timesArray = timeString.split(":");
+    // let hours = parseInt(timesArray[0]);
+    // let minutes = parseInt(timesArray[1]);
+    // let seconds = parseInt(timesArray[2]);
 
-    let tranformatedDate = new Date();
-    tranformatedDate.setDate(date);
-    tranformatedDate.setFullYear(year);
+    // let tranformatedDate = new Date();
+    // tranformatedDate.setDate(date);
+    // tranformatedDate.setFullYear(year);
+    // tranformatedDate.setMonth(month)
 
-    tranformatedDate.setHours(hours + 5);
-    tranformatedDate.setMinutes(minutes + 30);
-    tranformatedDate.setSeconds(seconds);
+    // tranformatedDate.setHours(hours + 5);
+    // tranformatedDate.setMinutes(minutes + 30);
+    // tranformatedDate.setSeconds(seconds);
 
-    return tranformatedDate;
+    // return tranformatedDate;
 }
 
 export const convertCamelCaseToReadableWord = (label:string) => {

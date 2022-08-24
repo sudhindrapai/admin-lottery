@@ -18,11 +18,13 @@ const DatePickerComponent:React.FC<DatepickerProps> = ({label, name, value, onCh
   const handleChange = (newValue: any | Date | null) => {
     onChangeDate(new Date(newValue?._d).toString(), name);
   };
+
+  // const updatedValue = new Date(value.getTime() - value.getTimezoneOffset()*60*1000);
     return<LocalizationProvider dateAdapter={AdapterMoment}>
     <DateTimePicker
           label={label}
-          inputFormat="DD/mm/yy h:mm:ss a"
-          value={new Date(value)}
+          inputFormat="DD/MM/yy h:mm:ss a"
+          value={value}
           onChange={handleChange}
           renderInput={(params) => <TextField {...params} fullWidth={true} />}
         />

@@ -1,6 +1,6 @@
 import {FC, useState, useRef, useEffect} from 'react';
 import Button from '../../components/UI/Button/Button'
-
+import {transformGMTToUTC} from '../../Utility/Utility'
 import StaticForm from './staticImgUploaderForm'
 
 import {StaticBannerSectionWrapper, DesktopBannerSection,
@@ -9,6 +9,7 @@ import {StaticBannerSectionWrapper, DesktopBannerSection,
 import {RootState} from '../../app/Store'
 import {uploadPromotionImages} from '../../features/promotions';
 import {useSelector, useDispatch} from 'react-redux';
+import {updatePromotion} from '../../features/promotions'
 
 import TestStaticForm from './TempStaticForm';
 
@@ -53,6 +54,8 @@ const StaticImageUploader:FC<StaticImgProps> = ({details, bannerRedirectionUrl})
 
     const desktopImgUrl = useSelector((state:RootState) => state.promotions.desktopImagUrl);
     const mobileImgUrl = useSelector((state:RootState) => state.promotions.mobileImgUrl);
+    const desktopImgName = useSelector((state:RootState) => state.promotions.desktopFileName);
+    const mobileImgName = useSelector((state:RootState) => state.promotions.mobileFileName)
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -86,19 +89,20 @@ const StaticImageUploader:FC<StaticImgProps> = ({details, bannerRedirectionUrl})
 
 
     let createStaticImgObj = () => {
-        let mobileBannerUrl = mobileImgUrl.length > 0 ? mobileImgUrl : desktopImgUrl
-        let requestObj = {
-            ...details
-        };
-        requestObj["promotionStartDate"] = startDate;
-        requestObj["promotionEndDate"] = endDate;
-        requestObj["redirectionUrl"] = bannerUrl;
+        let mobileBannerUrl = mobileImgName.length > 0 ? mobileImgName : desktopImgName
+        let requestObj = {};
+        requestObj["promotionId"] = details.promotionId;
+        requestObj["promotionPage"] = details.promotionPage;
+        requestObj["promotionType"] = details.promotionType;
         requestObj["promotionPosition"] = "TOP";
+        requestObj["promotionStartDate"] = transformGMTToUTC(startDate.toString());
+        requestObj["promotionEndDate"] = transformGMTToUTC(endDate.toString());
+        requestObj["promotionBannerUrl"] = bannerUrl;
         requestObj["promotionImages"] = [
-            desktopImgUrl, 
+            desktopImgName, 
             mobileBannerUrl
         ]
-        console.log(requestObj,"requestObj")
+        dispatch(updatePromotion(requestObj));
     };
 
     const updateDateChange = (date:any,name:string) => {
@@ -107,7 +111,6 @@ const StaticImageUploader:FC<StaticImgProps> = ({details, bannerRedirectionUrl})
         } else {
             setEnaDate(date)
         }
-        console.log(date,name,"name")
     }
 
     const updateBannerRedirectionUrl = (url:string) => {
