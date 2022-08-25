@@ -4,7 +4,7 @@ import ViewHeader from '../../components/ViewHeader/ViewHeader';
 import {PieGraph} from '../../components/Graphs/PieChart/PieChart';
 import {LineGraph} from '../../components/Graphs/LineGraph/LineGraph'
 import DashboardCard from '../../components/DashboardCard/DashboardCard';
-
+import {DoughnutChart} from '../../components/Graphs/DoughnutChart/DoughnutChart';
 import {RootState} from '../../app/Store';
 import {useSelector, useDispatch} from 'react-redux';
 import {getDashboardData} from '../../features/dashboard';
@@ -62,6 +62,10 @@ const Dashboard:FC = () => {
     <GraphList>
         <GraphWrapper>
             <LineGraph />
+        </GraphWrapper>
+        <GraphWrapper>
+        {Object.keys(lotteriesData).length > 0 && 
+        <DoughnutChart label={`User Details (total users: ${dashboardData.totalUsers})`} detail={useData} />}
         </GraphWrapper>
         <GraphWrapper>
         {Object.keys(useData).length > 0 && 
