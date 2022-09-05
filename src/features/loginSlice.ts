@@ -7,6 +7,8 @@ import {setLocalStorage} from '../LocalStorage/SetLocalStorage';
 import {toggleNotificationVisibility} from './networkNotification';
 import {NotificationType} from '../Utility/InterFacesAndEnum';
 
+import {handle401Status} from '../Utility/Utility';
+
 interface LoginState {
     isLoading: boolean,
     isLoggedin: boolean,
@@ -51,6 +53,11 @@ export const createLogin = createAsyncThunk(
             return response.json() 
         })
         .then((data) => {
+
+            if (data.statusCode === 401) {
+                handle401Status();
+            }
+
             if (data.statusCode === 200) {
 
             let responseObj = data.result;

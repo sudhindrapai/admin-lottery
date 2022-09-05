@@ -6,6 +6,8 @@ import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 import {toggleNotificationVisibility} from './networkNotification';
 import {NotificationType} from '../Utility/InterFacesAndEnum';
 
+import {handle401Status} from '../Utility/Utility';
+
 interface NotificationStateProps {
     emailNotifications: any,
     pushNotifications:any,
@@ -42,6 +44,11 @@ export const getEmailNotifications = createAsyncThunk(
             return response.json();
         })
         .then((response) => {
+
+            if (response.statusCode === 401) {
+                handle401Status();
+            }
+
             if (response.data === 200) {
            dispatch(setEmailNotificatons({
                data:[]
@@ -83,6 +90,11 @@ export const getPushNotifications = createAsyncThunk(
             return response.json();
         })
         .then((response) => {
+
+            if (response.statusCode === 401) {
+                handle401Status();
+            }
+
             if (response.data === 200) {
             dispatch(setPushNotificatons({
                 data: []

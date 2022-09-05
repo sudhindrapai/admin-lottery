@@ -4,6 +4,8 @@ import * as localStorageActiontype from '../LocalStorage/ActionTypes';
 import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 import {toggleNotificationVisibility} from './networkNotification';
 import {NotificationType} from '../Utility/InterFacesAndEnum';
+import {handle401Status} from '../Utility/Utility';
+
 
 interface DashboardData {
         totalUsers: number,
@@ -60,6 +62,11 @@ export const getDashboardData = createAsyncThunk(
             return response.json()
         })
         .then((response) => {
+
+            if (response.statusCode === 401) {
+                handle401Status();
+            }
+
             if (response.statusCode === 200) {
                 dispatch(setDashboardData({
                     data:response.result

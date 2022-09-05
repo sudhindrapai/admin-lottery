@@ -7,6 +7,8 @@ import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 import {toggleNotificationVisibility} from './networkNotification';
 import {NotificationType} from '../Utility/InterFacesAndEnum';
 
+import {handle401Status} from '../Utility/Utility';
+
 let updateTemplateInitialState = {
     templateObj:{}
 };
@@ -26,6 +28,11 @@ export const getUpdateTemplateDetail = createAsyncThunk(
                 return response.json();
             })
             .then((data) => {
+                
+                if (data.statusCode === 401) {
+                    handle401Status();
+                }
+    
                 dispatch(setUpdateTemplate({
                     templateObj: data.result
                 }));

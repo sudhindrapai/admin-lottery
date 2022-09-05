@@ -7,6 +7,8 @@ import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 import {toggleNotificationVisibility} from './networkNotification';
 import {NotificationType} from '../Utility/InterFacesAndEnum';
 
+import {handle401Status} from '../Utility/Utility';
+
 const initialState = {
     templateList: []
 }
@@ -29,6 +31,11 @@ export const getTemplateList = createAsyncThunk(
             return response.json();
         })
         .then((data) => {
+
+            if (data.statusCode === 401) {
+                handle401Status();
+            }
+
             if (data.statusCode === 504) {
                 dispatch(setTemplateList({
                     templateList:[]

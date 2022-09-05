@@ -83,3 +83,16 @@ align-items: center;
 justify-content: space-between;
 gap: 30px;
 `;
+
+export const GraphYaxis = styled.div`
+width: 300px;
+height: 50px;
+display: flex;
+flex-flow: row nowrap;
+align-items: flex-start;
+justify-content: flex-start;
+`;
+
+export const GraphYButton = styled.div`
+
+`;

@@ -1,3 +1,6 @@
+import * as localStorageActionType from '../LocalStorage/ActionTypes';
+import {setLocalStorage} from '../LocalStorage/SetLocalStorage';
+import {adminRouts} from '../routs'
 import {FormElement, customValidationType} from './InterFacesAndEnum';
 import moment from 'moment'
 
@@ -285,33 +288,6 @@ export const transformGMTToUTC = (dateString:string) => {
     let modifiedDate:any = moment.utc(dateString).format("YYYY-MM-DDTHH:mm:ss").valueOf()
     //  modifiedDate = new Date(modifiedDate).toString();
      return modifiedDate;
-    // let datesArray = modifiedDate.split(" ");
-// console.log(dateString,"dateString",moment.utc(dateString).format("YYYY-MM-DD HH:mm:ss Z"))
-// ['Sat', 'Oct', '08', '2022', '15:45:00', 'GMT+0530', '(India', 'Standard', 'Time)']
-// let splitedDateString = dateString.split("T")[0];
-// let splitedTimeString = dateString.split("T")[1].split(".")[0];
-// datesArray = splitedDateString.split("-")
-
-    // let date = parseInt(datesArray[2]);
-    // let year = parseInt(datesArray[0]);
-    // let month = parseInt(datesArray[1])
-    // let timeString = datesArray[4];
-    
-    // let timesArray = timeString.split(":");
-    // let hours = parseInt(timesArray[0]);
-    // let minutes = parseInt(timesArray[1]);
-    // let seconds = parseInt(timesArray[2]);
-
-    // let tranformatedDate = new Date();
-    // tranformatedDate.setDate(date);
-    // tranformatedDate.setFullYear(year);
-    // tranformatedDate.setMonth(month)
-
-    // tranformatedDate.setHours(hours + 5);
-    // tranformatedDate.setMinutes(minutes + 30);
-    // tranformatedDate.setSeconds(seconds);
-
-    // return tranformatedDate;
 }
 
 export const convertCamelCaseToReadableWord = (label:string) => {
@@ -327,4 +303,9 @@ export const convertCamelCaseToReadableWord = (label:string) => {
         }
     }
     return updatedString
+}
+
+export const handle401Status = () => {
+    setLocalStorage(localStorageActionType.CLEAR_LOGIN_USER_DETAIL,"");
+    window.location.href = adminRouts.login;
 }

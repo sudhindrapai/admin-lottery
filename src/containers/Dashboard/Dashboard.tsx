@@ -9,10 +9,29 @@ import {RootState} from '../../app/Store';
 import {useSelector, useDispatch} from 'react-redux';
 import {getDashboardData} from '../../features/dashboard';
 
-import {GraphList, GraphWrapper, Card, CardsList,HeaderWrapper,VerticalButton,GraphButton,GraphRow} from './StyledDashboard';
+import {GraphList, GraphWrapper, Card, CardsList,HeaderWrapper,
+    VerticalButton,GraphButton,GraphRow,GraphYaxis, GraphYButton} from './StyledDashboard';
 
 const exceptCards = ["totalUsers","goldUsers","regularUsers", "totalLotteries",
 "upcomingLotteres","currentLotteries","executedLotteries","deletedLotteries"];
+
+const graph1HorizontalBtns = [
+    {
+        label:"Y",
+        id:'year',
+        isSelected:true
+    },
+    {
+        label:"M",
+        id:'month',
+        isSelected:false
+    },
+    {
+        label:"D",
+        id:'day',
+        isSelected:false
+    }
+]
 
 const lineGraphXButtons = [
     {
@@ -51,6 +70,7 @@ const Dashboard:FC = () => {
     const [lotteriesData, setLotteriesData] = useState({});
 
     const [graph1X, setGraph1X] = useState(lineGraphXButtons);
+    const [graph1Y, setGraph1Y] = useState(graph1HorizontalBtns)
 
     let cardsView:any = <div></div>
 
@@ -89,6 +109,10 @@ const Dashboard:FC = () => {
         return <GraphButton isSelected={btnObj.isSelected}>
             {btnObj.label}
         </GraphButton>
+    });
+
+    const lineGraphYaxisButtons = graph1Y.map((timeObj) => {
+        return <GraphYButton></GraphYButton>
     })
 
     return <>

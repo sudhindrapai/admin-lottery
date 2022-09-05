@@ -6,6 +6,8 @@ import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 import {toggleNotificationVisibility} from './networkNotification';
 import {NotificationType} from '../Utility/InterFacesAndEnum';
 
+import {handle401Status} from '../Utility/Utility';
+
 const promotionInitialState = {
     isLoading:false,
     home:[],
@@ -46,6 +48,11 @@ export const getPromotionList = createAsyncThunk(
             return response.json()
         })
         .then((response) => {
+
+            if (response.statusCode === 401) {
+                handle401Status();
+            }
+
            if (response.statusCode === 200) {
                dispatch(setDesktopBanners({
                    response:response.result,
@@ -132,7 +139,10 @@ export const updatePromotion = createAsyncThunk(
             return response.json()
         })
         .then((response) =>{
-            console.log(response)
+            if (response.statusCode === 401) {
+                handle401Status();
+            }
+
         })
     }
 )

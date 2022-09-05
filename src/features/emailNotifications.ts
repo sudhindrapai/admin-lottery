@@ -5,6 +5,9 @@ import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 import {toggleNotificationVisibility} from './networkNotification';
 import {NotificationType} from '../Utility/InterFacesAndEnum';
 
+import {handle401Status} from '../Utility/Utility';
+
+
 interface EmailNotificationNode {
     emailNotificationId: number,
     emailSubject: string,
@@ -84,6 +87,11 @@ export const getEmailNotificationList = createAsyncThunk(
             return response.json();
         })
         .then((response) => {
+
+            if (response.statusCode === 401) {
+                handle401Status();
+            }
+
             if (response.statusCode === 200) {
                 dispatch(setData({
                     data:response.result
@@ -107,6 +115,11 @@ export const getNotificationDetail = createAsyncThunk(
             return response.json();
         })
         .then((response) => {
+
+            if (response.statusCode === 401) {
+                handle401Status();
+            }
+
             if (response.statusCode === 200) {
                 dispatch(setEmailNotificationDetail({
                     data:response.result
@@ -132,6 +145,11 @@ export const deleteEmailNotification = createAsyncThunk(
             return response.json();
         })
         .then((response) => {
+
+            if (response.statusCode === 401) {
+                handle401Status();
+            }
+
             if (response.statusCode === 200) {
                 dispatch(updateDeleteStatus({
                     isDeleted: true
@@ -156,6 +174,11 @@ export const deleteEmailNotification = createAsyncThunk(
                 return response.json();
             })
             .then((response) => {
+
+                if (response.statusCode === 401) {
+                    handle401Status();
+                }    
+
                 if (response.statusCode === 200) {
                     dispatch(setEmailNotificationCreationState({
                         status:true

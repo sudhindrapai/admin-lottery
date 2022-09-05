@@ -6,6 +6,8 @@ import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 import {toggleNotificationVisibility} from './networkNotification';
 import {NotificationType} from '../Utility/InterFacesAndEnum';
 
+import {handle401Status} from '../Utility/Utility';
+
 interface UsersStateType {
     users:any
 }
@@ -72,6 +74,11 @@ export const getUserList = createAsyncThunk(
             return response.json();
         })
         .then((response) => {
+
+            if (response.statusCode === 401) {
+                handle401Status();
+            }
+
             dispatch(setUserList({
                 data:response.result
             }));

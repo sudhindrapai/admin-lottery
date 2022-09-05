@@ -7,6 +7,8 @@ import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 import {toggleNotificationVisibility} from './networkNotification';
 import {NotificationType} from '../Utility/InterFacesAndEnum';
 
+import {handle401Status} from '../Utility/Utility';
+
 interface CreateLottery{
     errorMessage: string,
     isLotteryCreated: boolean
@@ -32,6 +34,12 @@ export const createLottery = createAsyncThunk(
             return response.json();
         })
         .then((data) => {
+
+            if (data.statusCode === 401) {
+                handle401Status();
+            }
+
+
             if (data.statusCode === 200){
                 dispatch(toggleLotteryCreateState({
                     isCreated: true

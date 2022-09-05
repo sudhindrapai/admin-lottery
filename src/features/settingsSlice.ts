@@ -5,6 +5,8 @@ import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 import {toggleNotificationVisibility} from './networkNotification';
 import {NotificationType} from '../Utility/InterFacesAndEnum';
 
+import {handle401Status} from '../Utility/Utility';
+
 interface SettingsNode {
     settingId: number,
     settingFor: string,
@@ -57,6 +59,11 @@ export const getSettingsData = createAsyncThunk(
             return response.json();
         })
         .then((response) => {
+
+            if (response.statusCode === 401) {
+                handle401Status();
+            }
+
             if (response.statusCode === 200) {
                 dispatch(setData({
                     data: response.result
@@ -99,6 +106,11 @@ export const updateSettingsData = createAsyncThunk(
             return response.json();
         })
         .then((response) => {
+
+            if (response.statusCode === 401) {
+                handle401Status();
+            }
+
             if (response.statusCode === 200) {
                 dispatch(toggleNotificationVisibility({
                     isVisible: true,

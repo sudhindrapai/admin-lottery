@@ -8,6 +8,8 @@ import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 import {toggleNotificationVisibility} from './networkNotification';
 import {NotificationType} from '../Utility/InterFacesAndEnum';
 
+import {handle401Status} from '../Utility/Utility';
+
 interface getLotteriesInitialState {
     lotteryList:LotteryDetail[],
     page: number,
@@ -38,6 +40,11 @@ export const getLotteryList = createAsyncThunk(
             return response.json();
         })
         .then((response) => {
+
+            if (response.statusCode === 401) {
+                handle401Status();
+            }
+
             if (response.statusCode === 200) {
                 dispatch(setLotteryList({
                     lotteryList:response.result

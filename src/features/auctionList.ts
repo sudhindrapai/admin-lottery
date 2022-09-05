@@ -4,6 +4,7 @@ import * as localStorageActiontype from '../LocalStorage/ActionTypes';
 import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 import {toggleNotificationVisibility} from './networkNotification';
 import {NotificationType} from '../Utility/InterFacesAndEnum';
+import {handle401Status} from '../Utility/Utility';
 
 interface AuctonObj{
     auctionId: number,
@@ -120,6 +121,11 @@ export const getAuctions = createAsyncThunk(
             return response.json();
         })
         .then((response) => {
+
+            if (response.statusCode === 401) {
+                handle401Status();
+            }
+
             if (response.statusCode === 200) {
                 dispatch(setAuctionList({
                     result: response.result
@@ -171,6 +177,11 @@ export const getAuctionRequest = createAsyncThunk(
             return response.json();
         })
         .then((response) => {
+
+            if (response.statusCode === 401) {
+                handle401Status();
+            }
+
             if (response.statusCode === 200) {
                 dispatch(setAuctionRequestList({
                     result: response.result
@@ -214,6 +225,11 @@ export const createAuction = createAsyncThunk(
             return response.json()
         })
         .then((response) => {
+
+            if (response.statusCode === 401) {
+                handle401Status();
+            }
+
             if (response.statusCode === 200) {
                 dispatch(toggleAuctionCreation({
                     isAuctionCreated: true
@@ -256,6 +272,11 @@ export const getAuctionDetailById = createAsyncThunk(
         })
         .then((response) => {
             if (response.statusCode === 200) {
+
+                if (response.statusCode === 401) {
+                    handle401Status();
+                }
+
                 dispatch(setAuctionDetail({
                     data: response.result
                 }));
@@ -297,6 +318,11 @@ export const approveUserAuction = createAsyncThunk(
             return response.json();
         })
         .then((response) => {
+
+            if (response.statusCode === 401) {
+                handle401Status();
+            }
+
             if (response.statusCode === 200) {
                 dispatch(toggleAuctionApproveState({
                     isAuctionApproved: true
@@ -333,6 +359,11 @@ export const deleteAuction = createAsyncThunk(
             return response.json()
         })
         .then((response) => {
+
+            if (response.statusCode === 401) {
+                handle401Status();
+            }
+
             if (response.statusCode === 200) {
                 dispatch(toggleAuctionDeletionState({
                     isDeleted: true
@@ -371,6 +402,11 @@ export const updateAuction = createAsyncThunk(
             return reaponse.json()
         })
         .then((response) => {
+
+            if (response.statusCode === 401) {
+                handle401Status();
+            }
+
             if (response.statusCode === 200) {
                 dispatch(toggleNotificationVisibility({
                     isVisible: true,
