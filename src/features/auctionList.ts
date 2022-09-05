@@ -282,7 +282,6 @@ export const getAuctionDetailById = createAsyncThunk(
     }
 );
 
-
 export const approveUserAuction = createAsyncThunk(
     'approve auction',
     async (payload:any, {dispatch}) => {
@@ -351,6 +350,46 @@ export const deleteAuction = createAsyncThunk(
                 isVisible: true,
                 status: NotificationType.error,
                 message: "Something went wrong"
+            }));
+        })
+    }
+);
+
+export const updateAuction = createAsyncThunk(
+    'updateAuction',
+    async (payload:any,{dispatch}) => {
+        let endpoint = payload.auctionType === "U" ? endpoints.updateUserAuction : endpoints.updateAdminAuction;
+        await fetch(endpoint,{
+            method: 'PUT',
+            headers:{
+                Authorization: `Bearer ${getLocalStorage(localStorageActiontype.GET_ACCESS_TOKEN)}`,
+                "Content-type": "application/json; charset=UTF-8",
+            },
+            body:JSON.stringify(payload)
+        })
+        .then((reaponse) => {
+            return reaponse.json()
+        })
+        .then((response) => {
+            if (response.statusCode === 200) {
+                dispatch(toggleNotificationVisibility({
+                    isVisible: true,
+                    status: NotificationType.success,
+                    message: response.errorMsg
+                }));
+            } else {
+                dispatch(toggleNotificationVisibility({
+                    isVisible: true,
+                    status: NotificationType.error,
+                    message: response.errorMsg
+                }));
+            }
+        })
+        .catch((error) => {
+            dispatch(toggleNotificationVisibility({
+                isVisible: true,
+                status: NotificationType.error,
+                message: "Something went wrong!"
             }));
         })
     }

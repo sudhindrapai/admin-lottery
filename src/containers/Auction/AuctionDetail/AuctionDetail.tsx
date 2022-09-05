@@ -12,7 +12,7 @@ import {updateFormInputState, validateForm, updateFormSelectState, updateFormTim
 import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement} from '../../../Utility/InterFacesAndEnum';
 
 import {adminRouts} from '../../../routs';
-import {getAuctionDetailById, deleteAuction, toggleAuctionDeletionState} from '../../../features/auctionList';
+import {getAuctionDetailById, deleteAuction, toggleAuctionDeletionState,updateAuction} from '../../../features/auctionList';
 import {useSelector, useDispatch} from 'react-redux';
 import {useParams, useNavigate} from 'react-router-dom';
 
@@ -755,7 +755,24 @@ const CreateAuction:FC = () => {
         dispatch(deleteAuction(`auctionId=${auctionId}`));
     }
 
-    const validateForm = () => {};
+    const validateForm = () => {
+    let tempObj = [
+        ...auctionDetail.form,
+        ...scheduleDetail.form,
+        ...addressDetail.form,
+        ...userDetail.form,
+        ...ticketdetail.form,
+        ...subTicketDetail.form,
+        ...productDetail.form
+    ]
+    let requestObj = {};
+    for (let element of tempObj) {
+        requestObj[element.id] = element.value;
+    }
+    requestObj["auctionType"] = detailResponse.auctionType;
+    requestObj["auctionId"] = detailResponse.auctionId
+    dispatch(updateAuction(requestObj));
+    };
 
     return <Fragment>
         <HeaderView>
