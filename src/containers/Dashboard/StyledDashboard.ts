@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+interface GraphButtonProps {
+    isSelected: boolean
+}
+
 export const HeaderWrapper = styled.div`
 width: 100%;
 box-sizing: border-box;
@@ -10,9 +14,9 @@ export const GraphWrapper = styled.div`
 width: 100%;
 box-sizing: border-box;
 background-color: #ffffff;
-padding: 30px;
+padding: 20px;
 display: flex;
-flex-basis: 47%;
+flex-basis: 42%;
 box-shadow: 0px 0px 2px rgb(0 0 0 / 12%);
 border-radius: 8px;
 `;
@@ -44,4 +48,38 @@ display: flex;
 flex-flow: row wrap;
 gap: 15px;
 margin-bottom: 50px;
+`;
+
+export const GraphButton = styled.div`
+width: 100%;
+box-sizing: border-box;
+color: ${(props:GraphButtonProps) => props.isSelected ? '#3a57e8' : '#000000'};
+background-color: ${(props:GraphButtonProps) => props.isSelected ? 'rgba(58,87,232,0.1)' : '#ffffff'};
+padding: 10px 8px;
+border: 1px solid #f1f1f1;
+text-align:left;
+cursor: pointer;
+height: 50px;
+word-break: break-word;
+`;
+
+export const VerticalButton = styled.div`
+width: 100px;
+box-sizing:border-box;
+display: flex;
+flex-flow: column wrap;
+align-items: flex-start;
+justify-content: flex-start;
+margin-top: 30px;
+padding-right: 10px;
+`;
+
+export const GraphRow = styled.div`
+width: 100%;
+box-sizing: border-box;
+display: flex;
+flex-flow: row nowrap;
+align-items: center;
+justify-content: space-between;
+gap: 30px;
 `;

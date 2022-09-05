@@ -9,10 +9,38 @@ import {RootState} from '../../app/Store';
 import {useSelector, useDispatch} from 'react-redux';
 import {getDashboardData} from '../../features/dashboard';
 
-import {GraphList, GraphWrapper, Card, CardsList,HeaderWrapper} from './StyledDashboard';
+import {GraphList, GraphWrapper, Card, CardsList,HeaderWrapper,VerticalButton,GraphButton,GraphRow} from './StyledDashboard';
 
 const exceptCards = ["totalUsers","goldUsers","regularUsers", "totalLotteries",
 "upcomingLotteres","currentLotteries","executedLotteries","deletedLotteries"];
+
+const lineGraphXButtons = [
+    {
+        label: "Users",
+        id:'users',
+        isSelected:true
+    },
+    {
+        label: "Lottery",
+        id:'lottery',
+        isSelected:false
+    },
+    {
+        label: "Auction",
+        id:'auction',
+        isSelected:false
+    },
+    {
+        label: "Gold Member",
+        id:'goldMember',
+        isSelected:false
+    },
+    {
+        label: "Registration",
+        id:'registration',
+        isSelected:false
+    }
+];
 
 const Dashboard:FC = () => {
     const dispatch = useDispatch();
@@ -21,6 +49,8 @@ const Dashboard:FC = () => {
 
     const [useData, setUserDatea] = useState<any>({});
     const [lotteriesData, setLotteriesData] = useState({});
+
+    const [graph1X, setGraph1X] = useState(lineGraphXButtons);
 
     let cardsView:any = <div></div>
 
@@ -55,26 +85,48 @@ const Dashboard:FC = () => {
         dispatch(getDashboardData())
     },[]);
 
+    const lineGraphXaxisButtons = graph1X.map((btnObj) =>{
+        return <GraphButton isSelected={btnObj.isSelected}>
+            {btnObj.label}
+        </GraphButton>
+    })
+
     return <>
     <HeaderWrapper>
     <ViewHeader title={"Dashboard"} />
     </HeaderWrapper>
     <GraphList>
+        <GraphRow>
         <GraphWrapper>
+            <VerticalButton>
+                {lineGraphXaxisButtons}
+            </VerticalButton>
             <LineGraph />
         </GraphWrapper>
         <GraphWrapper>
+        <VerticalButton>
+                {lineGraphXaxisButtons}
+            </VerticalButton>
         {Object.keys(lotteriesData).length > 0 && 
         <DoughnutChart label={`User Details (total users: ${dashboardData.totalUsers})`} detail={useData} />}
         </GraphWrapper>
+        </GraphRow>
+        <GraphRow>
         <GraphWrapper>
-        {Object.keys(useData).length > 0 && 
-        <BarChart label={`Lottery details (total lotteries: ${dashboardData.totalLotteries})`} detail={lotteriesData} />}
-        </GraphWrapper>
-        <GraphWrapper>
+        <VerticalButton>
+                {lineGraphXaxisButtons}
+            </VerticalButton>
         {Object.keys(lotteriesData).length > 0 && 
         <PieGraph label={`User Details (total users: ${dashboardData.totalUsers})`} detail={useData} />}
         </GraphWrapper>
+        <GraphWrapper>
+        <VerticalButton>
+                {lineGraphXaxisButtons}
+            </VerticalButton>
+        {Object.keys(useData).length > 0 && 
+        <BarChart label={`Lottery details (total lotteries: ${dashboardData.totalLotteries})`} detail={lotteriesData} />}
+        </GraphWrapper>
+        </GraphRow>
         </GraphList>
         <CardsList>
             {cardsView}

@@ -37,13 +37,13 @@ let leftMenuResponse: NavResponse[] = [
         routePath: adminRouts.dashboard,
         isSubmenuExists: true,
         isSubmenuExpanded: false,
-        activeRoutePaths:[adminRouts.dashboard],
+        activeRoutePaths:[adminRouts.dashboard,adminRouts.rootPath],
         submenu:[
             {
                 submenuLabel: "Dashboard",
                 isActive: false,
                 routePath: adminRouts.dashboard,
-                activeRoutePaths:[adminRouts.dashboard]
+                activeRoutePaths:[adminRouts.dashboard,adminRouts.rootPath]
             }
         ]
     },

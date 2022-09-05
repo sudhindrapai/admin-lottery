@@ -46,7 +46,7 @@ export const PieGraph = (props) => {
       <Pie
         data={data}
         height="340px"
-  width="451px"
+        width="390px"
         options={{
             maintainAspectRatio: false,
             responsive: true,

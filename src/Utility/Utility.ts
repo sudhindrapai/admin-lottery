@@ -281,10 +281,11 @@ export const searchTableData = (response: any, searchKey:string) => {
 
 
 export const transformGMTToUTC = (dateString:string) => {
-    let modifiedDate = moment.utc(dateString).format("YYYY-MM-DD HH:mm:ss Z")
-    return modifiedDate
-    // let datesArray = dateString.split(" ");
-    // console.log(dateString.includes("T"), "includes T?")
+    // format("YYYY-MM-DDTHH:mm:ss")
+    let modifiedDate:any = moment.utc(dateString).format("YYYY-MM-DDTHH:mm:ss").valueOf()
+    //  modifiedDate = new Date(modifiedDate).toString();
+     return modifiedDate;
+    // let datesArray = modifiedDate.split(" ");
 // console.log(dateString,"dateString",moment.utc(dateString).format("YYYY-MM-DD HH:mm:ss Z"))
 // ['Sat', 'Oct', '08', '2022', '15:45:00', 'GMT+0530', '(India', 'Standard', 'Time)']
 // let splitedDateString = dateString.split("T")[0];

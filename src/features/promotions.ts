@@ -124,6 +124,7 @@ export const updatePromotion = createAsyncThunk(
             method: 'PUT',
             headers:{
                 Authorization: `Bearer ${getLocalStorage(localStorageActiontype.GET_ACCESS_TOKEN)}`,
+                "Content-type": "application/json; charset=UTF-8",
             },
             body:JSON.stringify(payload)
         })
