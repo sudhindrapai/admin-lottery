@@ -16,6 +16,7 @@ box-sizing: border-box;
 background-color: #ffffff;
 padding: 20px;
 display: flex;
+flex-flow: column nowrap;
 flex-basis: 42%;
 box-shadow: 0px 0px 2px rgb(0 0 0 / 12%);
 border-radius: 8px;
@@ -85,14 +86,39 @@ gap: 30px;
 `;
 
 export const GraphYaxis = styled.div`
-width: 300px;
+width: 250px;
 height: 50px;
 display: flex;
 flex-flow: row nowrap;
 align-items: flex-start;
 justify-content: flex-start;
+border: 1px solid #f1f1f1;
+margin-left: 95px;
+margin-top: 15px;
 `;
 
-export const GraphYButton = styled.div`
+export const GraphItem = styled.div`
+width: 100%;
+box-sizing: border-box;
+display: flex;
+flex-flow: row nowrap;
+align-items:flex-start;
+justify-content:flex-start;
+`;
 
+export const Label = styled.div`
+background-color: rgba(58, 87, 232,0.3);
+height: 100%;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 0 15px;
+`;
+export const GraphYButton = styled.div`
+height: 100%;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 0 25px;
+cursor: pointer;
 `;

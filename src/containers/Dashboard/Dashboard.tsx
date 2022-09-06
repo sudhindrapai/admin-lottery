@@ -10,7 +10,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {getDashboardData} from '../../features/dashboard';
 
 import {GraphList, GraphWrapper, Card, CardsList,HeaderWrapper,
-    VerticalButton,GraphButton,GraphRow,GraphYaxis, GraphYButton} from './StyledDashboard';
+    VerticalButton,GraphButton,GraphRow,GraphYaxis, GraphYButton,GraphItem,Label} from './StyledDashboard';
 
 const exceptCards = ["totalUsers","goldUsers","regularUsers", "totalLotteries",
 "upcomingLotteres","currentLotteries","executedLotteries","deletedLotteries"];
@@ -112,7 +112,7 @@ const Dashboard:FC = () => {
     });
 
     const lineGraphYaxisButtons = graph1Y.map((timeObj) => {
-        return <GraphYButton></GraphYButton>
+        return <GraphYButton>{timeObj.label}</GraphYButton>
     })
 
     return <>
@@ -122,33 +122,74 @@ const Dashboard:FC = () => {
     <GraphList>
         <GraphRow>
         <GraphWrapper>
+            <GraphItem>
             <VerticalButton>
                 {lineGraphXaxisButtons}
             </VerticalButton>
             <LineGraph />
+            </GraphItem>
+            <GraphItem>
+                <GraphYaxis>
+                    <Label>
+                        Time
+                    </Label>
+               {lineGraphYaxisButtons}
+               </GraphYaxis>
+            </GraphItem>
         </GraphWrapper>
         <GraphWrapper>
+        <GraphItem>
         <VerticalButton>
                 {lineGraphXaxisButtons}
-            </VerticalButton>
+        </VerticalButton>
         {Object.keys(lotteriesData).length > 0 && 
         <DoughnutChart label={`User Details (total users: ${dashboardData.totalUsers})`} detail={useData} />}
+        </GraphItem>
+        <GraphItem>
+        <GraphYaxis>
+                    <Label>
+                        Time
+                    </Label>
+               {lineGraphYaxisButtons}
+               </GraphYaxis>
+            </GraphItem>
         </GraphWrapper>
         </GraphRow>
+
         <GraphRow>
         <GraphWrapper>
+        <GraphItem>
         <VerticalButton>
                 {lineGraphXaxisButtons}
             </VerticalButton>
         {Object.keys(lotteriesData).length > 0 && 
         <PieGraph label={`User Details (total users: ${dashboardData.totalUsers})`} detail={useData} />}
+        </GraphItem>
+        <GraphItem>
+        <GraphYaxis>
+                    <Label>
+                        Time
+                    </Label>
+               {lineGraphYaxisButtons}
+               </GraphYaxis>
+            </GraphItem>
         </GraphWrapper>
         <GraphWrapper>
+        <GraphItem>
         <VerticalButton>
                 {lineGraphXaxisButtons}
             </VerticalButton>
         {Object.keys(useData).length > 0 && 
         <BarChart label={`Lottery details (total lotteries: ${dashboardData.totalLotteries})`} detail={lotteriesData} />}
+        </GraphItem>
+        <GraphItem>
+        <GraphYaxis>
+                    <Label>
+                        Time
+                    </Label>
+               {lineGraphYaxisButtons}
+               </GraphYaxis>
+            </GraphItem>
         </GraphWrapper>
         </GraphRow>
         </GraphList>
