@@ -194,7 +194,8 @@ const LeftMenu:FC = () => {
     },[]) 
 
     const isActivePath = (routsList:string[]):boolean => {
-        var re = new RegExp(location.pathname, 'gi');
+        let updatedPathName = location.pathname === "/" ? adminRouts.dashboard : location.pathname;
+        var re = new RegExp(updatedPathName, 'gi');
         let pathsList = routsList.join(" ");
 
         return pathsList.match(re) !== null;

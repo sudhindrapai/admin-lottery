@@ -90,6 +90,11 @@ export const createLogin = createAsyncThunk(
         })
         .catch((error) => {
             console.log(error,"error");
+            dispatch(toggleNotificationVisibility({
+                isVisible: true,
+                status: NotificationType.error,
+                message: "something went wrong!"
+            }));
         })
         .finally(() => {
             dispatch(toggleLoading({
