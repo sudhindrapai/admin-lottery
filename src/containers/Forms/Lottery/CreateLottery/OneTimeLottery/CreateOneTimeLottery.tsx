@@ -1,4 +1,4 @@
-import {FC,useState} from 'react';
+import {FC,useEffect,useState} from 'react';
 import Button from '../../../../../components/UI/Button/Button';
 import ImageUploader from '../../../../../components/ImageUploader/ImageUploader';
 
@@ -428,12 +428,13 @@ isValidForm: false
 
 interface LotteryProps {
     onCreateLottery(obj:any):void,
-    onCancel():void
+    onCancel():void,
+    ticketObj:any
 }
 
 const CreateLotteryForm:FC<LotteryProps> = (props) => {
 
-    const {onCreateLottery,onCancel} = props;
+    const {ticketObj,onCreateLottery,onCancel} = props;
 
     const [lotteryName, setLotteryName] = useState<CreateLottery>(LotteryNameForm)
     const [lotterySettingForm, setLotterySettingForm] = useState<CreateLottery>(lotterySettingsForm);
@@ -445,6 +446,35 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
     const [selectedLotteryType, setLotteryType] = useState(3);
 
     const imagesList = useSelector((state:RootState) => state.images.images);
+
+    useEffect(() => {
+        if (ticketObj && ticketObj.length > 0) {
+        let ticket = ticketObj[0];
+        let updatedTicketType = ticketsType.form.map((ticketTypeObj) => {
+            return{
+                ...ticketTypeObj,
+                value: ticket[ticketTypeObj.id]
+            }
+        });
+
+        let updatedSubTicketType = subTicket.form.map((subTicketObj) => {
+            return{
+                ...subTicketObj,
+                value: ticket[subTicketObj.id]
+            }
+        });
+
+        setSubTicket({
+            ...subTicket,
+            form:updatedSubTicketType
+        })
+
+        setTicketType({
+            ...ticketsType,
+            form:updatedTicketType
+        });
+    }
+    },[ticketObj]);
 
      // lottery name form start here
      const handleLotteryNameInput = (event:React.ChangeEvent <HTMLTextAreaElement | HTMLInputElement>):void => {

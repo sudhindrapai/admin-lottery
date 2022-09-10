@@ -116,7 +116,7 @@ const Dashboard:FC = () => {
     })
 
     return <>
-    <HeaderWrapper>
+    {/* <HeaderWrapper>
     <ViewHeader title={"Dashboard"} />
     </HeaderWrapper>
     <GraphList>
@@ -195,7 +195,7 @@ const Dashboard:FC = () => {
         </GraphList>
         <CardsList>
             {cardsView}
-        </CardsList>
+        </CardsList> */}
         </>
 };
 
