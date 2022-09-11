@@ -10,6 +10,7 @@ import {FormElementType, customValidationType, InputVariant, InputTypes, FormEle
 
 import {adminRouts} from '../../../routs';
 import {createAuction, toggleAuctionCreation} from '../../../features/auctionList';
+import {getSettingsData} from '../../../features/settingsSlice'
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState} from '../../../app/Store';
 import {useNavigate} from 'react-router-dom';
@@ -537,7 +538,44 @@ const CreateAuction:FC = () => {
     const [productDetail, setProductDetails] = useState<FormState>(productDetails);
     const [isForGoldMembers, setStatus] = useState<boolean>(false);
 
-    const isAuctionCreated = useSelector((state:RootState) => state.auction.isAuctionCreated)
+    const isAuctionCreated = useSelector((state:RootState) => state.auction.isAuctionCreated);
+    const ticketData = useSelector((state:RootState) => state.settings.data);
+
+    useEffect(() => {
+        dispatch(getSettingsData());
+    },[]);
+
+    useEffect(() => {
+        console.log(ticketData,"ticketDataticketDataticketData")
+        let auctionObj = ticketData.filter((auctionObj) => {
+            return auctionObj.settingFor === "AUCTION"
+        })[0];
+
+        let updatedTicketType = ticketdetail.form.map((ticketTypeObj) => {
+            return{
+                ...ticketTypeObj,
+                value: auctionObj[ticketTypeObj.id]
+            }
+        });
+
+        let updatedsubTicketType = subTicketDetail.form.map((ticketTypeObj) => {
+            return{
+                ...ticketTypeObj,
+                value: auctionObj[ticketTypeObj.id]
+            }
+        });
+
+        setSubTicketDetail({
+            ...subTicketDetail,
+            form:updatedsubTicketType
+        })
+
+        setTicketDetail({
+            ...ticketdetail,
+            form:updatedTicketType
+        })
+
+    },[ticketData]);
 
     useEffect(() => {
         if (isAuctionCreated === true) {
