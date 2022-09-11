@@ -185,10 +185,12 @@ const AuctionList = () => {
     }
 
     let tableBody = responseData.map((tableRowObj:any) => {
-console.log(tableRowObj,"tableRowObj")
-        let idBtn =  <Button title={`#${tableRowObj.auctionId}`} 
+        let idBtn = tableRowObj.auctionId;
+        if (tableRowObj.auctionStatus === "U") {
+            idBtn =  <Button title={`#${tableRowObj.auctionId}`} 
         btnSize={ButtonSize.sm} btnVariant={ButtonVariant.primaryLink} 
         clicked={() => {redirectToDetailView(tableRowObj.auctionId, tableRowObj.auctionStatus)}} />;
+        }
 
         let status = tableRowObj.auctionStatus === "C" ? <TableStyle.Live>
             Live
