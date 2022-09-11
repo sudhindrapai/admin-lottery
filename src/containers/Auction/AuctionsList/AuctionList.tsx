@@ -116,7 +116,8 @@ const AuctionList = () => {
         navigate(path);
     };
 
-    const redirectToDetailView = (auctionId:number) => {
+    const redirectToDetailView = (auctionId:number, status:string) => {
+        if (status !== "U") return
         navigate(adminRouts.updateAuction(auctionId));
     }
 
@@ -184,10 +185,10 @@ const AuctionList = () => {
     }
 
     let tableBody = responseData.map((tableRowObj:any) => {
-
+console.log(tableRowObj,"tableRowObj")
         let idBtn =  <Button title={`#${tableRowObj.auctionId}`} 
         btnSize={ButtonSize.sm} btnVariant={ButtonVariant.primaryLink} 
-        clicked={() => {redirectToDetailView(tableRowObj.auctionId)}} />;
+        clicked={() => {redirectToDetailView(tableRowObj.auctionId, tableRowObj.auctionStatus)}} />;
 
         let status = tableRowObj.auctionStatus === "C" ? <TableStyle.Live>
             Live

@@ -769,6 +769,7 @@ const CreateAuction:FC = () => {
     for (let element of tempObj) {
         requestObj[element.id] = element.value;
     }
+    requestObj["isMemberAuction"] = false;
     requestObj["auctionType"] = detailResponse.auctionType;
     requestObj["auctionId"] = detailResponse.auctionId
     dispatch(updateAuction(requestObj));

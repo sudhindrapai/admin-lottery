@@ -1,6 +1,7 @@
 import {FC, Fragment, useState, useEffect} from 'react';
 import ViewHeader from '../../../components/ViewHeader/ViewHeader';
 
+import {transformGMTToUTC} from '../../../Utility/Utility'
 import ImageUploader from '../../../components/ImageUploader/ImageUploader'
 import FormBuilder from '../../FormBuilder/FormBuilder';
 import Button from '../../../components/UI/Button/Button';
@@ -546,7 +547,7 @@ const CreateAuction:FC = () => {
     },[]);
 
     useEffect(() => {
-        console.log(ticketData,"ticketDataticketDataticketData")
+        if (ticketData && ticketData.length > 0) {
         let auctionObj = ticketData.filter((auctionObj) => {
             return auctionObj.settingFor === "AUCTION"
         })[0];
@@ -574,7 +575,7 @@ const CreateAuction:FC = () => {
             ...ticketdetail,
             form:updatedTicketType
         })
-
+    }
     },[ticketData]);
 
     useEffect(() => {
@@ -711,12 +712,14 @@ const CreateAuction:FC = () => {
         ...productDetail.form,
     ];
 
-    let requestObj = {};
+    let requestObj:any = {};
 
     for (let formElement of formElementsArray) {
         requestObj[formElement.id] = formElement.value
     }
 
+    requestObj["auctionStartDate"] = transformGMTToUTC(requestObj.auctionStartDate);
+    requestObj["auctionEndDate"] = transformGMTToUTC(requestObj.auctionEndDate);
     requestObj["isMemberAuction"] = isForGoldMembers;
 
     dispatch(createAuction(requestObj));
