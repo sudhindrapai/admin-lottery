@@ -525,10 +525,11 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
         // lottery setting form stats
         const updateSettingsFormState = (value:string, name:string) => {
             let updatedArray = updateFormSelectState(value, name, lotterySettingForm.form);
+            console.log(value,"value")
             if (value === "Money Lottery") {
                 console.log(value)
                 setLotteryType(1);
-            } else {
+            } else if (value === "Gift Lottery") {
                 setLotteryType(2);
             }
             setLotterySettingForm({

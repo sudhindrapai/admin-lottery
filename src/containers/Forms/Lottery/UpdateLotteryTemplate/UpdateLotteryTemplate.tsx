@@ -499,7 +499,7 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
 
             if (ticketType === "Money Lottery") {
                 setLotteryType(1);
-            } else {
+            } else if (ticketType === "Gift Lottery") {
                 setLotteryType(2);
             }
 
@@ -633,7 +633,7 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
         let updatedArray = updateFormSelectState(value, name, lotterySettingForm.form);
         if (value === "Money Lottery") {
             setLotteryType(1);
-        } else {
+        } else if (value === "Gift Lottery") {
             setLotteryType(2);
         }
         setLotterySettingForm({
