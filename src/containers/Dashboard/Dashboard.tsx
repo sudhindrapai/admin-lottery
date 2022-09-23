@@ -1,4 +1,4 @@
-import {FC, useEffect, useState} from 'react';
+import {FC, useEffect, useMemo, useState} from 'react';
 import  BarChart from '../../components/Graphs/BarChart/BarChart';
 import ViewHeader from '../../components/ViewHeader/ViewHeader';
 import {PieGraph} from '../../components/Graphs/PieChart/PieChart';
@@ -102,7 +102,7 @@ const Dashboard:FC = () => {
     const [graph1Y, setGraph1Y] = useState(graph1HorizontalBtns);
 
     // ----
-    const [donughtXasisButtons, setXDoughtnutButton] = useState([])
+    const [donughtXasisButtons, setXDoughtnutButton] = useState<any>([])
 
     let cardsView:any = <div></div>
 
@@ -114,7 +114,6 @@ const Dashboard:FC = () => {
                     results:dataObj[data.id]
                 }
             });
-            console.log(updatedObj)
             setXDoughtnutButton(updatedObj);
         }
     }
@@ -172,10 +171,24 @@ const Dashboard:FC = () => {
         return <GraphYButton>{timeObj.label}</GraphYButton>
     });
 
+    const updateDoughtnutGraphValue = (selectedObj) => {
+        console.log(selectedObj,"updateDoughtnutGraphValue");
+        let updatedData = donughtXasisButtons.map((obj:any) => {
+            return {...obj,
+                isSelected:obj.id === selectedObj.id
+            }
+        });
+
+        setXDoughtnutButton([...updatedData]);
+    };
 
     const doughtnutYAxisButton = donughtXasisButtons.map((obj:any) => {
-        return <GraphButton isSelected={obj.isSelected}>{obj.label}</GraphButton>
+        return <GraphButton onClick={() => {updateDoughtnutGraphValue(obj)}} isSelected={obj.isSelected}>{obj.label}</GraphButton>
     })
+
+    let doughtnutGraph = useMemo(() => {
+        return <DoughnutChart label={`Users by country`} detail={donughtXasisButtons} />
+    },[donughtXasisButtons])
 
     return <>
     <HeaderWrapper>
@@ -188,8 +201,9 @@ const Dashboard:FC = () => {
     <VerticalButton>
                 {doughtnutYAxisButton}
             </VerticalButton>
-            {donughtXasisButtons.length > 0 &&
-            <DoughnutChart label={`Users by country`} detail={donughtXasisButtons} />}
+            {/* {donughtXasisButtons.length > 0 &&
+            <DoughnutChart label={`Users by country`} detail={donughtXasisButtons} />} */}
+            {doughtnutGraph}
     </GraphItem>
     <GraphItem>
     <GraphYaxis>

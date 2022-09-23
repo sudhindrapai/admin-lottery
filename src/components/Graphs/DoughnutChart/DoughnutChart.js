@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import Chart from 'chart.js/auto';
 import { Doughnut } from "react-chartjs-2";
 
@@ -6,12 +6,15 @@ export const DoughnutChart = (props) => {
   const {detail,label} = props;
   const [graphLabel, setLabel] = useState([]);
   const [values, setData] = useState([]);
-  if (detail !== undefined && detail !== null && graphLabel.length === 0) {
+  
+  useEffect(() => {
     const activeObj = detail.filter((obj) => {
       return obj.isSelected
     })[0];
 
-    let resulArray = activeObj.results;
+    if (activeObj !== undefined && Object.keys(activeObj).length > 0) {
+
+    let resulArray = activeObj.results ? activeObj.results:[];
 
     let labelsArray = [];
     let  valuesArray = [];
@@ -24,9 +27,12 @@ export const DoughnutChart = (props) => {
       valuesArray.push(value);
     }
 
+    console.log(labelsArray,valuesArray,"valuesArrayvaluesArray")
     setLabel(labelsArray);
     setData(valuesArray);
   }
+  },[detail]);
+  
     const data = {
       labels: graphLabel,
       datasets: [{
