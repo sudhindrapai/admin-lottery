@@ -81,7 +81,7 @@ let tabMenuViewList = [
 ]
 
 
-const AuctionList = () => {
+const AuctionList:FC = () => {
     const navigate = useNavigate();
 
     const dispatch = useDispatch();

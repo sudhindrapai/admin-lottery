@@ -61,44 +61,101 @@ const lineGraphXButtons = [
     }
 ];
 
+
+const doughtChatXasisButton = [
+    {
+        label: "Users",
+        id:'users',
+        isSelected:true,
+        results:[]
+    },
+    {
+        label: "Gold Members",
+        id:'goldMembers',
+        isSelected:false,
+        results:[]
+    },
+    {
+        label: "Lottery Income",
+        id:'lotteryIncome',
+        isSelected:false,
+        results:[]
+    },
+    {
+        label: "Auction income",
+        id:'auctionIncome',
+        isSelected:false,
+        results:[]
+    }
+];
+
+
 const Dashboard:FC = () => {
     const dispatch = useDispatch();
 
     const dashboardData:any = useSelector((state:RootState) => state.dashboard.data);
 
-    const [useData, setUserDatea] = useState<any>({});
+    const [userData, setUserDatea] = useState<any>({});
     const [lotteriesData, setLotteriesData] = useState({});
 
     const [graph1X, setGraph1X] = useState(lineGraphXButtons);
-    const [graph1Y, setGraph1Y] = useState(graph1HorizontalBtns)
+    const [graph1Y, setGraph1Y] = useState(graph1HorizontalBtns);
+
+    // ----
+    const [donughtXasisButtons, setXDoughtnutButton] = useState([])
 
     let cardsView:any = <div></div>
 
+    const updateDoughtnutChartData = (dataObj,doughtChatXasisButton) => {
+        if (donughtXasisButtons.length === 0) {
+            let updatedObj = doughtChatXasisButton.map((data) => {
+                return {
+                    ...data,
+                    results:dataObj[data.id]
+                }
+            });
+            console.log(updatedObj)
+            setXDoughtnutButton(updatedObj);
+        }
+    }
+
     if (dashboardData !== undefined && Object.keys(dashboardData).length > 0) {
-        if (Object.keys(useData).length === 0) {
+
+        // code to set doughtnut graph data
+        if (Object.keys(userData).length === 0) {
             setUserDatea({
                 goldUsers: dashboardData.goldUsers,
                 regularUsers: dashboardData.regularUsers
             });
         }
 
-        if (Object.keys(lotteriesData).length === 0) {
-            setLotteriesData({
-                upcomingLotteres:dashboardData.upcomingLotteres,
-                currentLotteries:dashboardData.currentLotteries,
-                executedLotteries:dashboardData.executedLotteries,
-                deletedLotteries:dashboardData.deletedLotteries
-            })
+        let doughtnutDataObj = {
+            users: dashboardData.countrywiseUsers,
+            goldMembers: dashboardData.countrywiseGoldUsers,
+            lotteryIncome:dashboardData.countrywiseLotteryIncome,
+            auctionIncome:dashboardData.countrywiseAuctionIncome
         }
+        
+        updateDoughtnutChartData(doughtnutDataObj,doughtChatXasisButton);
+        // end code to set doughtnut graph data
 
-        let keys = Object.keys(dashboardData).filter((kayName) => {
-            return exceptCards.includes(kayName) === false;
-        })
-        cardsView = keys.map((keyName) => {
-            return <Card>
-                <DashboardCard label={keyName} count={dashboardData[keyName]} isNeedToShowDollarSign={false} />
-                </Card>
-        })
+    //     if (Object.keys(lotteriesData).length === 0) {
+    //         setLotteriesData({
+    //             upcomingLotteres:dashboardData.upcomingLotteres,
+    //             currentLotteries:dashboardData.currentLotteries,
+    //             executedLotteries:dashboardData.executedLotteries,
+    //             deletedLotteries:dashboardData.deletedLotteries
+    //         })
+    //     }
+
+    //     let keys = Object.keys(dashboardData).filter((kayName) => {
+    //         return exceptCards.includes(kayName) === false;
+    //     })
+    //     cardsView = keys.map((keyName) => {
+    //         return <Card>
+    //             <DashboardCard label={keyName} count={dashboardData[keyName]} isNeedToShowDollarSign={false} />
+    //             </Card>
+    //     })
     }
 
     useEffect(() => {
@@ -113,13 +170,38 @@ const Dashboard:FC = () => {
 
     const lineGraphYaxisButtons = graph1Y.map((timeObj) => {
         return <GraphYButton>{timeObj.label}</GraphYButton>
+    });
+
+
+    const doughtnutYAxisButton = donughtXasisButtons.map((obj:any) => {
+        return <GraphButton isSelected={obj.isSelected}>{obj.label}</GraphButton>
     })
 
     return <>
-    {/* <HeaderWrapper>
+    <HeaderWrapper>
     <ViewHeader title={"Dashboard"} />
     </HeaderWrapper>
     <GraphList>
+    <GraphRow>
+    <GraphWrapper>
+    <GraphItem>
+    <VerticalButton>
+                {doughtnutYAxisButton}
+            </VerticalButton>
+            {donughtXasisButtons.length > 0 &&
+            <DoughnutChart label={`Users by country`} detail={donughtXasisButtons} />}
+    </GraphItem>
+    <GraphItem>
+    <GraphYaxis>
+                    <Label>
+                        Time
+                    </Label>
+               </GraphYaxis>
+    </GraphItem>
+    </GraphWrapper>
+    </GraphRow>
+    </GraphList>
+    {/* <GraphList>
         <GraphRow>
         <GraphWrapper>
             <GraphItem>
@@ -143,7 +225,7 @@ const Dashboard:FC = () => {
                 {lineGraphXaxisButtons}
         </VerticalButton>
         {Object.keys(lotteriesData).length > 0 && 
-        <DoughnutChart label={`User Details (total users: ${dashboardData.totalUsers})`} detail={useData} />}
+        
         </GraphItem>
         <GraphItem>
         <GraphYaxis>
@@ -163,7 +245,7 @@ const Dashboard:FC = () => {
                 {lineGraphXaxisButtons}
             </VerticalButton>
         {Object.keys(lotteriesData).length > 0 && 
-        <PieGraph label={`User Details (total users: ${dashboardData.totalUsers})`} detail={useData} />}
+        <PieGraph label={`User Details (total users: ${dashboardData.totalUsers})`} detail={userData} />}
         </GraphItem>
         <GraphItem>
         <GraphYaxis>
@@ -179,7 +261,7 @@ const Dashboard:FC = () => {
         <VerticalButton>
                 {lineGraphXaxisButtons}
             </VerticalButton>
-        {Object.keys(useData).length > 0 && 
+        {Object.keys(userData).length > 0 && 
         <BarChart label={`Lottery details (total lotteries: ${dashboardData.totalLotteries})`} detail={lotteriesData} />}
         </GraphItem>
         <GraphItem>
@@ -192,8 +274,8 @@ const Dashboard:FC = () => {
             </GraphItem>
         </GraphWrapper>
         </GraphRow>
-        </GraphList>
-        <CardsList>
+        </GraphList> */}
+        {/* <CardsList>
             {cardsView}
         </CardsList> */}
         </>

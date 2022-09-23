@@ -63,7 +63,7 @@ export const getDashboardData = createAsyncThunk(
         })
         .then((response) => {
 
-            if (response.statusCode === 401) {
+            if (response.status === 401) {
                 handle401Status();
             }
 
@@ -83,6 +83,9 @@ export const getDashboardData = createAsyncThunk(
                     message: response.errorMsg
                 }));
             }
+        })
+        .catch((error) => {
+            console.log(error,"dashboard error")
         })
     })
 

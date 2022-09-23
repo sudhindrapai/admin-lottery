@@ -95,6 +95,7 @@ justify-content: flex-start;
 border: 1px solid #f1f1f1;
 margin-left: 95px;
 margin-top: 15px;
+width: auto;
 `;
 
 export const GraphItem = styled.div`

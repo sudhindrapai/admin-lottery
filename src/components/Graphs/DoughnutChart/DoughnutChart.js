@@ -7,14 +7,25 @@ export const DoughnutChart = (props) => {
   const [graphLabel, setLabel] = useState([]);
   const [values, setData] = useState([]);
   if (detail !== undefined && detail !== null && graphLabel.length === 0) {
-    let labelsList = Object.keys(detail);
-    let graphValues = [];
-    for (let key of labelsList) {
-      graphValues.push(detail[key])
+    const activeObj = detail.filter((obj) => {
+      return obj.isSelected
+    })[0];
+
+    let resulArray = activeObj.results;
+
+    let labelsArray = [];
+    let  valuesArray = [];
+    let index = 1;
+    for (let valueObj of resulArray) {
+      let label = valueObj.country !==  undefined && (valueObj.country).length > 0 ? valueObj.country : `Label_${index}`;
+      let value = valueObj.count !== undefined ? valueObj.count : `Count_${index}`;
+      index ++;
+      labelsArray.push(label);
+      valuesArray.push(value);
     }
-    console.log(detail,labelsList,graphValues)
-    setLabel(labelsList);
-    setData(graphValues);
+
+    setLabel(labelsArray);
+    setData(valuesArray);
   }
     const data = {
       labels: graphLabel,
