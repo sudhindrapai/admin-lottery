@@ -27,12 +27,11 @@ export const DoughnutChart = (props) => {
       valuesArray.push(value);
     }
 
-    console.log(labelsArray,valuesArray,"valuesArrayvaluesArray")
     setLabel(labelsArray);
     setData(valuesArray);
   }
   },[detail]);
-  
+
     const data = {
       labels: graphLabel,
       datasets: [{

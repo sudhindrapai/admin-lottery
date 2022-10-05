@@ -12,10 +12,11 @@ import {getDashboardData} from '../../features/dashboard';
 import {GraphList, GraphWrapper, Card, CardsList,HeaderWrapper,
     VerticalButton,GraphButton,GraphRow,GraphYaxis, GraphYButton,GraphItem,Label} from './StyledDashboard';
 
-const exceptCards = ["totalUsers","goldUsers","regularUsers", "totalLotteries",
-"upcomingLotteres","currentLotteries","executedLotteries","deletedLotteries"];
+const exceptCards = ["yearwiseAuctionTicketsCount","monthwiseAuctionTicketsCount","daywiseAuctionTicketsCount","yearwiseLotteryTicketsCount","monthwiseLotteryTicketsCount","countrywiseUsers","countrywiseGoldUsers","countrywiseLotteryIncome","countrywiseAuctionIncome","goldUsers","regularUsers","monthwiseRegistartionsCount","yearwiseRegistartionsCount",
+"daywiseRegistartionsCount","yearwiseExecutedAuctionsCount","monthwiseExecutedAuctionsCount","daywiseLotteryTicketsCount",
+"daywiseExecutedAuctionsCount","yearwiseExecutedLotteriesCount",'monthwiseExecutedLotteriesCount',"daywiseExecutedLotteriesCount","goldUsers","regularUsers"];
 
-const graph1HorizontalBtns = [
+const linegraphXaxis = [
     {
         label:"Y",
         id:'year',
@@ -33,7 +34,7 @@ const graph1HorizontalBtns = [
     }
 ]
 
-const lineGraphXButtons = [
+const lineGraphYButtons = [
     {
         label: "Users",
         id:'users',
@@ -89,6 +90,21 @@ const doughtChatXasisButton = [
     }
 ];
 
+const usersDoughtnutGraphXaxisButton = [
+    {
+        label: "Users",
+        id:'users',
+        isSelected:true,
+        results:[]
+    },
+    {
+        label: "Tickets",
+        id:'tickets',
+        isSelected:false,
+        results:[]
+    }
+];
+
 
 const Dashboard:FC = () => {
     const dispatch = useDispatch();
@@ -98,13 +114,16 @@ const Dashboard:FC = () => {
     const [userData, setUserDatea] = useState<any>({});
     const [lotteriesData, setLotteriesData] = useState({});
 
-    const [graph1X, setGraph1X] = useState(lineGraphXButtons);
-    const [graph1Y, setGraph1Y] = useState(graph1HorizontalBtns);
+    const [graph1X, setGraph1X] = useState(linegraphXaxis);
+    const [graph1Y, setGraph1Y] = useState(lineGraphYButtons);
+    const [lineGraphData, setLineGraphData] = useState({})
+
+    const [usersDoughtnutData,setUsersDoughtnutData] = useState<any>([]);
+
+    const [cardsList, setCardsList] = useState<any>([]);
 
     // ----
     const [donughtXasisButtons, setXDoughtnutButton] = useState<any>([])
-
-    let cardsView:any = <div></div>
 
     const updateDoughtnutChartData = (dataObj,doughtChatXasisButton) => {
         if (donughtXasisButtons.length === 0) {
@@ -118,7 +137,20 @@ const Dashboard:FC = () => {
         }
     }
 
+
     if (dashboardData !== undefined && Object.keys(dashboardData).length > 0) {
+
+        let cardsListNames = [];
+        // code to set cards list
+        if (cardsList.length === 0) {
+            let keysList = Object.keys(dashboardData).filter((key) => {
+                return exceptCards.indexOf(key) === -1
+            })
+            setCardsList(keysList)
+        }
+
+
+        // end code to set cards list
 
         // code to set doughtnut graph data
         if (Object.keys(userData).length === 0) {
@@ -138,41 +170,93 @@ const Dashboard:FC = () => {
         updateDoughtnutChartData(doughtnutDataObj,doughtChatXasisButton);
         // end code to set doughtnut graph data
 
-    //     if (Object.keys(lotteriesData).length === 0) {
-    //         setLotteriesData({
-    //             upcomingLotteres:dashboardData.upcomingLotteres,
-    //             currentLotteries:dashboardData.currentLotteries,
-    //             executedLotteries:dashboardData.executedLotteries,
-    //             deletedLotteries:dashboardData.deletedLotteries
-    //         })
-    //     }
+        
+        // code for line graph
+        if (Object.keys(lineGraphData).length === 0) {
+        let lineGraphValues = {
+            yearwiseRegistartionsCount:dashboardData.yearwiseRegistartionsCount,
+            monthwiseRegistartionsCount:dashboardData.monthwiseRegistartionsCount,
+            daywiseRegistartionsCount: dashboardData.daywiseRegistartionsCount,
+            yearwiseExecutedAuctionsCount:dashboardData.yearwiseExecutedAuctionsCount,
+            monthwiseExecutedAuctionsCount:dashboardData.monthwiseExecutedAuctionsCount,
+            daywiseExecutedAuctionsCount:dashboardData.daywiseExecutedAuctionsCount,
+            yearwiseExecutedLotteriesCount:dashboardData.yearwiseExecutedLotteriesCount,
+            monthwiseExecutedLotteriesCount:dashboardData.monthwiseExecutedLotteriesCount,
+            daywiseExecutedLotteriesCount:dashboardData.daywiseExecutedLotteriesCount
+        }
 
-    //     let keys = Object.keys(dashboardData).filter((kayName) => {
-    //         return exceptCards.includes(kayName) === false;
-    //     })
-    //     cardsView = keys.map((keyName) => {
-    //         return <Card>
-    //             <DashboardCard label={keyName} count={dashboardData[keyName]} isNeedToShowDollarSign={false} />
-    //             </Card>
-    //     })
+        setLineGraphData(lineGraphValues);
+    }
+        //  end code for line graph
+
+        // dougtnut users graph
+
+        const mapUsersDoughtnutGraph = (usersData) => {
+            // console.log(usersData,usersDoughtnutGraphXaxisButton,"usersData")
+            // setUsersDoughtnutData(usersData);
+            let updatedArray = usersDoughtnutGraphXaxisButton.map((obj) => {
+                return{
+                    ...obj,
+                    results:[usersData[obj.id]]
+                }
+            });
+            // console.log(updatedArray,"updatedArray")
+            if (usersDoughtnutData.length === 0){
+                setUsersDoughtnutData(updatedArray);
+            }
+        }
+
+        // if (usersDoughtnutData.length === 0) {
+            let usersData = {users:{
+                usersGoldMembers:dashboardData.goldUsers,
+                usersRegularMembers:dashboardData.regularUsers,
+            },
+            tickets:{}
+        }
+            mapUsersDoughtnutGraph(usersData)
+        // }
+
+        // end doughtnut users graph
+
     }
 
     useEffect(() => {
         dispatch(getDashboardData())
     },[]);
 
-    const lineGraphXaxisButtons = graph1X.map((btnObj) =>{
-        return <GraphButton isSelected={btnObj.isSelected}>
-            {btnObj.label}
+    // linegraphCode Starts
+    const lineGraphXaxisButtons = graph1X.map((obj) =>{
+        return <GraphButton onClick={() => {updateLineGraphXValue(obj)}}  isSelected={obj.isSelected}>
+            {obj.label}
         </GraphButton>
     });
 
-    const lineGraphYaxisButtons = graph1Y.map((timeObj) => {
-        return <GraphYButton>{timeObj.label}</GraphYButton>
+    const lineGraphYaxisButtons = graph1Y.map((obj) => {
+        return <GraphButton onClick={() => {updateLineGraphYValue(obj)}}  isSelected={obj.isSelected} >{obj.label}</GraphButton>
     });
 
-    const updateDoughtnutGraphValue = (selectedObj) => {
-        console.log(selectedObj,"updateDoughtnutGraphValue");
+    const updateLineGraphYValue = (selectedObj:any) => {
+        setGraph1Y(graph1Y.map((obj) => {
+            return {
+                ...obj,
+                isSelected:obj.id === selectedObj.id
+            }
+        }))
+    }
+
+    const updateLineGraphXValue = (selectedObj:any) => {
+        setGraph1X(graph1X.map((obj) => {
+            return {
+                ...obj,
+                isSelected:obj.id === selectedObj.id
+            }
+        }))
+    }
+
+    // end linegraph code
+
+    // doughtnut graph code
+    const updateDoughtnutGraphValue = (selectedObj:any) => {
         let updatedData = donughtXasisButtons.map((obj:any) => {
             return {...obj,
                 isSelected:obj.id === selectedObj.id
@@ -183,12 +267,36 @@ const Dashboard:FC = () => {
     };
 
     const doughtnutYAxisButton = donughtXasisButtons.map((obj:any) => {
-        return <GraphButton onClick={() => {updateDoughtnutGraphValue(obj)}} isSelected={obj.isSelected}>{obj.label}</GraphButton>
+        return <GraphButton onClick={() => {updateDoughtnutGraphValue(obj)}} isSelected={obj.isSelected}>
+            {obj.label}
+            </GraphButton>
     })
 
     let doughtnutGraph = useMemo(() => {
         return <DoughnutChart label={`Users by country`} detail={donughtXasisButtons} />
-    },[donughtXasisButtons])
+    },[donughtXasisButtons]);
+
+    // end doughtnut graph code
+
+    // users doughtnut graph code starts
+    
+    let usersDoughtnutGraphYAxisButtons = usersDoughtnutData.map((obj:any) => {
+        return <GraphButton onClick={() => {updateDoughtnutGraphValue(obj)}} isSelected={obj.isSelected}>
+            {obj.label}
+            </GraphButton>
+    })
+
+    // end users doughtnut graph code
+
+
+    // cards view
+    let cardsView = cardsList.map((cardKey) => {
+        return <Card>
+            <DashboardCard count = {dashboardData[cardKey]} label={cardKey} isNeedToShowDollarSign={false} />
+            {/* <h1>{cardKey}</h1> */}
+            </Card>
+    })
+    // end cards view
 
     return <>
     <HeaderWrapper>
@@ -201,8 +309,6 @@ const Dashboard:FC = () => {
     <VerticalButton>
                 {doughtnutYAxisButton}
             </VerticalButton>
-            {/* {donughtXasisButtons.length > 0 &&
-            <DoughnutChart label={`Users by country`} detail={donughtXasisButtons} />} */}
             {doughtnutGraph}
     </GraphItem>
     <GraphItem>
@@ -213,8 +319,42 @@ const Dashboard:FC = () => {
                </GraphYaxis>
     </GraphItem>
     </GraphWrapper>
+    {/* End doughtnut graph */}
+    {/* ------------------------------------------------ */}
+    <GraphWrapper>
+    <GraphItem>
+    <VerticalButton>
+                {lineGraphYaxisButtons}
+            </VerticalButton>
+            <LineGraph graph1X={graph1X}  graph1Y={graph1Y} lineGraphData={lineGraphData}/>
+    </GraphItem>
+    <GraphItem>
+    <GraphYaxis>
+                    <Label>
+                        Time
+                    </Label>
+                    {lineGraphXaxisButtons}
+               </GraphYaxis>
+    </GraphItem>
+    </GraphWrapper>
     </GraphRow>
     </GraphList>
+
+    <GraphList>
+        <GraphRow>
+        <GraphWrapper>
+    <GraphItem>
+    <VerticalButton>
+                {usersDoughtnutGraphYAxisButtons}
+            </VerticalButton>
+            {usersDoughtnutData.length > 0 && <PieGraph label={`User`} detail={usersDoughtnutData} />}
+    </GraphItem>
+    </GraphWrapper>
+        </GraphRow>
+    </GraphList>
+    <CardsList>
+        {cardsView}
+    </CardsList>
     {/* <GraphList>
         <GraphRow>
         <GraphWrapper>

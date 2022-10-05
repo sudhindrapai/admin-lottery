@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import Chart from 'chart.js/auto';
 import { Pie } from "react-chartjs-2";
 
@@ -6,16 +6,39 @@ export const PieGraph = (props) => {
   const {detail,label} = props;
   const [graphLabel, setLabel] = useState([]);
   const [values, setData] = useState([]);
-  if (detail !== undefined && detail !== null && graphLabel.length === 0) {
-    let labelsList = Object.keys(detail);
-    let graphValues = [];
-    for (let key of labelsList) {
-      graphValues.push(detail[key])
-    }
-    console.log(detail,labelsList,graphValues)
-    setLabel(labelsList);
-    setData(graphValues);
-  }
+  // if (detail !== undefined && detail !== null && graphLabel.length === 0) {
+  //   let labelsList = Object.keys(detail);
+  //   let graphValues = [];
+  //   for (let key of labelsList) {
+  //     graphValues.push(detail[key])
+  //   }
+  //   console.log(detail,labelsList,graphValues)
+  //   setLabel(labelsList);
+  //   setData(graphValues);
+  // }
+  useEffect(() => {
+    // let labelsList = Object.keys(detail);
+    // let graphValues = [];
+    // for (let key of labelsList) {
+    //   graphValues.push(detail[key])
+    // }
+    
+    // setLabel(labelsList);
+    // setData(graphValues);
+
+    let activeObj = detail.filter((obj) => {
+      return obj.isSelected
+    })[0];
+
+    let resultObj = (activeObj.results)[0];
+
+    let labels = ['Gold Members',"Regular Members"];
+    let value = [resultObj.usersGoldMembers, resultObj.usersRegularMembers];
+
+    setLabel(labels);
+    setData(value);
+
+  },[])
     const data = {
       labels: graphLabel,
       datasets: [{
