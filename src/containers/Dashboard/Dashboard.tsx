@@ -192,8 +192,6 @@ const Dashboard:FC = () => {
         // dougtnut users graph
 
         const mapUsersDoughtnutGraph = (usersData) => {
-            // console.log(usersData,usersDoughtnutGraphXaxisButton,"usersData")
-            // setUsersDoughtnutData(usersData);
             let updatedArray = usersDoughtnutGraphXaxisButton.map((obj) => {
                 return{
                     ...obj,
@@ -350,6 +348,16 @@ const Dashboard:FC = () => {
             {usersDoughtnutData.length > 0 && <PieGraph label={`User`} detail={usersDoughtnutData} />}
     </GraphItem>
     </GraphWrapper>
+
+    <GraphWrapper>
+    <GraphItem>
+    <VerticalButton>
+                {usersDoughtnutGraphYAxisButtons}
+            </VerticalButton>
+            {usersDoughtnutData.length > 0 && <BarChart label={`User`} detail={usersDoughtnutData} />}
+    </GraphItem>
+    </GraphWrapper>
+
         </GraphRow>
     </GraphList>
     <CardsList>
