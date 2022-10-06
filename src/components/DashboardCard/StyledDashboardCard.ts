@@ -12,6 +12,7 @@ gap: 14px;
 background-color: #ffffff;
 box-shadow: 0px 10px 30px rgba(17, 38, 146, 0.05);
 border-radius: 8px;
+height: 100%;
 `;
 
 export const Label = styled.label`
