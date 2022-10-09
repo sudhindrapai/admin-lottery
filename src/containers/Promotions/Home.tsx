@@ -8,7 +8,7 @@ interface HomeProps{
 }
 
 const Home:FC<HomeProps> = ({details, bannerRedirectionUrl}) => {
-
+console.log(details,"Home")
     return <Wrapper title={"Static Banner"}>
         <StaticImageUploader bannerRedirectionUrl={bannerRedirectionUrl} details={details[0]} />
     </Wrapper>

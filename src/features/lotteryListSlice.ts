@@ -13,13 +13,15 @@ import {handle401Status} from '../Utility/Utility';
 interface getLotteriesInitialState {
     lotteryList:LotteryDetail[],
     page: number,
-    limit: number
+    limit: number,
+    lotteryGameDetail: any
 }
 
 const lotteryListInitialStatae:getLotteriesInitialState = {
     lotteryList:[],
     page: 1,
-    limit: 10
+    limit: 10,
+    lotteryGameDetail:{}
 }
 
 interface getLotteryListResponse {
@@ -82,6 +84,53 @@ export const getLotteryList = createAsyncThunk(
 );
 
 
+export const getLotteryGameDetail = createAsyncThunk(
+    'get lottery game detail',
+    async(payload:string,{dispatch}) => {
+        await(fetch(`${endpoint.getLotteryGameById}${payload}`,{
+            method: 'GET',
+            headers:{
+                Authorization: `Bearer ${getLocalStorage(localStorageActiontype.GET_ACCESS_TOKEN)}`,
+                "Content-type": "application/json; charset=UTF-8",
+            }
+        }))
+        .then((response) => {
+            return response.json();
+        })
+        .then((response) => {
+            if (response.statusCode === 401) {
+                handle401Status();
+            }
+
+            if (response.statusCode === 200) {
+                dispatch(setLotteryGameDetail({
+                    data:response.result
+                }));
+                dispatch(toggleNotificationVisibility({
+                    isVisible: true,
+                    status: NotificationType.success,
+                    message: response.errorMsg
+                }));
+            } else if (response.statusCode === 504) {
+                dispatch(setLotteryGameDetail({
+                    data:[]
+                }));
+                dispatch(toggleNotificationVisibility({
+                    isVisible: true,
+                    status: NotificationType.error,
+                    message: response.errorMsg
+                }));
+            } else {
+                dispatch(toggleNotificationVisibility({
+                    isVisible: true,
+                    status: NotificationType.error,
+                    message: "Something went wrong"
+                }));
+            }
+        })
+    }
+)
+
 const LotteryListSlice = createSlice({
     name: 'lotteryList',
     initialState: lotteryListInitialStatae,
@@ -91,9 +140,15 @@ const LotteryListSlice = createSlice({
                 ...state,
                 lotteryList:action.payload.lotteryList
             }
+        },
+        setLotteryGameDetail: (state,action:PayloadAction<any>) => {
+            return {
+                ...state,
+                lotteryGameDetail:action.payload.data
+            }
         }
     }
 });
 
-export const {setLotteryList} = LotteryListSlice.actions;
+export const {setLotteryList,setLotteryGameDetail} = LotteryListSlice.actions;
 export default LotteryListSlice.reducer;

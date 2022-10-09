@@ -18,12 +18,19 @@ const AppTopBar:FC = () => {
         navigate(adminRouts.login);
     };
 
+    const redirectToProfile = () => {
+        navigate(adminRouts.profile);
+    }
+
     return (<Wrapper>
         <ProfielWapper>
             <ProfileImage src={ProfileImageSrc} />
         <DropdownContainer>
             <DropdownOption onClick={clearLocalStorage} >
                 Logout
+            </DropdownOption>
+            <DropdownOption onClick={redirectToProfile} >
+                Profile
             </DropdownOption>
         </DropdownContainer>
         </ProfielWapper>

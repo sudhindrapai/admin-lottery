@@ -36,19 +36,23 @@ const StaticImageUploader:FC<StaticImgProps> = ({details, bannerRedirectionUrl})
 
     const dispatch = useDispatch();
 
-    console.log(details,bannerRedirectionUrl,"[bannerRedirectionUrl]")
-
     const [bannerUrl, setBannerUrl] = useState("");
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEnaDate] = useState(new Date());
+    const [desktopImgUrl1, setDesktopImgUrl1] = useState("");
+    const [mobileImgUrl1, setMobileImgUrl1] = useState("");
+    const [id, setId] = useState(0);
 
     useEffect(() => {
         if (details && Object.keys(details).length > 0) {
             setBannerUrl(details.promotionBannerUrl);
             setStartDate(details.promotionStartDate);
             setEnaDate(details.promotionEndDate);
+            setDesktopImgUrl1(details.promotionWebBannerImages ? details.promotionWebBannerImages : "");
+            setMobileImgUrl1(details.promotionMobileBannerImages ? details.promotionMobileBannerImages : "");
+            setId(details.promotionId ? details.promotionId : 0)
         }
-    },[details])
+    },[details]);
 
     const [isForDesktopImg, setDesktopImgStatus] = useState(false);
 
@@ -58,7 +62,6 @@ const StaticImageUploader:FC<StaticImgProps> = ({details, bannerRedirectionUrl})
     const mobileImgName = useSelector((state:RootState) => state.promotions.mobileFileName)
 
     const inputRef = useRef<HTMLInputElement>(null);
-
 
     const triggerImageUploader = (isforDektop:boolean) => {
         setDesktopImgStatus(isforDektop);
@@ -75,7 +78,8 @@ const StaticImageUploader:FC<StaticImgProps> = ({details, bannerRedirectionUrl})
         formData.append('documentName',updateFileName(files.name));
         dispatch(uploadPromotionImages({
             formObj:formData,
-            isForDesktop:isForDesktopImg
+            isForDesktop:isForDesktopImg,
+            id:id
         }));
     }
 
@@ -132,7 +136,7 @@ const StaticImageUploader:FC<StaticImgProps> = ({details, bannerRedirectionUrl})
                 Add image
             </AddImageBtn>
         </DesktopBannerSection>
-        {desktopImgUrl && <img src={desktopImgUrl} />}
+        {desktopImgUrl1 && <img src={desktopImgUrl1} />}
         <DesktopBannerSection>
             <BannerSectionTitle>
             Desktop Banner (1920x450)
@@ -144,7 +148,7 @@ const StaticImageUploader:FC<StaticImgProps> = ({details, bannerRedirectionUrl})
                 Add image
             </AddImageBtn>
         </DesktopBannerSection>
-        {mobileImgUrl && <img src={mobileImgUrl} />}
+        {mobileImgUrl1 && <img src={mobileImgUrl1} />}
         <StaticFormSection>
             {/* <StaticForm bannerRedirectionUrl={bannerRedirectionUrl} details={details} /> */}
         </StaticFormSection>

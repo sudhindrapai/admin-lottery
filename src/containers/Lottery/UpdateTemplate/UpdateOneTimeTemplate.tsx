@@ -23,7 +23,9 @@ const UpdateOneTimeTemplate = () => {
         }
     },[]);
 
-    let view  = Object.keys(templateObj).length > 0 ? <UpdateTemplateForm onCreateLottery={() => {}} onCancel={() => {}} templateDetail={templateObj} /> : <div>Please wait</div>
+    let view  = Object.keys(templateObj).length > 0 ? 
+    <UpdateTemplateForm onCreateLottery={() => {}} onCancel={() => {}} templateDetail={templateObj} /> :
+     <div>Please wait</div>
 
     return view;
 };

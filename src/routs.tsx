@@ -27,7 +27,9 @@ import PushNotificationList from './containers/Notifications/PushNotifications/P
 import UserSettings from './containers/Settings/UserSettings/UserSettings';
 import CreateNotification from './containers/Notifications/CreateNotification/CreateNotification';
 import Promotions from './containers/Promotions/Promotions';
-import EmailNotificationDetail from './containers/Notifications/EmailNotificationDetails/NotificationDetails'
+import EmailNotificationDetail from './containers/Notifications/EmailNotificationDetails/NotificationDetails';
+import Profile from './containers/Profile/Profile';
+import TwoFa from './containers/2FA/TwoFa'
 
 let accessToken = getLocalStorage(localStorageActionType.GET_ACCESS_TOKEN);
 
@@ -76,6 +78,7 @@ export const adminRouts = {
     userSettings:"/admin/settings/user-details",
     gamesList:"/admin/games/list",
     login:"/admin/login",
+    twoFa:"/admin/twoFa",
     updateLottery: "/admin/lottery/update-lottery",
     updateTemplate: "/admin/lottery/update-template/:lotteryId",
     updateOneTimeTemplate: "/admin/lottery/update-onetime-template/:lotteryId",
@@ -83,6 +86,7 @@ export const adminRouts = {
     pushNotificationList:"/admin/notifications/push-notifications/list",
     createNotification:"/admin/notification/create-notification",
     promotions:"/admin/promotions",
+    profile:"/admin/profile",
     updateAuction:routeToAuctionDetail,
     approveAuction:routeToGetAuctionApproveDetail,
     emailNotificationDetail: routeToGetEmailNotificationDetail
@@ -114,6 +118,8 @@ const AppRoute:FC = () => {
             <Route path={adminRouts.pushNotificationList} element={<PushNotificationList />} />
             <Route path={adminRouts.createNotification} element={<CreateNotification />} />
             <Route path={adminRouts.promotions} element={<Promotions />} />
+            <Route path={adminRouts.profile} element={<Profile />} />
+            <Route path={adminRouts.twoFa} element={<TwoFa />} />
             <Route path={adminRouts.emailNotificationDetail(null)} element={<EmailNotificationDetail />} />
             <Route path={"*"} element={<h3>404</h3>} />
         </Routes> : <Routes>

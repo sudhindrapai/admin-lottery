@@ -19,11 +19,11 @@ const Wrapper:FC<AppWrapper> = ({children}) => {
     let pathName = location.pathname;
     return <StyledAppWrapper>
         <NetworkErrorNotifier />
-            {pathName !== "/admin/login" &&<LeftMenuSection>
+            {pathName !== "/admin/login" && pathName !== "/admin/twoFa" &&<LeftMenuSection>
                 <LeftMenu />
             </LeftMenuSection>}
             <ContentWrapper>
-               { pathName !== "/admin/login" && <TopBar />}
+               { pathName !== "/admin/login" && pathName !== "/admin/twoFa" && <TopBar />}
                 <Content>
                     {children}
                 </Content>

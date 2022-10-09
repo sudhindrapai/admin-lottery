@@ -20,8 +20,8 @@ const BarChart = (props) => {
     const data = {
       labels: graphLabel,
       datasets: [{
-          label: label,
-          data: values,
+          label: ["2","3"],
+          data: [3,4,2,7,,8,6],
           backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
               'rgba(54, 162, 235, 0.2)',

@@ -1,10 +1,10 @@
 import {FC,useState, useRef, useEffect} from 'react';
-import Button from '../../../../components/UI/Button/Button';
+import Button from '../../../components/UI/Button/Button';
 
-import FormBuilder from '../../../FormBuilder/FormBuilder';
-import {updateFormInputState, validateForm, updateFormSelectState, updateFormTimeState, updateFormDate} from '../../../../Utility/Utility';
-import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement} from '../../../../Utility/InterFacesAndEnum';
-import {WeekNames, FormSectionContainer,LotteryTypeTitle,LotteryTypeValue,CreateLotteryContainer, SectionTitle,UploadImageBtnSection, FormElementTitle, CreateLotteryFirstSection, CreateLotterySecondSection, TwoFormSection, FormView, Action} from '../CreateLottery/RepeatedLottery/StyledCreateLottery';
+import FormBuilder from '../../FormBuilder/FormBuilder';
+import {updateFormInputState, validateForm, updateFormSelectState, updateFormTimeState, updateFormDate} from '../../../Utility/Utility';
+import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement} from '../../../Utility/InterFacesAndEnum';
+import {WeekNames, FormSectionContainer,LotteryTypeTitle,LotteryTypeValue,CreateLotteryContainer, SectionTitle,UploadImageBtnSection, FormElementTitle, CreateLotteryFirstSection, CreateLotterySecondSection, TwoFormSection, FormView, Action} from '../../Forms/Lottery/CreateLottery/RepeatedLottery/StyledCreateLottery';
 
 // import {useSelector, useDispatch} from 'react-redux';
 
@@ -452,8 +452,8 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
             let ticketType = templateDetail.rewardType === "M" ? "Money Lottery": "Gift Lottery";
             let Visibility = templateDetail.isMemberLottery ?  "Gold Members" : "All Members";
             let lotteryPriceMoney = templateDetail.rewardAmount;
-            let startDate = templateDetail.lotteryStartDate;
-            let endDate = templateDetail.lotteryEndDate;
+            let startDate = templateDetail.lotteryGameStartDate;
+            let endDate = templateDetail.lotteryGameEndDate;
             let bronzePrice = templateDetail.bronzeTicketPrice;
             let bronzeSubTickets = templateDetail.bronzeSubTickets;
             let silverPrice = templateDetail.silverTicketPrice;
@@ -479,7 +479,6 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
                         value: lotteryObj.id === "rewardType" ? ticketType : lotteryObj.id === "lotterySettingVisibility"? Visibility : lotteryObj.value
                     }
                 });
-                console.log(updatedForm,'updatedForm')
                 setLotterySettingForm({
                     ...lotterySettingForm,
                     form:updatedForm
@@ -503,6 +502,8 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
                         startDate : scheduleObj.id === "lotteryEndDate" ? endDate : scheduleObj.slectedDate
                     }
                 });
+
+
                 setScheduleFormValues({
                     ...scheduleFormValues,
                     form: updatedScheduleForm
@@ -551,6 +552,20 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
                 })
         }
     },[]);
+
+    const mapAuctionResponse = (formElements:FormElement[]) => {
+        let updatedFormElement = formElements.map((element) => {
+            let updatedElement = {
+                ...element
+            }
+            // if (element.elementType === "datePicker") {
+                updatedElement["value"] = templateDetail[element.id];
+            // }
+            
+            return updatedElement;
+        });
+        return updatedFormElement;
+    }
 
      // lottery name form start here
      const handleLotteryNameInput = (event:React.ChangeEvent <HTMLTextAreaElement | HTMLInputElement>):void => {
@@ -662,6 +677,8 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
             ...scheduleFormValues,
             form:updatedArray
         });
+        console.log("handleScheduleDaysFormTimeInput",date,name);
+        let selectedDate = new Date(date)
         
     };
     
