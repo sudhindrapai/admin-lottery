@@ -39,7 +39,8 @@ const FormBuilder:React.FC<FormbuilderProps> = (props) => {
                     fullWidth={formElement.fullWidth} 
                     helperText={formElement.errorMessage} 
                     error={formElement.isTouched && formElement.errorMessage.length > 0} 
-                    handleInputChange={onInputChange} /> 
+                    handleInputChange={onInputChange} 
+                    disabled={formElement.disabled} /> 
                     </StyledFormElement>;
                 break;
                 case FormElementType.password:

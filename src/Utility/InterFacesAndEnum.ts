@@ -79,7 +79,8 @@ export interface FormElement {
     row?:number,
     dropdownValues:string[],
     selectedTime: Date | null,
-    slectedDate: Date | null
+    slectedDate: Date | null,
+    disabled:boolean
 }
 
 export interface LotteryDetail {

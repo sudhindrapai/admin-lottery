@@ -56,7 +56,8 @@ const loginFormState:LoginForm = {
             isPasswordHidden:true,
             dropdownValues:[],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
         },
         {
             elementType:FormElementType.input,
@@ -76,7 +77,8 @@ const loginFormState:LoginForm = {
             isPasswordHidden:true,
             dropdownValues:[],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
         },
     ],
     isValidForm: false

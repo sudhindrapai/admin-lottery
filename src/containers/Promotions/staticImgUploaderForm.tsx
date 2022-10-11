@@ -35,7 +35,8 @@ const staticSectionForm: FormInterface = {
             isPasswordHidden:true,
             dropdownValues:[],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
     },
     {
         elementType:FormElementType.datePicker,
@@ -55,7 +56,8 @@ const staticSectionForm: FormInterface = {
             isPasswordHidden:true,
             dropdownValues:[],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
     },
     {
         elementType:FormElementType.datePicker,
@@ -75,7 +77,8 @@ const staticSectionForm: FormInterface = {
             isPasswordHidden:true,
             dropdownValues:[],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
     }
 ],
     isValidForm: true
@@ -100,7 +103,8 @@ const TicketDetail: FormInterface = {
             isPasswordHidden:true,
             dropdownValues:[],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
     }, 
     {elementType:FormElementType.input,
         value:"",
@@ -119,7 +123,8 @@ const TicketDetail: FormInterface = {
         isPasswordHidden:true,
         dropdownValues:[],
         selectedTime: null,
-        slectedDate: null
+        slectedDate: null,
+        disabled: false
 },
 {elementType:FormElementType.input,
     value:"",
@@ -138,7 +143,8 @@ const TicketDetail: FormInterface = {
     isPasswordHidden:true,
     dropdownValues:[],
     selectedTime: null,
-    slectedDate: null
+    slectedDate: null,
+    disabled: false
 }, {elementType:FormElementType.input,
     value:"",
     id:"platinumTicketPrice",
@@ -156,7 +162,8 @@ const TicketDetail: FormInterface = {
     isPasswordHidden:true,
     dropdownValues:[],
     selectedTime: null,
-    slectedDate: null
+    slectedDate: null,
+    disabled: false
 }],
     isValidForm: true
 };

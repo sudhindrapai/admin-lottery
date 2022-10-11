@@ -52,7 +52,8 @@ const AuctionDetail: FormState = {
         isPasswordHidden:true,
         dropdownValues:[],
         selectedTime: null,
-        slectedDate: null
+        slectedDate: null,
+        disabled: false
 },
 {elementType:FormElementType.input,
     value:"",
@@ -71,7 +72,8 @@ const AuctionDetail: FormState = {
     isPasswordHidden:true,
     dropdownValues:[],
     selectedTime: null,
-    slectedDate: null
+    slectedDate: null,
+    disabled: false
 },
 {elementType:FormElementType.input,
     value:"",
@@ -90,7 +92,8 @@ const AuctionDetail: FormState = {
     isPasswordHidden:true,
     dropdownValues:[],
     selectedTime: null,
-    slectedDate: null
+    slectedDate: null,
+    disabled: false
 },
 {elementType:FormElementType.input,
     value:"",
@@ -109,7 +112,8 @@ const AuctionDetail: FormState = {
     isPasswordHidden:true,
     dropdownValues:[],
     selectedTime: null,
-    slectedDate: null
+    slectedDate: null,
+    disabled: false
 }
 ],
     isValidForm: true
@@ -134,7 +138,8 @@ const AddStaff: FormState = {
             isPasswordHidden:true,
             dropdownValues:[],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
     },
     {elementType:FormElementType.input,
         value:"",
@@ -153,7 +158,8 @@ const AddStaff: FormState = {
         isPasswordHidden:true,
         dropdownValues:[],
         selectedTime: null,
-        slectedDate: null
+        slectedDate: null,
+        disabled: false
     },
     {elementType:FormElementType.input,
         value:"",
@@ -172,7 +178,8 @@ const AddStaff: FormState = {
         isPasswordHidden:true,
         dropdownValues:[],
         selectedTime: null,
-        slectedDate: null
+        slectedDate: null,
+        disabled: false
     },
     {elementType:FormElementType.select,
         value:"",
@@ -191,7 +198,8 @@ const AddStaff: FormState = {
         isPasswordHidden:true,
         dropdownValues:["staff account","admin account"],
         selectedTime: null,
-        slectedDate: null
+        slectedDate: null,
+        disabled: false
     }
     ],
         isValidForm: true

@@ -56,7 +56,8 @@ const AuctionDetail: FormState = {
             isPasswordHidden:true,
             dropdownValues:["GOLD_MEMBERS","REGULAR_MEMBER","CUSTOM"],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
         },
         {elementType:FormElementType.datePicker,
             value:"",
@@ -75,7 +76,8 @@ const AuctionDetail: FormState = {
             isPasswordHidden:true,
             dropdownValues:[],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
         },
     {elementType:FormElementType.input,
         value:"",
@@ -94,7 +96,8 @@ const AuctionDetail: FormState = {
         isPasswordHidden:true,
         dropdownValues:[],
         selectedTime: null,
-        slectedDate: null
+        slectedDate: null,
+        disabled: false
 }
 ],
     isValidForm: true

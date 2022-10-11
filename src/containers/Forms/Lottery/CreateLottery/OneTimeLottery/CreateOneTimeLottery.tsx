@@ -45,7 +45,8 @@ const LotteryNameForm: CreateLottery = {
             isPasswordHidden:true,
             dropdownValues:[],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
     }],
     isValidForm: true
 };
@@ -70,7 +71,8 @@ const lotterySettingsForm: CreateLottery = {
             isPasswordHidden:true,
             dropdownValues:["Money Lottery", "Gift Lottery"],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
         },
         {
             elementType:FormElementType.select,
@@ -90,7 +92,8 @@ const lotterySettingsForm: CreateLottery = {
             isPasswordHidden:true,
             dropdownValues:["All Members", "Gold Members"],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
         }
     ],
     isValidForm: true
@@ -116,7 +119,8 @@ const ticketTypeForm:CreateLottery = {
             isPasswordHidden:true,
             dropdownValues:[],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
         },
         {
             elementType:FormElementType.input,
@@ -136,7 +140,8 @@ const ticketTypeForm:CreateLottery = {
             isPasswordHidden:true,
             dropdownValues:[],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
         },
         {
             elementType:FormElementType.input,
@@ -156,7 +161,8 @@ const ticketTypeForm:CreateLottery = {
             isPasswordHidden:true,
             dropdownValues:[],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
         },
         {
             elementType:FormElementType.input,
@@ -176,7 +182,8 @@ const ticketTypeForm:CreateLottery = {
             isPasswordHidden:true,
             dropdownValues:[],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
         }
     ],
     isValidForm: false
@@ -202,7 +209,8 @@ const subTicketForm:CreateLottery = {
             isPasswordHidden:true,
             dropdownValues:[],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
         },
         {
             elementType:FormElementType.input,
@@ -222,7 +230,8 @@ const subTicketForm:CreateLottery = {
             isPasswordHidden:true,
             dropdownValues:[],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
         },
         {
             elementType:FormElementType.input,
@@ -242,7 +251,8 @@ const subTicketForm:CreateLottery = {
             isPasswordHidden:true,
             dropdownValues:[],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
         },
         {
             elementType:FormElementType.input,
@@ -262,7 +272,8 @@ const subTicketForm:CreateLottery = {
             isPasswordHidden:true,
             dropdownValues:[],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
         }
     ],
     isValidForm: false
@@ -288,7 +299,8 @@ const lotteryMoneyForm: CreateLottery = {
             isPasswordHidden:true,
             dropdownValues:[],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
         }
     ],
     isValidForm: true
@@ -314,7 +326,8 @@ const scheduleDaysForm: CreateLottery = {
             isPasswordHidden:true,
             dropdownValues:[""],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
         },
         {
             elementType:FormElementType.datePicker,
@@ -334,7 +347,8 @@ const scheduleDaysForm: CreateLottery = {
             isPasswordHidden:true,
             dropdownValues:[""],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
         }
     ],
     isValidForm: true
@@ -360,7 +374,8 @@ const lotteryTicketPriceForm:CreateLottery =  {
         isPasswordHidden:true,
         dropdownValues:[],
         selectedTime: null,
-        slectedDate: null
+        slectedDate: null,
+        disabled: false
     },
     {
         elementType:FormElementType.input,
@@ -380,7 +395,8 @@ const lotteryTicketPriceForm:CreateLottery =  {
         isPasswordHidden:true,
         dropdownValues:[],
         selectedTime: null,
-        slectedDate: null
+        slectedDate: null,
+        disabled: false
     },
     {
         elementType:FormElementType.input,
@@ -400,7 +416,8 @@ const lotteryTicketPriceForm:CreateLottery =  {
         isPasswordHidden:true,
         dropdownValues:[],
         selectedTime: null,
-        slectedDate: null
+        slectedDate: null,
+        disabled: false
     },
     {
         elementType:FormElementType.input,
@@ -420,7 +437,8 @@ const lotteryTicketPriceForm:CreateLottery =  {
         isPasswordHidden:true,
         dropdownValues:[],
         selectedTime: null,
-        slectedDate: null
+        slectedDate: null,
+        disabled: false
     },
 ],
 isValidForm: false

@@ -48,7 +48,8 @@ const TicketDetail: FormState = {
             isPasswordHidden:true,
             dropdownValues:[],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
     }, 
     {elementType:FormElementType.input,
         value:"",
@@ -67,7 +68,8 @@ const TicketDetail: FormState = {
         isPasswordHidden:true,
         dropdownValues:[],
         selectedTime: null,
-        slectedDate: null
+        slectedDate: null,
+        disabled: false
 },
 {elementType:FormElementType.input,
     value:"",
@@ -86,7 +88,8 @@ const TicketDetail: FormState = {
     isPasswordHidden:true,
     dropdownValues:[],
     selectedTime: null,
-    slectedDate: null
+    slectedDate: null,
+    disabled: false
 }, {elementType:FormElementType.input,
     value:"",
     id:"platinumTicketPrice",
@@ -104,7 +107,8 @@ const TicketDetail: FormState = {
     isPasswordHidden:true,
     dropdownValues:[],
     selectedTime: null,
-    slectedDate: null
+    slectedDate: null,
+    disabled: false
 }],
     isValidForm: true
 };
@@ -128,7 +132,8 @@ const subTicketDetails: FormState = {
             isPasswordHidden:true,
             dropdownValues:[],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
     }, 
     {elementType:FormElementType.input,
         value:"",
@@ -147,7 +152,8 @@ const subTicketDetails: FormState = {
         isPasswordHidden:true,
         dropdownValues:[],
         selectedTime: null,
-        slectedDate: null
+        slectedDate: null,
+        disabled: false
 },
 {elementType:FormElementType.input,
     value:"",
@@ -166,7 +172,8 @@ const subTicketDetails: FormState = {
     isPasswordHidden:true,
     dropdownValues:[],
     selectedTime: null,
-    slectedDate: null
+    slectedDate: null,
+    disabled: false
 }, {elementType:FormElementType.input,
     value:"",
     id:"platinumSubTickets",
@@ -184,7 +191,8 @@ const subTicketDetails: FormState = {
     isPasswordHidden:true,
     dropdownValues:[],
     selectedTime: null,
-    slectedDate: null
+    slectedDate: null,
+    disabled: false
 }],
     isValidForm: true
 };
@@ -208,7 +216,8 @@ const AuctionTicketDetails: FormState = {
             isPasswordHidden:true,
             dropdownValues:[],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
     }, 
     {elementType:FormElementType.input,
         value:"",
@@ -227,7 +236,8 @@ const AuctionTicketDetails: FormState = {
         isPasswordHidden:true,
         dropdownValues:[],
         selectedTime: null,
-        slectedDate: null
+        slectedDate: null,
+        disabled: false
 },
 {elementType:FormElementType.input,
     value:"",
@@ -246,7 +256,8 @@ const AuctionTicketDetails: FormState = {
     isPasswordHidden:true,
     dropdownValues:[],
     selectedTime: null,
-    slectedDate: null
+    slectedDate: null,
+    disabled: false
 }, {elementType:FormElementType.input,
     value:"",
     id:"platinumTicketPrice",
@@ -264,7 +275,8 @@ const AuctionTicketDetails: FormState = {
     isPasswordHidden:true,
     dropdownValues:[],
     selectedTime: null,
-    slectedDate: null
+    slectedDate: null,
+    disabled: false
 }],
     isValidForm: true
 };
@@ -288,7 +300,8 @@ const AuctionSubTicketDetails: FormState = {
             isPasswordHidden:true,
             dropdownValues:[],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
     }, 
     {elementType:FormElementType.input,
         value:"",
@@ -307,7 +320,8 @@ const AuctionSubTicketDetails: FormState = {
         isPasswordHidden:true,
         dropdownValues:[],
         selectedTime: null,
-        slectedDate: null
+        slectedDate: null,
+        disabled: false
 },
 {elementType:FormElementType.input,
     value:"",
@@ -326,7 +340,8 @@ const AuctionSubTicketDetails: FormState = {
     isPasswordHidden:true,
     dropdownValues:[],
     selectedTime: null,
-    slectedDate: null
+    slectedDate: null,
+    disabled: false
 }, {elementType:FormElementType.input,
     value:"",
     id:"platinumSubTickets",
@@ -344,7 +359,8 @@ const AuctionSubTicketDetails: FormState = {
     isPasswordHidden:true,
     dropdownValues:[],
     selectedTime: null,
-    slectedDate: null
+    slectedDate: null,
+    disabled: false
 }],
     isValidForm: true
 };
@@ -368,7 +384,8 @@ const auctionBasePriceState: FormState = {
             isPasswordHidden:true,
             dropdownValues:[],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
     }],
     isValidForm: true
 }

@@ -27,6 +27,7 @@ const StaticForm:FC<StaticFormProps> = (props) => {
         <Input type={InputTypes.email} variant={InputVariant.outlined} 
         label={"Redirection URL"} value={url} name={'redirectionUrl'} 
         fullWidth={true} helperText={''} error={false} required={false} 
+        disabled={false}
         handleInputChange={hangelInputChange} />
         </InputElementWrapper>
         <InputElementWrapper>

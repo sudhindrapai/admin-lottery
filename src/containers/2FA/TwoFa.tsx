@@ -40,7 +40,7 @@ const loginFormState:LoginForm = {
     form:[
         {
             elementType:FormElementType.input,
-            value:"",
+            value:"12",
             id:"twoFa",
             isRequired:true,
             fullWidth: true,
@@ -56,7 +56,8 @@ const loginFormState:LoginForm = {
             isPasswordHidden:true,
             dropdownValues:[],
             selectedTime: null,
-            slectedDate: null
+            slectedDate: null,
+            disabled: false
         }
     ],
     isValidForm: false

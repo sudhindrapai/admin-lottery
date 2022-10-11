@@ -26,10 +26,11 @@ interface InputProps {
     helperText: string,
     error: boolean,
     required: boolean
+    disabled: boolean,
     handleInputChange(event:React.ChangeEvent <HTMLTextAreaElement | HTMLInputElement>):void
 }
 
-const Input: React.FC <InputProps> = ({type, variant, label, value, name, required, fullWidth, handleInputChange, error, helperText}) => {
+const Input: React.FC <InputProps> = ({type, variant, label, value, name, required, fullWidth, handleInputChange, error, helperText, disabled}) => {
     return <TextField 
     autoComplete="off"
     required={required}
@@ -41,6 +42,7 @@ const Input: React.FC <InputProps> = ({type, variant, label, value, name, requir
     error={error}
     helperText ={helperText}
     fullWidth={fullWidth} 
+    disabled={disabled}
     onChange={handleInputChange} />
 };
 
