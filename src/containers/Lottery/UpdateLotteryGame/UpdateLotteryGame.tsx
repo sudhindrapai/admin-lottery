@@ -44,7 +44,7 @@ const LotteryNameForm: CreateLottery = {
             dropdownValues:[],
             selectedTime: null,
             slectedDate: null,
-            disabled: false
+            disabled: true
     }],
     isValidForm: true
 };
@@ -70,7 +70,7 @@ const lotterySettingsForm: CreateLottery = {
             dropdownValues:["Money Lottery", "Gift Lottery"],
             selectedTime: null,
             slectedDate: null,
-            disabled: false
+            disabled: true
         },
         {
             elementType:FormElementType.input,
@@ -91,7 +91,7 @@ const lotterySettingsForm: CreateLottery = {
             dropdownValues:["All Members", "Gold Members"],
             selectedTime: null,
             slectedDate: null,
-            disabled: false
+            disabled: true
         }
     ],
     isValidForm: true
@@ -118,7 +118,7 @@ const ticketTypeForm:CreateLottery = {
             dropdownValues:[],
             selectedTime: null,
             slectedDate: null,
-            disabled: false
+            disabled: true
         },
         {
             elementType:FormElementType.input,
@@ -139,7 +139,7 @@ const ticketTypeForm:CreateLottery = {
             dropdownValues:[],
             selectedTime: null,
             slectedDate: null,
-            disabled: false
+            disabled: true
         },
         {
             elementType:FormElementType.input,
@@ -160,7 +160,7 @@ const ticketTypeForm:CreateLottery = {
             dropdownValues:[],
             selectedTime: null,
             slectedDate: null,
-            disabled: false
+            disabled: true
         },
         {
             elementType:FormElementType.input,
@@ -181,7 +181,7 @@ const ticketTypeForm:CreateLottery = {
             dropdownValues:[],
             selectedTime: null,
             slectedDate: null,
-            disabled: false
+            disabled: true
         }
     ],
     isValidForm: false
@@ -208,7 +208,7 @@ const subTicketForm:CreateLottery = {
             dropdownValues:[],
             selectedTime: null,
             slectedDate: null,
-            disabled: false
+            disabled: true
         },
         {
             elementType:FormElementType.input,
@@ -229,7 +229,7 @@ const subTicketForm:CreateLottery = {
             dropdownValues:[],
             selectedTime: null,
             slectedDate: null,
-            disabled: false
+            disabled: true
         },
         {
             elementType:FormElementType.input,
@@ -250,7 +250,7 @@ const subTicketForm:CreateLottery = {
             dropdownValues:[],
             selectedTime: null,
             slectedDate: null,
-            disabled: false
+            disabled: true
         },
         {
             elementType:FormElementType.input,
@@ -271,7 +271,7 @@ const subTicketForm:CreateLottery = {
             dropdownValues:[],
             selectedTime: null,
             slectedDate: null,
-            disabled: false
+            disabled: true
         }
     ],
     isValidForm: false
@@ -298,7 +298,7 @@ const lotteryMoneyForm: CreateLottery = {
             dropdownValues:[],
             selectedTime: null,
             slectedDate: null,
-            disabled: false
+            disabled: true
         }
     ],
     isValidForm: true
@@ -325,7 +325,7 @@ const scheduleDaysForm: CreateLottery = {
             dropdownValues:[""],
             selectedTime: null,
             slectedDate: null,
-            disabled: false
+            disabled: true
         },
         {
             elementType:FormElementType.datePicker,
@@ -373,7 +373,7 @@ const lotteryTicketPriceForm:CreateLottery =  {
         dropdownValues:[],
         selectedTime: null,
         slectedDate: null,
-        disabled: false
+        disabled: true
     },
     {
         elementType:FormElementType.input,
@@ -394,7 +394,7 @@ const lotteryTicketPriceForm:CreateLottery =  {
         dropdownValues:[],
         selectedTime: null,
         slectedDate: null,
-        disabled: false
+        disabled: true
     },
     {
         elementType:FormElementType.input,
@@ -415,7 +415,7 @@ const lotteryTicketPriceForm:CreateLottery =  {
         dropdownValues:[],
         selectedTime: null,
         slectedDate: null,
-        disabled: false
+        disabled: true
     },
     {
         elementType:FormElementType.input,
@@ -436,7 +436,7 @@ const lotteryTicketPriceForm:CreateLottery =  {
         dropdownValues:[],
         selectedTime: null,
         slectedDate: null,
-        disabled: false
+        disabled: true
     },
 ],
 isValidForm: false
@@ -792,7 +792,7 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
             <Button title={"Cancel"} 
             btnSize ={ButtonSize.md} 
             btnVariant={ButtonVariant.primaryFilled} clicked={redirectToLotteryList} />
-            <Button title={"Create"} 
+            <Button title={"Update"} 
             btnSize ={ButtonSize.md} 
             btnVariant={ButtonVariant.primaryFilled} clicked={createTicketHandler} />
         </Action>

@@ -10,10 +10,11 @@ interface DatepickerProps {
     label:string,
     name:string,
     value: Date | null | any,
+    disabled:boolean,
     onChangeDate(date: Date|null|any , name: string):void
 }
 
-const DatePickerComponent:React.FC<DatepickerProps> = ({label, name, value, onChangeDate}) => {
+const DatePickerComponent:React.FC<DatepickerProps> = ({label, name, value,disabled, onChangeDate}) => {
 
   const handleChange = (newValue: any | Date | null) => {
     onChangeDate(new Date(newValue?._d).toString(), name);
@@ -25,6 +26,7 @@ const DatePickerComponent:React.FC<DatepickerProps> = ({label, name, value, onCh
           label={label}
           inputFormat="DD/MM/yy h:mm:ss a"
           value={value}
+          disabled={disabled}
           onChange={handleChange}
           renderInput={(params) => <TextField {...params} fullWidth={true} />}
         />

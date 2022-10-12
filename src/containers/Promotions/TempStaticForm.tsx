@@ -31,10 +31,10 @@ const StaticForm:FC<StaticFormProps> = (props) => {
         handleInputChange={hangelInputChange} />
         </InputElementWrapper>
         <InputElementWrapper>
-        <DatePicket label={"Start Date"} name={'startDate'} value={new Date(startDate)} onChangeDate={onDateChange} />
+        <DatePicket label={"Start Date"} name={'startDate'} value={new Date(startDate)} disabled={false} onChangeDate={onDateChange} />
         </InputElementWrapper>
         <InputElementWrapper>
-        <DatePicket label={"End Date"} name={'endDate'} value={endDate} onChangeDate={onDateChange} />
+        <DatePicket label={"End Date"} name={'endDate'} value={endDate} disabled={false} onChangeDate={onDateChange} />
         </InputElementWrapper>
     </>
 };

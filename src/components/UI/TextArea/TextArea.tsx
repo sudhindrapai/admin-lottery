@@ -13,10 +13,11 @@ interface InputProps {
     error: boolean,
     required: boolean,
     row:number
+    disabled:boolean,
     handleInputChange(event:React.ChangeEvent <HTMLTextAreaElement | HTMLInputElement>):void
 }
 
-const TextAreaComponent: React.FC<InputProps> = ({required,variant,label,value,name,error,helperText, row, fullWidth,handleInputChange}) => {
+const TextAreaComponent: React.FC<InputProps> = ({required,variant,label,value,name,error,helperText, row, fullWidth,disabled,handleInputChange}) => {
     return <TextField required={required}
     type={"text"} 
     rows={row}
@@ -28,6 +29,7 @@ const TextAreaComponent: React.FC<InputProps> = ({required,variant,label,value,n
     error={error}
     helperText ={helperText}
     fullWidth={fullWidth} 
+    disabled={disabled}
     onChange={handleInputChange} />
 };
 

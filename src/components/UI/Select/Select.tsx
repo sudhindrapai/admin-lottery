@@ -15,11 +15,12 @@ interface SelectProps {
     name: string,
     error: boolean,
     dropdownValues:string[],
+    disabled:boolean,
     handleInputChange(value: string, id: string):void
 }
 
 const SelectInput:FC<SelectProps> = (props) => {
-    const {fullWidth,required,value,label,id,name,error,dropdownValues,handleInputChange} = props
+    const {fullWidth,required,value,label,id,name,error,dropdownValues,disabled,handleInputChange} = props
 
     const handleChange = (event: SelectChangeEvent) => {
         handleInputChange(event.target.value as string, id)
@@ -34,6 +35,7 @@ const SelectInput:FC<SelectProps> = (props) => {
           label={label}
           name={name}
           error={error}
+          disabled={disabled}
           onChange={handleChange}
         >
           {dropdownValues.map((dropdownValue) => {

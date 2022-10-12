@@ -55,7 +55,7 @@ const FormBuilder:React.FC<FormbuilderProps> = (props) => {
                     value={formElement.value} 
                     error = {formElement.isTouched && formElement.errorMessage.length > 0}
                     errorMessage ={formElement.errorMessage}
-                    onPasswordChange={onInputChange} /> 
+                    onPasswordChange={onInputChange}  /> 
                     </StyledFormElement>;
                     break;
                 case FormElementType.radioGroup:
@@ -80,7 +80,7 @@ const FormBuilder:React.FC<FormbuilderProps> = (props) => {
                         error={formElement.isValidInput} 
                         required={formElement.isRequired} 
                         row={4} 
-                        handleInputChange={onInputChange} /> 
+                        handleInputChange={onInputChange} disabled={formElement.disabled} /> 
                         </StyledFormElement>
                         break;
                     case FormElementType.datePicker:
@@ -91,6 +91,7 @@ const FormBuilder:React.FC<FormbuilderProps> = (props) => {
                             name={formElement.id} 
                             value={new Date(formElement.value)} 
                             onChangeDate={onChangeDate}
+                            disabled={formElement.disabled}
                              />
                         </StyledFormElement>
                     break;
@@ -105,7 +106,7 @@ const FormBuilder:React.FC<FormbuilderProps> = (props) => {
                             name={formElement.id} 
                             error={formElement.isValidInput} 
                             dropdownValues={formElement.dropdownValues} 
-                            handleInputChange={onSelectValueChange} />
+                            handleInputChange={onSelectValueChange} disabled={formElement.disabled} />
                         </StyledFormElement>
                         break;
                         case FormElementType.timePicker:
@@ -116,7 +117,7 @@ const FormBuilder:React.FC<FormbuilderProps> = (props) => {
                                 error={formElement.isValidInput} 
                                 fullWidth={formElement.fullWidth} 
                                 label={formElement.label} 
-                                onTimeChange={onChangeTime}  />
+                                onTimeChange={onChangeTime}  disabled={formElement.disabled} />
                             </StyledFormElement>
                             break;
                 default:

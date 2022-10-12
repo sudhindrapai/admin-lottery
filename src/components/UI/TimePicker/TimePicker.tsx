@@ -10,12 +10,13 @@ interface TimePickerProps {
   name: string,
   value: Date | null,
   error: boolean,
+  disabled:boolean,
   onTimeChange(date: Date|null, name: string):void
 }
 
 const TimePickerComponent:FC<TimePickerProps> = (props) => {
 
-  const {label, fullWidth, value, error, name, onTimeChange} = props;
+  const {label, fullWidth, value, error, name, onTimeChange, disabled} = props;
 
     
       const handleChange = (newValue: Date | null) => {
@@ -28,6 +29,7 @@ const TimePickerComponent:FC<TimePickerProps> = (props) => {
           label={label}
           value={value}
           onChange={handleChange}
+          disabled={disabled}
           renderInput={(params:any) => <TextField error={error} {...params} fullWidth={fullWidth} />}
         />
     </LocalizationProvider>
