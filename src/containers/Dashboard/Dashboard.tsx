@@ -121,6 +121,7 @@ const Dashboard:FC = () => {
     const [usersDoughtnutData,setUsersDoughtnutData] = useState<any>([]);
 
     const [cardsList, setCardsList] = useState<any>([]);
+    const [auctionCardList, setAuctionCardList] = useState<any>([])
 
     // ----
     const [donughtXasisButtons, setXDoughtnutButton] = useState<any>([])
@@ -140,13 +141,17 @@ const Dashboard:FC = () => {
 
     if (dashboardData !== undefined && Object.keys(dashboardData).length > 0) {
 
-        let cardsListNames = [];
+        let cardsListNames = ["totalUsers","executedLotteries",
+        "executedLotteriesTotalRewardPrice","executedLotteriesTotalTicketsPrice",
+        "executedLotteriesTotalTicketsSold"];
         // code to set cards list
         if (cardsList.length === 0) {
-            let keysList = Object.keys(dashboardData).filter((key) => {
-                return exceptCards.indexOf(key) === -1
-            })
-            setCardsList(keysList)
+            // let keysList = Object.keys(dashboardData).filter((key) => {
+            //     return exceptCards.indexOf(key) === -1
+            // })
+            setCardsList(cardsListNames);
+            setAuctionCardList(["executedAuctions","executedAuctionsTotalRewardPrice",
+            "executedAuctionsTotalTicketsPrice","executedAuctionsTotalTicketsSold"])
         }
 
 
@@ -198,7 +203,6 @@ const Dashboard:FC = () => {
                     results:[usersData[obj.id]]
                 }
             });
-            // console.log(updatedArray,"updatedArray")
             if (usersDoughtnutData.length === 0){
                 setUsersDoughtnutData(updatedArray);
             }
@@ -209,7 +213,12 @@ const Dashboard:FC = () => {
                 usersGoldMembers:dashboardData.goldUsers,
                 usersRegularMembers:dashboardData.regularUsers,
             },
-            tickets:{}
+            tickets:{
+                executedLotteriesPlatinumTicketsSold:dashboardData.executedLotteriesPlatinumTicketsSold,
+                executedLotteriesGoldTicketsSold:dashboardData.executedLotteriesGoldTicketsSold,
+                executedLotteriesSilverTicketsSold:dashboardData.executedLotteriesSilverTicketsSold,
+                executedLotteriesBronzeTicketsSold:dashboardData.executedLotteriesBronzeTicketsSold
+            }
         }
             mapUsersDoughtnutGraph(usersData)
         // }
@@ -277,9 +286,18 @@ const Dashboard:FC = () => {
     // end doughtnut graph code
 
     // users doughtnut graph code starts
+
+    const updateUsersPiechartYaxisValue = (selectedObj:any) => {
+        let updatedData = usersDoughtnutData.map((obj:any) => {
+            return {...obj,
+                isSelected:obj.id === selectedObj.id
+            }
+        });
+        setUsersDoughtnutData([...updatedData]);
+    }
     
     let usersDoughtnutGraphYAxisButtons = usersDoughtnutData.map((obj:any) => {
-        return <GraphButton onClick={() => {updateDoughtnutGraphValue(obj)}} isSelected={obj.isSelected}>
+        return <GraphButton onClick={() => {updateUsersPiechartYaxisValue(obj)}} isSelected={obj.isSelected}>
             {obj.label}
             </GraphButton>
     })
@@ -291,8 +309,13 @@ const Dashboard:FC = () => {
     let cardsView = cardsList.map((cardKey) => {
         return <Card>
             <DashboardCard count = {dashboardData[cardKey]} label={cardKey} isNeedToShowDollarSign={false} />
-            {/* <h1>{cardKey}</h1> */}
             </Card>
+    });
+
+    let auctionCards = auctionCardList.map((cardKey) => {
+        return <Card>
+        <DashboardCard count = {dashboardData[cardKey]} label={cardKey} isNeedToShowDollarSign={false} />
+        </Card>
     })
     // end cards view
 
@@ -300,6 +323,18 @@ const Dashboard:FC = () => {
     <HeaderWrapper>
     <ViewHeader title={"Dashboard"} />
     </HeaderWrapper>
+    <h3>
+            Lottery
+        </h3>
+    <CardsList>
+        {cardsView}
+    </CardsList>
+    <h3>
+            Auction
+        </h3>
+    <CardsList>
+        {auctionCards}
+    </CardsList>
     <GraphList>
     <GraphRow>
     <GraphWrapper>
@@ -312,7 +347,7 @@ const Dashboard:FC = () => {
     <GraphItem>
     <GraphYaxis>
                     <Label>
-                        Time
+                        Country
                     </Label>
                </GraphYaxis>
     </GraphItem>
@@ -360,9 +395,6 @@ const Dashboard:FC = () => {
 
         </GraphRow>
     </GraphList>
-    <CardsList>
-        {cardsView}
-    </CardsList>
     {/* <GraphList>
         <GraphRow>
         <GraphWrapper>

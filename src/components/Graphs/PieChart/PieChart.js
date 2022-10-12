@@ -13,14 +13,21 @@ export const PieGraph = (props) => {
     })[0];
 
     let resultObj = (activeObj.results)[0];
-
+if (activeObj.id === "users") {
     let labels = ['Gold Members',"Regular Members"];
     let value = [resultObj.usersGoldMembers, resultObj.usersRegularMembers];
-
     setLabel(labels);
     setData(value);
+} else if (activeObj.id === "tickets") {
+  let labels = ['Platinum Tickets',"Gold Tickets","Silver Tickets","Bronze Tickets"];
+  let value = [resultObj.executedLotteriesPlatinumTicketsSold, 
+    resultObj.executedLotteriesGoldTicketsSold, resultObj.executedLotteriesSilverTicketsSold, 
+    resultObj.executedLotteriesBronzeTicketsSold];
+    setLabel(labels);
+    setData(value);
+}
+  },[detail]);
 
-  },[])
     const data = {
       labels: graphLabel,
       datasets: [{

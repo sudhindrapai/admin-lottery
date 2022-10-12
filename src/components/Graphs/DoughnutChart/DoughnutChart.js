@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import Chart from 'chart.js/auto';
+// import Chart from 'chart.js/auto';
 import { Doughnut } from "react-chartjs-2";
 
 export const DoughnutChart = (props) => {
@@ -21,7 +21,7 @@ export const DoughnutChart = (props) => {
     let index = 1;
     for (let valueObj of resulArray) {
       let label = valueObj.country !==  undefined && (valueObj.country).length > 0 ? valueObj.country : `Label_${index}`;
-      let value = valueObj.count !== undefined ? valueObj.count : `Count_${index}`;
+      let value = valueObj.count !== undefined ? valueObj.count : valueObj.income ? valueObj.income : 0;
       index ++;
       labelsArray.push(label);
       valuesArray.push(value);
