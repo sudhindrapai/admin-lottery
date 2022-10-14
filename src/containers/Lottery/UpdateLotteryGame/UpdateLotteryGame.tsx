@@ -2,8 +2,9 @@ import {FC,useState, useRef, useEffect} from 'react';
 import Button from '../../../components/UI/Button/Button';
 
 import FormBuilder from '../../FormBuilder/FormBuilder';
-import ImageUploader from '../../../components/ImageUploader/ImageUploader'
-import {updateFormInputState, validateForm, updateFormSelectState, updateFormTimeState, updateFormDate} from '../../../Utility/Utility';
+import ImageUploader from '../../../components/ImageUploader/ImageUploader';
+import {transformGMTToUTC} from '../../../Utility/Utility'
+import {updateFormInputState, validateForm, updateFormSelectState, updateFormDate} from '../../../Utility/Utility';
 import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement} from '../../../Utility/InterFacesAndEnum';
 import {WeekNames, FormSectionContainer,LotteryTypeTitle,LotteryTypeValue,CreateLotteryContainer, SectionTitle,UploadImageBtnSection, FormElementTitle, CreateLotteryFirstSection, CreateLotterySecondSection, TwoFormSection, FormView, Action} from '../../Forms/Lottery/CreateLottery/RepeatedLottery/StyledCreateLottery';
 
@@ -710,8 +711,7 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
     // end schedule days form
 
     const createTicketHandler = () => {
-        let completeObject = {
-        };
+        let completeObject:any = {};
         
         let completeFormArray = [
             ...LotteryNameForm.form,
@@ -722,18 +722,19 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
         ]
 
         for (let formObj of completeFormArray) {
-            if (formObj.id === "lotteryStartDate" || formObj.id === "lotteryEndDate") {
-                completeObject[formObj.id] = new Date(formObj.value);
-            } else {
                 completeObject[formObj.id] = formObj.value;
-            }
         }
 
         completeObject["rewardGiftDesc"] = "";
         completeObject["isRepeat"] = false;
         completeObject["isMemberLottery"] = false;
-
-        console.log(completeObject);
+        completeObject["lotteryStartDate"] = transformGMTToUTC(completeObject.lotteryStartDate);
+        completeObject["lotteryEndDate"] = transformGMTToUTC(completeObject.lotteryEndDate);
+        completeObject["lotteryStartTime"] = transformGMTToUTC(completeObject.lotteryStartDate);
+        completeObject["lotteryEndTime"] = transformGMTToUTC(completeObject.lotteryEndDate);
+        completeObject["lotteryId"] = templateDetail.lotteryGameId;
+        completeObject["rewardType"] = templateDetail.rewardType
+        // console.log(completeObject);
         onCreateLottery(completeObject)
     };
 

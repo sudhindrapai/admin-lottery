@@ -129,7 +129,27 @@ export const getLotteryGameDetail = createAsyncThunk(
             }
         })
     }
-)
+);
+
+export const updateLottery = createAsyncThunk(
+    'Update lottery',
+    async(payload:any,{dispatch}) => {
+        await fetch(endpoint.updateLottery,{
+            method: 'PUT',
+            body:JSON.stringify(payload),
+            headers:{
+                Authorization: `Bearer ${getLocalStorage(localStorageActiontype.GET_ACCESS_TOKEN)}`,
+                "Content-type": "application/json; charset=UTF-8",
+            }
+        })
+        .then((response) => {
+            return response.json()
+        })
+        .then((response) => {
+            console.log(response)
+        })
+    }
+);
 
 const LotteryListSlice = createSlice({
     name: 'lotteryList',

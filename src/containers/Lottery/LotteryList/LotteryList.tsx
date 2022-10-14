@@ -3,6 +3,7 @@ import {RootState} from '../../../app/Store';
 import {useSelector, useDispatch} from 'react-redux';
 import {getLotteryList} from '../../../features/lotteryListSlice';
 import ViewHeader from '../../../components/ViewHeader/ViewHeader';
+import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 import EmptyTableView from '../../../components/EmptyTableView/EmptyTableView';
 import Button from '../../../components/UI/Button/Button';
 import {useNavigate} from 'react-router-dom';
@@ -234,7 +235,11 @@ const LotteryList:FC = () => {
             <td>&#x24; {lotteryObj.rewardAmount? lotteryObj.rewardAmount : 0}</td>
             <td>{transformDate(lotteryObj.lotteryGameStartDate)}</td>
             <td>{transformDate(lotteryObj.lotteryGameEndDate)}</td>
-            <td>&#x24; {lotteryObj.amountCollected? lotteryObj.amountCollected : 0}</td>
+            <td>
+            <TrafficLight 
+            maxAmount={lotteryObj.rewardAmount? lotteryObj.rewardAmount : 0} 
+            compareAmount={lotteryObj.amountCollected? lotteryObj.amountCollected : 0} />
+                &#x24; {lotteryObj.amountCollected? lotteryObj.amountCollected : 0}</td>
             <td><NumberOfUsers>{lotteryObj.noOfUsersJoined}</NumberOfUsers></td>
             <td>{lotteryStatusTag}</td>
             </tr>

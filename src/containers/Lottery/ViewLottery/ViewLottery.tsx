@@ -1,11 +1,16 @@
 import {FC, useEffect} from 'react';
 
 import UpdateLotteryGame from '../UpdateLotteryGame/UpdateLotteryGame';
-
+import ViewHeader from '../../../components/ViewHeader/ViewHeader';
 import {useSelector, useDispatch} from 'react-redux';
-import {getLotteryGameDetail} from '../../../features/lotteryListSlice';
+import {getLotteryGameDetail,updateLottery} from '../../../features/lotteryListSlice';
 import {useLocation,useParams} from 'react-router-dom';
-import {RootState} from '../../../app/Store'
+import {RootState} from '../../../app/Store';
+
+import {HeaderView} from './styledViewLottery';
+
+import {adminRouts} from '../../../routs';
+
 const ViewLottery:FC = () => {
     const dispatch = useDispatch();
     const paramsObj = useParams();
@@ -16,11 +21,19 @@ const ViewLottery:FC = () => {
         dispatch(getLotteryGameDetail(paramsObj?.lotteryId? paramsObj.lotteryId : ""))
     },[]);
 
+    const updateGame = (requestObj) => {
+        console.log(gameDetail,"updateGame");
+        dispatch(updateLottery(requestObj));
+    };
+
     let view  = Object.keys(gameDetail).length > 0 ? 
-        <UpdateLotteryGame onCancel={() => {}} onCreateLottery={() => {}} templateDetail={gameDetail} />:
+        <UpdateLotteryGame onCancel={() => {}} onCreateLottery={updateGame} templateDetail={gameDetail} />:
      <div>Please wait</div>
 
     return <div>
+        <HeaderView>
+        <ViewHeader title={`#${gameDetail.lotteryGameId}`} isBackButtonRequired={true} backButtonRedirectionUrl={adminRouts.lotteryList} />
+        </HeaderView>
         {view}
     </div>
 };
