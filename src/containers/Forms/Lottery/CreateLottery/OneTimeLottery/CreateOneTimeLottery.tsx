@@ -463,7 +463,7 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
     const [scheduleFormValues, setScheduleFormValues] = useState<CreateLottery>(scheduleDaysForm);
     const [selectedLotteryType, setLotteryType] = useState(3);
 
-    const imagesList = useSelector((state:RootState) => state.images.images);
+    const imagesList = useSelector((state:RootState) => state.images.imageNames);
 
     useEffect(() => {
         if (ticketObj && ticketObj.length > 0) {

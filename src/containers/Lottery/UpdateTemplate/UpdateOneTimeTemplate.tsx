@@ -2,6 +2,7 @@ import {FC, useEffect} from 'react';
 import UpdateTemplateForm from '../../Forms/Lottery/UpdateLotteryTemplate/UpdateOneTimeLotteryTemplate';
 import {useParams} from 'react-router-dom';
 import {getUpdateTemplateDetail, setUpdateTemplate} from '../../../features/updateTemplateSlice';
+import {updateLottery} from '../../../features/lotteryListSlice'
 import {useSelector, useDispatch} from 'react-redux';
 import { RootState } from '../../../app/Store';
 
@@ -23,8 +24,12 @@ const UpdateOneTimeTemplate = () => {
         }
     },[]);
 
+    const updateLottery = (updateObj) => {
+        dispatch(updateLottery(updateObj));
+    }
+
     let view  = Object.keys(templateObj).length > 0 ? 
-    <UpdateTemplateForm onCreateLottery={() => {}} onCancel={() => {}} templateDetail={templateObj} /> :
+    <UpdateTemplateForm onCreateLottery={updateLottery} onCancel={() => {}} templateDetail={templateObj} /> :
      <div>Please wait</div>
 
     return view;

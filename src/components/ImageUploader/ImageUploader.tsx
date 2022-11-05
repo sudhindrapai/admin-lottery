@@ -8,7 +8,7 @@ const ImageUploader:FC = () => {
 
     const dispatch = useDispatch();
 
-    const inputRef = useRef<HTMLInputElement>(null);
+    const imageUploaderRef = useRef<HTMLInputElement>(null);
 
     const images = useSelector((state:RootState) => state.images.images);
 
@@ -33,7 +33,7 @@ const ImageUploader:FC = () => {
 
 
     const triggerImageUploader = () => {
-        inputRef.current?.click();
+        imageUploaderRef.current?.click();
     }
 
     const createUploadFileObj = (event) => {
@@ -49,7 +49,7 @@ const ImageUploader:FC = () => {
 
     return <Wrapper>
         <Container>
-            <input type={"file"} ref={inputRef} 
+            <input type={"file"} tabIndex={0} ref={imageUploaderRef} 
             style={{display: 'none'}}
             onChange={(event) => {
             createUploadFileObj(event);

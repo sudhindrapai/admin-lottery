@@ -692,8 +692,7 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
     // end schedule days form
 
     const createTicketHandler = () => {
-        let completeObject = {
-        };
+        let completeObject:any = {};
         
         let completeFormArray = [
             ...LotteryNameForm.form,
@@ -775,7 +774,7 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
             <Button title={"Cancel"} 
             btnSize ={ButtonSize.md} 
             btnVariant={ButtonVariant.primaryFilled} clicked={redirectToLotteryList} />
-            <Button title={"Create"} 
+            <Button title={"Update"} 
             btnSize ={ButtonSize.md} 
             btnVariant={ButtonVariant.primaryFilled} clicked={createTicketHandler} />
         </Action>

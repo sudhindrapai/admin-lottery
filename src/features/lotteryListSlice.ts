@@ -42,7 +42,6 @@ export const getLotteryList = createAsyncThunk(
             return response.json();
         })
         .then((response) => {
-
             if (response.statusCode === 401) {
                 handle401Status();
             }
@@ -74,6 +73,7 @@ export const getLotteryList = createAsyncThunk(
             }
         })
         .catch((error) => {
+            console.log(error)
             dispatch(toggleNotificationVisibility({
                 isVisible: true,
                 status: NotificationType.error,
