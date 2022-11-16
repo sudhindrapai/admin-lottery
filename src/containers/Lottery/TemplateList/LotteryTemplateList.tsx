@@ -37,15 +37,13 @@ const LotteryTemplateList = () => {
         }
     }
 
-    const redirectToCreateGame = () => {};
-
     let templateListView = templateList.map((templateObj:any) => {
         return <TemplatLineItem>
             <TemplateId onClick={() => {redirectToTemplateList(templateObj.lotteryId, templateObj.isRepeat)}}>
                 {templateObj.lotteryId}
             </TemplateId>
             <TemplateItem>
-             {templateObj.rewardType === "M" ? `${templateObj.rewardAmount}` : templateObj.rewardGiftName} 
+             {templateObj.rewardType === "M" ? `${templateObj.rewardAmount ? templateObj.rewardAmount: 0}` : templateObj.rewardGiftName} 
             </TemplateItem>
             <TemplateItem>
                 {templateObj.isRepeat ? "Repeated Lottery": "One Time Lottery"}

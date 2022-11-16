@@ -5,6 +5,7 @@ import {getUpdateTemplateDetail, setUpdateTemplate} from '../../../features/upda
 import {updateLottery} from '../../../features/lotteryListSlice'
 import {useSelector, useDispatch} from 'react-redux';
 import { RootState } from '../../../app/Store';
+import ImageUploader from '../../../components/ImageUploader/ImageUploader';
 
 const UpdateOneTimeTemplate = () => {
 

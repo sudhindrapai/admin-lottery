@@ -88,7 +88,10 @@ const SlidingImgUploader:FC<SlidingImgProps> = (props) => {
             </Count>
             <ImgPlaceHolder />
         </SlidingImgItem>
-    })
+    });
+
+    console.log(activeSlidingObj,"activeSlidingObj")
+
     return <SlidingImgUploaderSection>
         <SlidingImgList>
         {imagesListView}

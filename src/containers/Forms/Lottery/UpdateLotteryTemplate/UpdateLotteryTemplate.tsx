@@ -1,6 +1,7 @@
 import {FC,useState, useRef, useEffect} from 'react';
 import Button from '../../../../components/UI/Button/Button';
 import FormBuilder from '../../../FormBuilder/FormBuilder';
+import ImageUploader from '../../../../components/ImageUploader/ImageUploader';
 import {updateFormInputState, validateForm, updateFormSelectState, updateFormTimeState} from '../../../../Utility/Utility';
 import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement} from '../../../../Utility/InterFacesAndEnum';
 import {WeekNames, FormSectionContainer,LotteryTypeTitle,LotteryTypeValue,
@@ -810,7 +811,7 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
                 </FormSectionContainer>
             </form>}
             {selectedLotteryType === 2 && <form>
-            <FormSectionContainer>
+            {/* <FormSectionContainer>
                 <SectionTitle>
                 Images
                 </SectionTitle>
@@ -818,8 +819,9 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
                     <input type={"file"} hidden={true} onChange={(event) => {uplodImage(event)}} ref={uploadImageRef} />
                     <div title={"Add images"} 
                     onClick={triggerUploadImage} />
-                </UploadImageBtnSection>
-                </FormSectionContainer>
+                </UploadImageBtnSection> */}
+                <ImageUploader />
+                {/* </FormSectionContainer> */}
             </form>}
             {selectedLotteryType != 3 && <form name={"Customer Registration"} html-for={"customer resgistraion"} autoComplete="off">
                 <FormSectionContainer>
