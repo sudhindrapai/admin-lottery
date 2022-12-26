@@ -48,7 +48,6 @@ export const uploadImage = createAsyncThunk(
         })
         .then((response) => {
             let image:ImageObj = response
-            // if (response.statusCode === 200) {
                 let responseArray:string[] = [];
                 let names: string[] = [];
                     let imageString = image.fileDownloadUri;
@@ -59,14 +58,14 @@ export const uploadImage = createAsyncThunk(
                 dispatch(setImages({
                     data:responseArray,
                     names:names
-                }))
-            // }
+                }));
         })
-        .catch(() => {
+        .catch((error) => {
+            console.log(error)
             dispatch(toggleNotificationVisibility({
                 isVisible: true,
                 status: NotificationType.error,
-                message: "something went wrong!"
+                message: "something went wrong!!!!"
             }));
         })
     }
@@ -77,15 +76,41 @@ const ImageUploaderSlice = createSlice({
     initialState: imageUploaderInitialState,
     reducers:{
         setImages:(state, action:PayloadAction<SetImages>) => {
-            let updatedArray = [...state.images].concat(action.payload.data)
+            let updatedArray:any = [];
+            if (state.images !== null && state.images.length > 0) {
+                updatedArray = [...state.images].concat(action.payload.data);
+            } 
+
+            if (state.images === null || state.images.length === 0) {
+                updatedArray = action.payload.data
+            }
+
             return {
                 ...state,
                 images: updatedArray,
                 imageNames: action.payload.names
             }
+        },
+        setUpdateImgDetails:(state,action:PayloadAction<any>)=>{
+            return{
+                ...state,
+                images:action.payload.images
+            }
+        },
+        deleteImage:(state,action:PayloadAction<{imgUrl:string}>) => {
+            let filteredImages:any = [];
+            if (state.images !== null && state.images.length > 0) {
+                filteredImages = (state.images).filter((img) => {
+                    return img !== action.payload.imgUrl
+                })
+            }
+            return{
+                ...state,
+                images:filteredImages
+            }
         }
     }
 });
 
-export const {setImages} = ImageUploaderSlice.actions;
+export const {setImages,setUpdateImgDetails,deleteImage} = ImageUploaderSlice.actions;
 export default ImageUploaderSlice.reducer;

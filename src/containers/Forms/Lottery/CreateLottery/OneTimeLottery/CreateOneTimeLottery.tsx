@@ -632,18 +632,26 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
             ...lotterySettingForm.form,
             ...ticketsType.form,
             ...subTicket.form,
+            ...lotteryMoneyForm.form,
             ...scheduleFormValues.form
         ]
 
         for (let formObj of completeFormArray) {
             if (formObj.id === "lotteryStartDate" || formObj.id === "lotteryEndDate") {
-                completeObject[formObj.id] = new Date(formObj.value);
-                if (formObj.id === "lotteryStartDate") {
-                    completeObject["lotteryStartTime"] = new Date(formObj.value);
-                } else if (formObj.id === "lotteryEndDate") {
-                    completeObject["lotteryEndTime"] = new Date(formObj.value);
+                if ((formObj.value).length > 0) {
+                    completeObject[formObj.id] = new Date(formObj.value);
+                    if (formObj.id === "lotteryStartDate") {
+                        completeObject["lotteryStartTime"] = new Date(formObj.value);
+                    } else if (formObj.id === "lotteryEndDate") {
+                        completeObject["lotteryEndTime"] = new Date(formObj.value);
+                    }
+                } else {
+                    completeObject[formObj.id] = "";
+                    completeObject["lotteryStartTime"] = "";
+                    completeObject["lotteryEndTime"] = "";
                 }
             } else {
+
                 completeObject[formObj.id] = formObj.value;
             }
         }

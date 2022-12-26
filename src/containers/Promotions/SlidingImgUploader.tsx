@@ -42,7 +42,7 @@ interface SlidingImgProps {
 
 const SlidingImgUploader:FC<SlidingImgProps> = (props) => {
     const {slidingImgs} = props;
-
+console.log(slidingImgs,"SlidingImgUploader")
     const [images, setImgsList] = useState(imagesList);
     const [activeSlidingObj, setActiveSlidingObj] = useState({});
 
@@ -60,7 +60,6 @@ const SlidingImgUploader:FC<SlidingImgProps> = (props) => {
                 return updateObj;
             });
             setImgsList(updatedSlidingList)
-            console.log(slidingImgs,"slidingImgs")
         }
     },[slidingImgs])
 

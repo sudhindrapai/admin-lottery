@@ -284,7 +284,7 @@ const lotteryMoneyForm: CreateLottery = {
         {
             elementType:FormElementType.input,
             value:"",
-            id:"lotteryPriceMoney",
+            id:"rewardAmount",
             isRequired:true,
             fullWidth: true,
             isCustomValidationRequred: true,
@@ -712,7 +712,6 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
                 isEndDay: isEndDaySelected ? weekObj.isEndDay : weekObj.id == id ? true : false
             }
         });
-        console.log(updatedWeeks)
         setRepeatWeek(updatedWeeks);
     }
 
@@ -731,7 +730,8 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
             ...lotterySettingForm.form,
             ...ticketsType.form,
             ...subTicket.form,
-            ...scheduleDaysForm.form
+            ...scheduleDaysForm.form,
+            ...lotteryMoneyForm.form
         ];
 
         for (let formObj of completeFormArray) {
@@ -744,8 +744,11 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
     
         for (let objKey in completeObject) {
             if (objKey === "lotteryEndTime" || objKey === "lotteryStartTime") {
-                completeObject[objKey] = new Date(transformGMTToUTC(completeObject[objKey]));
-                
+                if (completeObject[objKey] === "") {
+                    completeObject[objKey] = "";
+                } else {
+                    completeObject[objKey] = new Date(transformGMTToUTC(completeObject[objKey]));
+                }
             }
             if (objKey === "rewardType") {
                 completeObject[objKey] = completeObject[objKey] === "Money Lottery" ? "M" : "G"
@@ -754,8 +757,6 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
 
         completeObject["rewardImages"] = imagesList;
         
-        console.log(completeObject,"completeObject")
-        // fixme
         onCreateLottery(completeObject);
     };
 

@@ -98,6 +98,7 @@ export const uploadPromotionImages = createAsyncThunk(
             let image:ImageObj = response
                     let imageUrl = image.fileDownloadUri;
                     let fileName = image.fileName;
+                    // console.log(payload.id,"payloadId")
                     if (payload.isForDesktop){
                         dispatch(setDesktopImgDetails(
                             {

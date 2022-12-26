@@ -147,6 +147,11 @@ export const updateLottery = createAsyncThunk(
         })
         .then((response) => {
             console.log(response)
+            dispatch(toggleNotificationVisibility({
+                isVisible: true,
+                status: NotificationType.success,
+                message: response.errorMsg
+            }));
         })
     }
 );

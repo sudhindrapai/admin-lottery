@@ -4,6 +4,14 @@ interface MenuOption {
     isSelected: boolean
 }
 
+export const Img = styled.img`
+width: 100%;
+max-width: 100%;
+object-fit: contain;
+margin-bottom: 15px;
+border-radius: 4px;
+`;
+
 export const Wrapper = styled.div`
 width: 100%;
 box-sizing: border-box;

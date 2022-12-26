@@ -7,7 +7,9 @@ import {updateFormInputState, validateForm, updateFormSelectState, updateFormTim
 import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement} from '../../../../Utility/InterFacesAndEnum';
 import {WeekNames, FormSectionContainer,LotteryTypeTitle,LotteryTypeValue,CreateLotteryContainer, SectionTitle,UploadImageBtnSection, FormElementTitle, CreateLotteryFirstSection, CreateLotterySecondSection, TwoFormSection, FormView, Action} from '../CreateLottery/RepeatedLottery/StyledCreateLottery';
 
-// import {useSelector, useDispatch} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import {setUpdateImgDetails} from '../../../../features/imageUploaderSlice';
+import {RootState} from '../../../../app/Store';
 
 interface CreateLottery {
     form: FormElement[],
@@ -453,6 +455,10 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
 
     const {onCreateLottery,onCancel, templateDetail} = props;
 
+    const dispatch = useDispatch();
+
+    console.log(templateDetail,"CreateLotteryForm")
+
     const uploadImageRef = useRef<HTMLInputElement>(null);
 
     const [lotteryName, setLotteryName] = useState<CreateLottery>(LotteryNameForm)
@@ -462,9 +468,11 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
     const [lotteryMoneyFormValues, setLotteryMoneyForm] = useState<CreateLottery>(lotteryMoneyForm);
     const [lotteryTicketPriceValues, setLotteryTicketPriceValueForm] = useState<CreateLottery>(lotteryTicketPriceForm);
     const [scheduleFormValues, setScheduleFormValues] = useState<CreateLottery>(scheduleDaysForm);
-    const [selectedLotteryType, setLotteryType] = useState(3)
+    const [selectedLotteryType, setLotteryType] = useState(3);
 
 
+    const imgList = useSelector((state:RootState) => state.images.images);
+    // let imgList = []
     useEffect(() => {
 
         if (Object.keys(templateDetail).length > 0) {
@@ -484,7 +492,12 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
             let giftName = templateDetail.rewardGiftName;
             let lotteryStartTime = templateDetail.lotteryStartTime;
             let lotteryEndTime = templateDetail.lotteryEndTime;
-            let images = templateDetail.rewardImages;
+            let images = templateDetail.rewardImages ? [] : templateDetail.rewardImages
+
+            console.log(images,"imgListimgList")
+            dispatch(setUpdateImgDetails({
+                images:images
+            }))
 
             if (ticketType === "Money Lottery") {
                 setLotteryType(1);
@@ -696,11 +709,12 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
         let completeObject:any = {};
         
         let completeFormArray = [
-            ...LotteryNameForm.form,
+            ...lotteryName.form,
             ...lotterySettingForm.form,
             ...ticketsType.form,
             ...subTicket.form,
-            ...scheduleFormValues.form
+            ...scheduleFormValues.form,
+            ...lotteryMoneyFormValues.form
         ]
 
         for (let formObj of completeFormArray) {
@@ -709,13 +723,22 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
             } else {
                 completeObject[formObj.id] = formObj.value;
             }
+        
+            if (formObj.id === "rewardType") {
+                completeObject[formObj.id] = completeObject[formObj.id] === "Money Lottery" ? "M" : "G"
+            }
+            
         }
+
 
         completeObject["rewardGiftDesc"] = "";
         completeObject["isRepeat"] = false;
         completeObject["isMemberLottery"] = false;
+        completeObject["lotteryId"] = templateDetail.lotteryId;
+        completeObject["lotteryEndTime"] = templateDetail.lotteryEndTime;
+        completeObject["lotteryStartTime"] = templateDetail.lotteryStartTime;
+        completeObject["rewardImages"] = imgList;
 
-        console.log(completeObject);
         onCreateLottery(completeObject)
     };
 

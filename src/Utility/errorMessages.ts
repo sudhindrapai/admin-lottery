@@ -1,0 +1,14 @@
+export const emptyBronzeSubTickets = "bronze sub tickets should not be empty";
+export const emptyGoldSubTickets = "gold sub tickets should not be empty";
+export const emptySilveerSubTickets = "silver sub tickets should not be empty";
+export const emptyPlatinumSubTickets = "platinum sub tickets should not be empty";
+export const emptyBronzeTicketPrice = "bronze ticket price should not be empty";
+export const emptyGoldTicketPrice = "gold ticket price should not be empty";
+export const emptySilverTicketPrice = "silver ticket price should not be empty";
+export const emptyPlatinumTicketPrice = "platinum ticket price should not be empty";
+export const emptyGiftName = "Reward name should not be empty";
+export const emptyRewardImgs = "Reward Images should not be empty";
+export const emptyRewardAmount = "empty or invalid reward amount";
+export const emptyVisibility = "Please select lottery visibility";
+export const emptyStartDate = "lottery start date should not be empty";
+export const emptyEndDate = "lottery end date should not be empty";

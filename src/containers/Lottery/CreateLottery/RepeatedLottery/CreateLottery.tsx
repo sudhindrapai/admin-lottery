@@ -13,6 +13,10 @@ import {getSettingsData} from '../../../../features/settingsSlice'
 import {useDispatch, useSelector} from 'react-redux';
 import { RootState } from '../../../../app/Store';
 
+import {validateCreateRepeatLottery} from '../../../../Utility/formValidation';
+import {NotificationType} from '../../../../Utility/InterFacesAndEnum';
+import {toggleNotificationVisibility} from '../../../../features/networkNotification';
+
 const CreateLottery:FC = () => {
     const dispatch = useDispatch();
 
@@ -24,7 +28,16 @@ const CreateLottery:FC = () => {
     const [lotteryTicketDetails, setTicketDetails] = useState<any>([])
 
     const onCreate = (obj:any) => {
-        dispatch(createLottery(obj))
+        let validatedObj = validateCreateRepeatLottery(obj);
+        if (validatedObj.status) {
+            dispatch(createLottery(obj))
+        } else {
+            dispatch(toggleNotificationVisibility({
+                isVisible: true,
+                status: NotificationType.error,
+                message: validatedObj.message
+            }));
+        }
     }
 
     useEffect(() => {

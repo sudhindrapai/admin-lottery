@@ -1,7 +1,8 @@
 import {FC, useMemo, useRef} from 'react';
-import {Wrapper, Container, TitleWrapper, Title, AddBtn, EmptyImgSection, Image, ImageWrapper} from './StyledImageUploader';
+import {Wrapper, Container, TitleWrapper, Title, AddBtn, EmptyImgSection,
+     Image, ImageWrapper, IndImgWrapper, DeleteIcon} from './StyledImageUploader';
 import {RootState} from '../../app/Store';
-import {uploadImage} from '../../features/imageUploaderSlice';
+import {uploadImage,deleteImage} from '../../features/imageUploaderSlice';
 import {useSelector, useDispatch} from 'react-redux';
 
 const ImageUploader:FC = () => {
@@ -13,23 +14,40 @@ const ImageUploader:FC = () => {
     const images = useSelector((state:RootState) => state.images.images);
 
 
+    const deleteImg = (url:string) => {
+        dispatch(deleteImage({
+            imgUrl:url
+        }));
+    }
+
     let imagesView = useMemo(() => {
-        if (images.length === 0) {
+        if (images !== null && images.length === 0) {
             return <EmptyImgSection>
                 <div>No Images Found</div>
             </EmptyImgSection>
         } else{
-            
+            <EmptyImgSection>
+                <div>No Images Found</div>
+            </EmptyImgSection>
         }
     },[images]);
 
-    // let imageList = <></>;
+    let imageList:any = <></>;
 
-    // if (images.length > 0) {
-        let imageList = images.map((imgUrl:string) =>{
-            return <Image src={imgUrl} alt={"Image"} />
+    if (images !== null && images.length > 0) {
+         imageList = images !== null && images.map((imgUrl:string) =>{
+            return <IndImgWrapper>
+                <DeleteIcon onClick={() => {deleteImg(imgUrl)}}>
+                    D
+                </DeleteIcon>
+                <Image src={imgUrl} alt={"Image"} />
+                </IndImgWrapper>
         });
-    // }
+    } else {
+        imageList = <EmptyImgSection>
+        <div>No Images Found</div>
+    </EmptyImgSection>
+    }
 
 
     const triggerImageUploader = () => {
@@ -41,6 +59,7 @@ const ImageUploader:FC = () => {
     }
 
     const uploadFile = (files: any) => {
+        console.log(files,"[uploadFile]")
         const formData = new FormData();
         formData.append("file", files);
         formData.append('documentName',files.name);
@@ -63,7 +82,7 @@ const ImageUploader:FC = () => {
                     Add images
                 </AddBtn>
             </TitleWrapper>
-            {images.length === 0 ? imagesView: <ImageWrapper>{imageList}</ImageWrapper>}
+            {images !== null && images.length === 0 ? imagesView: <ImageWrapper>{imageList}</ImageWrapper>}
         </Container>
     </Wrapper>
 };

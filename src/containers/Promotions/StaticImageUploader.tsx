@@ -4,7 +4,7 @@ import {transformGMTToUTC} from '../../Utility/Utility'
 import StaticForm from './staticImgUploaderForm'
 
 import {StaticBannerSectionWrapper, DesktopBannerSection,
-     BannerSectionTitle, AddImageBtn, BannerSectionSubtitle, StaticFormSection} from './StyledPromotions';
+     BannerSectionTitle, AddImageBtn, BannerSectionSubtitle, StaticFormSection, Img} from './StyledPromotions';
 
 import {RootState} from '../../app/Store'
 import {uploadPromotionImages} from '../../features/promotions';
@@ -43,16 +43,19 @@ const StaticImageUploader:FC<StaticImgProps> = ({details, bannerRedirectionUrl})
     const [mobileImgUrl1, setMobileImgUrl1] = useState("");
     const [id, setId] = useState(0);
 
+    // const dummyImgUrl = "https://dummyimage.com/1920x450/000/fff";
+
     useEffect(() => {
+        console.log(details,"details")
         if (details && Object.keys(details).length > 0) {
             setBannerUrl(details.promotionBannerUrl);
             setStartDate(details.promotionStartDate);
             setEnaDate(details.promotionEndDate);
-            setDesktopImgUrl1(details.promotionWebBannerImages ? details.promotionWebBannerImages : "");
-            setMobileImgUrl1(details.promotionMobileBannerImages ? details.promotionMobileBannerImages : "");
+            setDesktopImgUrl1(details.promotionWebBannerImages ? details.promotionWebBannerImages : "https://dummyimage.com/1920x450/000/fff");
+            setMobileImgUrl1(details.promotionMobileBannerImages ? details.promotionMobileBannerImages : "https://dummyimage.com/1920x450/000/fff");
             setId(details.promotionId ? details.promotionId : 0)
         }
-    },[details]);
+    },[]);
 
     const [isForDesktopImg, setDesktopImgStatus] = useState(false);
 
@@ -61,7 +64,7 @@ const StaticImageUploader:FC<StaticImgProps> = ({details, bannerRedirectionUrl})
     const desktopImgName = useSelector((state:RootState) => state.promotions.desktopFileName);
     const mobileImgName = useSelector((state:RootState) => state.promotions.mobileFileName)
 
-    const inputRef = useRef<HTMLInputElement>(null);
+    const inputRef = useRef<HTMLInputElement | null>(null);
 
     const triggerImageUploader = (isforDektop:boolean) => {
         setDesktopImgStatus(isforDektop);
@@ -93,7 +96,8 @@ const StaticImageUploader:FC<StaticImgProps> = ({details, bannerRedirectionUrl})
 
 
     let createStaticImgObj = () => {
-        let mobileBannerUrl = mobileImgName.length > 0 ? mobileImgName : desktopImgName
+        let mobileBannerUrl = mobileImgName.length > 0 ? mobileImgName : desktopImgName;
+        // console.log(details,"details")
         let requestObj = {};
         requestObj["promotionId"] = details.promotionId;
         requestObj["promotionPage"] = details.promotionPage;
@@ -136,7 +140,7 @@ const StaticImageUploader:FC<StaticImgProps> = ({details, bannerRedirectionUrl})
                 Add image
             </AddImageBtn>
         </DesktopBannerSection>
-        {desktopImgUrl1 && <img src={desktopImgUrl1} />}
+        {desktopImgUrl1 && <Img src={desktopImgUrl1} alt={"desktop"} />}
         <DesktopBannerSection>
             <BannerSectionTitle>
             Desktop Banner (1920x450)
@@ -148,7 +152,7 @@ const StaticImageUploader:FC<StaticImgProps> = ({details, bannerRedirectionUrl})
                 Add image
             </AddImageBtn>
         </DesktopBannerSection>
-        {mobileImgUrl1 && <img src={mobileImgUrl1} />}
+        {mobileImgUrl1 && <Img src={mobileImgUrl1} alt={"mobile view"} />}
         <StaticFormSection>
             {/* <StaticForm bannerRedirectionUrl={bannerRedirectionUrl} details={details} /> */}
         </StaticFormSection>

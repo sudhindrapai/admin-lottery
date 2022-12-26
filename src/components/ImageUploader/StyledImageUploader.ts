@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import {Delete} from '@styled-icons/fluentui-system-regular/Delete'
 
 export const Wrapper = styled.div`
 width: 100%;
@@ -77,4 +78,17 @@ flex-flow: row nowrap;
 align-items: flex-start;
 justify-content: flex-start;
 gap: 15px;
+`;
+
+export const IndImgWrapper = styled.div`
+position: relative;
+`;
+
+export const DeleteIcon = styled(Delete)`
+height:20px;
+width: 20px;
+position: absolute;
+top: 0;
+right: 0;
+cursor:pointer;
 `;

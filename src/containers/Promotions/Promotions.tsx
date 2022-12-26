@@ -76,6 +76,7 @@ const Promotions = () => {
            if (menuObj.id === "homme") {
             view = <HomeSection bannerRedirectionUrl={homePageRedirectionUrl} details={homePromotionList} />;
            } else if (menuObj.id === "lottery") {
+            //    console.log(lotteryPromotionList,"lotteryPromotionList")
                view = <Lottery lotteryPromotionList={lotteryPromotionList} />
            } else {
             view = <Auction auctionPromotionList={auctionPromotionList} />

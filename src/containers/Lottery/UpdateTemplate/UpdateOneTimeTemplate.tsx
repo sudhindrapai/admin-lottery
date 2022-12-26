@@ -7,6 +7,10 @@ import {useSelector, useDispatch} from 'react-redux';
 import { RootState } from '../../../app/Store';
 import ImageUploader from '../../../components/ImageUploader/ImageUploader';
 
+import {validateCreateOnetimeLottery} from '../../../Utility/formValidation';
+import {NotificationType} from '../../../Utility/InterFacesAndEnum';
+import {toggleNotificationVisibility} from '../../../features/networkNotification';
+
 const UpdateOneTimeTemplate = () => {
 
     const templateObj = useSelector((state: RootState) => state.updateTemplate.templateObj);
@@ -25,12 +29,21 @@ const UpdateOneTimeTemplate = () => {
         }
     },[]);
 
-    const updateLottery = (updateObj) => {
-        dispatch(updateLottery(updateObj));
+    const updateLotteryData = (updateObj:any) => {
+        let validatedObj = validateCreateOnetimeLottery(updateObj);
+        if (validatedObj.status) {
+            dispatch(updateLottery(updateObj));
+        } else {
+            dispatch(toggleNotificationVisibility({
+                isVisible: true,
+                status: NotificationType.error,
+                message: validatedObj.message
+            }));
+        }
     }
 
     let view  = Object.keys(templateObj).length > 0 ? 
-    <UpdateTemplateForm onCreateLottery={updateLottery} onCancel={() => {}} templateDetail={templateObj} /> :
+    <UpdateTemplateForm onCreateLottery={updateLotteryData} onCancel={() => {}} templateDetail={templateObj} /> :
      <div>Please wait</div>
 
     return view;
