@@ -21,7 +21,7 @@ const ImageUploader:FC = () => {
     }
 
     let imagesView = useMemo(() => {
-        if (images !== null && images.length === 0) {
+        if (images !== undefined && images !== null && images.length === 0) {
             return <EmptyImgSection>
                 <div>No Images Found</div>
             </EmptyImgSection>
@@ -34,7 +34,7 @@ const ImageUploader:FC = () => {
 
     let imageList:any = <></>;
 
-    if (images !== null && images.length > 0) {
+    if (images !== undefined && images !== null && images.length > 0) {
          imageList = images !== null && images.map((imgUrl:string) =>{
             return <IndImgWrapper>
                 <DeleteIcon onClick={() => {deleteImg(imgUrl)}}>
@@ -59,7 +59,6 @@ const ImageUploader:FC = () => {
     }
 
     const uploadFile = (files: any) => {
-        console.log(files,"[uploadFile]")
         const formData = new FormData();
         formData.append("file", files);
         formData.append('documentName',files.name);
@@ -82,7 +81,7 @@ const ImageUploader:FC = () => {
                     Add images
                 </AddBtn>
             </TitleWrapper>
-            {images !== null && images.length === 0 ? imagesView: <ImageWrapper>{imageList}</ImageWrapper>}
+            {images !== undefined && images !== null && images.length === 0 ? imagesView: <ImageWrapper>{imageList}</ImageWrapper>}
         </Container>
     </Wrapper>
 };

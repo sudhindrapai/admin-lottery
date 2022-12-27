@@ -15,14 +15,12 @@ const ViewLottery:FC = () => {
     const dispatch = useDispatch();
     const paramsObj = useParams();
     const gameDetail = useSelector((state:RootState) => state.lotteryList.lotteryGameDetail)
-    // const
+    
     useEffect(() => {
-        // console.log(location)
         dispatch(getLotteryGameDetail(paramsObj?.lotteryId? paramsObj.lotteryId : ""))
     },[]);
 
     const updateGame = (requestObj) => {
-        console.log(gameDetail,"updateGame");
         dispatch(updateLottery(requestObj));
     };
 

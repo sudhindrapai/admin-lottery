@@ -457,8 +457,6 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
 
     const dispatch = useDispatch();
 
-    console.log(templateDetail,"CreateLotteryForm")
-
     const uploadImageRef = useRef<HTMLInputElement>(null);
 
     const [lotteryName, setLotteryName] = useState<CreateLottery>(LotteryNameForm)
@@ -472,7 +470,7 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
 
 
     const imgList = useSelector((state:RootState) => state.images.images);
-    // let imgList = []
+    
     useEffect(() => {
 
         if (Object.keys(templateDetail).length > 0) {
@@ -494,7 +492,6 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
             let lotteryEndTime = templateDetail.lotteryEndTime;
             let images = templateDetail.rewardImages ? [] : templateDetail.rewardImages
 
-            console.log(images,"imgListimgList")
             dispatch(setUpdateImgDetails({
                 images:images
             }))
@@ -511,7 +508,6 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
                         value: lotteryObj.id === "rewardType" ? ticketType : lotteryObj.id === "lotterySettingVisibility"? Visibility : lotteryObj.value
                     }
                 });
-                console.log(updatedForm,'updatedForm')
                 setLotterySettingForm({
                     ...lotterySettingForm,
                     form:updatedForm

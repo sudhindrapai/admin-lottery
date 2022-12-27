@@ -2,11 +2,15 @@ import {FC,useState, useRef, useEffect} from 'react';
 import Button from '../../../../components/UI/Button/Button';
 import FormBuilder from '../../../FormBuilder/FormBuilder';
 import ImageUploader from '../../../../components/ImageUploader/ImageUploader';
-import {updateFormInputState, validateForm, updateFormSelectState, updateFormTimeState} from '../../../../Utility/Utility';
+import {updateFormInputState, validateForm, updateFormSelectState,updateFormDate,transformGMTToUTC, updateFormTimeState} from '../../../../Utility/Utility';
 import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement} from '../../../../Utility/InterFacesAndEnum';
 import {WeekNames, FormSectionContainer,LotteryTypeTitle,LotteryTypeValue,
     CreateLotteryContainer, SectionTitle, FormElementTitle, 
     CreateLotteryFirstSection, CreateLotterySecondSection, TwoFormSection, FormView, Action, UploadImageBtnSection} from '../CreateLottery/RepeatedLottery/StyledCreateLottery';
+
+import { RootState } from '../../../../app/Store';
+import {useSelector, useDispatch} from 'react-redux';
+import {setUpdateImgDetails} from '../../../../features/imageUploaderSlice';
 
 interface CreateLottery {
     form: FormElement[],
@@ -282,7 +286,7 @@ const lotteryMoneyForm: CreateLottery = {
         {
             elementType:FormElementType.input,
             value:"",
-            id:"lotteryPriceMoney",
+            id:"rewardAmount",
             isRequired:true,
             fullWidth: true,
             isCustomValidationRequred: true,
@@ -328,9 +332,9 @@ const scheduleDaysForm: CreateLottery = {
             disabled: false
         },
         {
-            elementType:FormElementType.timePicker,
+            elementType:FormElementType.datePicker,
             value:"",
-            id:"startTime",
+            id:"lotteryStartTime",
             isRequired:true,
             fullWidth: true,
             isCustomValidationRequred: false,
@@ -349,9 +353,9 @@ const scheduleDaysForm: CreateLottery = {
             disabled: false
         },
         {
-            elementType:FormElementType.timePicker,
+            elementType:FormElementType.datePicker,
             value:"",
-            id:"endTime",
+            id:"lotteryEndTime",
             isRequired:true,
             fullWidth: true,
             isCustomValidationRequred: false,
@@ -365,6 +369,48 @@ const scheduleDaysForm: CreateLottery = {
             radioGroupValues:[],
             isPasswordHidden:true,
             dropdownValues:[""],
+            selectedTime: null,
+            slectedDate: null,
+            disabled: false
+        },
+        {
+            elementType:FormElementType.select,
+            value:"Sunday",
+            id:"lotteryStartDay",
+            isRequired:true,
+            fullWidth: true,
+            isCustomValidationRequred: true,
+            inputVariant: InputVariant.outlined,
+            inputType: InputTypes.number,
+            customValidationType: customValidationType.numberValidation,
+            isValidInput:false,
+            isTouched:false,
+            errorMessage:"",
+            label:"Lottery Start Day",
+            radioGroupValues:[],
+            isPasswordHidden:true,
+            dropdownValues:["Sunday","Monday","Tuesday","Wednesday","Thrusday","Friday","Saturday"],
+            selectedTime: null,
+            slectedDate: null,
+            disabled: false
+        },
+        {
+            elementType:FormElementType.select,
+            value:"Sunday",
+            id:"lotteryEndDay",
+            isRequired:true,
+            fullWidth: true,
+            isCustomValidationRequred: true,
+            inputVariant: InputVariant.outlined,
+            inputType: InputTypes.number,
+            customValidationType: customValidationType.numberValidation,
+            isValidInput:false,
+            isTouched:false,
+            errorMessage:"",
+            label:"Lottery End Day",
+            radioGroupValues:[],
+            isPasswordHidden:true,
+            dropdownValues:["Sunday","Monday","Tuesday","Wednesday","Thrusday","Friday","Saturday"],
             selectedTime: null,
             slectedDate: null,
             disabled: false
@@ -479,6 +525,10 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
 
     const uploadImageRef = useRef<HTMLInputElement>(null);
 
+    const dispatch = useDispatch();
+
+    const imgList = useSelector((state:RootState) => state.images.images);
+
     const [lotteryName, setLotteryName] = useState<CreateLottery>(LotteryNameForm);
     const [lotterySettingForm, setLotterySettingForm] = useState<CreateLottery>(lotterySettingsForm);
     const [ticketsType, setTicketType] = useState<CreateLottery>(ticketTypeForm);
@@ -515,7 +565,13 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
             let giftName = templateDetail.rewardGiftName;
             let lotteryStartTime = templateDetail.lotteryStartTime;
             let lotteryEndTime = templateDetail.lotteryEndTime;
-            let images = templateDetail.rewardImages;
+            let lotteryStartDay = templateDetail.lotteryStartDay;
+            let lotteryEndDay = templateDetail.lotteryEndDay;
+            let images = templateDetail.rewardImages ? [] : templateDetail.rewardImages
+
+            dispatch(setUpdateImgDetails({
+                images:images
+            }))
 
             if (ticketType === "Money Lottery") {
                 setLotteryType(1);
@@ -547,10 +603,20 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
                 });
 
                 let updatedScheduleForm = scheduleFormValues.form.map((scheduleObj) => {
+                    let updatedValue = scheduleObj.value;
+                    if (scheduleObj.id === "lotteryStartDay") {
+                        updatedValue = lotteryStartDay
+                    } else if (scheduleObj.id === "lotteryEndDay") {
+                        updatedValue = lotteryEndDay
+                    } else if (scheduleObj.id === "lotteryEndTime") {
+                        updatedValue = lotteryEndTime;
+                    } else if (scheduleObj.id === "lotteryStartTime") {
+                        updatedValue = lotteryStartTime
+                    }
+
                     return{
                         ...scheduleObj,
-                        slectedDate: scheduleObj.id === "lotteryStartDate" ? 
-                        startDate : scheduleObj.id === "lotteryEndDate" ? endDate : scheduleObj.slectedDate
+                        value:updatedValue
                     }
                 });
                 setScheduleFormValues({
@@ -598,7 +664,8 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
                 setLotteryName({
                     ...lotteryName,
                     form:updatedLotteryNameForm
-                })
+                });
+
         }
     },[]);
 
@@ -708,14 +775,15 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
     }
 
     const handleScheduleDaysFormTimeInput = (date: Date, name: string) => {
-        let updatedArray = updateFormTimeState(date, name, scheduleFormValues.form);
+        let updatedArray = updateFormDate(date, name, scheduleFormValues.form);
         setScheduleFormValues({
             ...scheduleFormValues,
             form:updatedArray
         });
-        console.log("handleScheduleDaysFormTimeInput",date,name)
     };
     
+    console.log(scheduleFormValues.form,"[]")
+
     let scheduleDaysFormView = 
     <FormBuilder formElements={scheduleFormValues.form} 
     onInputChange = {handleLotteryTicketPriceInputChange} 
@@ -758,21 +826,44 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
         };
 
         let completeFormArray = [
-            ...LotteryNameForm.form,
+            ...lotteryName.form,
             ...lotterySettingForm.form,
             ...ticketsType.form,
             ...subTicket.form,
+            ...lotteryMoneyFormValues.form,
+            ...scheduleFormValues.form
         ];
 
         for (let formObj of completeFormArray) {
             completeObject[formObj.id] = formObj.value;
         }
 
+        for (let formObj of completeFormArray) {
+            // if (formObj.id === "lotteryStartDate" || formObj.id === "lotteryEndDate") {
+            //     completeObject[formObj.id] = new Date(formObj.value);
+            // } else {
+            //     completeObject[formObj.id] = formObj.value;
+            // }
+
+            if (formObj.id === "lotteryEndTime" || formObj.id === "lotteryStartTime") {
+                if (completeObject[formObj.id] === "") {
+                    completeObject[formObj.id] = "";
+                } else {
+                    completeObject[formObj.id] = new Date(transformGMTToUTC(completeObject[formObj.id]));
+                }
+            }
+        
+            if (formObj.id === "rewardType") {
+                completeObject[formObj.id] = completeObject[formObj.id] === "Money Lottery" ? "M" : "G"
+            }
+            
+        }
+
         completeObject["rewardGiftDesc"] = "";
         completeObject["isRepeat"] = true;
         completeObject["isMemberLottery"] = false;
-        completeObject["lotteryStartDay"] = "monday";
-        completeObject["lotteryEndDay"] = "friday";
+        completeObject["lotteryId"] = templateDetail.lotteryId;
+        completeObject["rewardImages"] = imgList;
         
         onCreateLottery(completeObject);
     };
@@ -811,17 +902,7 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
                 </FormSectionContainer>
             </form>}
             {selectedLotteryType === 2 && <form>
-            {/* <FormSectionContainer>
-                <SectionTitle>
-                Images
-                </SectionTitle>
-                <UploadImageBtnSection>
-                    <input type={"file"} hidden={true} onChange={(event) => {uplodImage(event)}} ref={uploadImageRef} />
-                    <div title={"Add images"} 
-                    onClick={triggerUploadImage} />
-                </UploadImageBtnSection> */}
                 <ImageUploader />
-                {/* </FormSectionContainer> */}
             </form>}
             {selectedLotteryType != 3 && <form name={"Customer Registration"} html-for={"customer resgistraion"} autoComplete="off">
                 <FormSectionContainer>
@@ -835,7 +916,7 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
             <Button title={"Cancel"} 
             btnSize ={ButtonSize.md} 
             btnVariant={ButtonVariant.primaryFilled} clicked={redirectToLotteryList} />
-            <Button title={"Create"} 
+            <Button title={"Update"} 
             btnSize ={ButtonSize.md} 
             btnVariant={ButtonVariant.primaryFilled} clicked={createTicketHandler} />
         </Action>

@@ -2,10 +2,11 @@ import {FC, useEffect} from 'react';
 import UpdateTemplateForm from '../../Forms/Lottery/UpdateLotteryTemplate/UpdateOneTimeLotteryTemplate';
 import {useParams} from 'react-router-dom';
 import {getUpdateTemplateDetail, setUpdateTemplate} from '../../../features/updateTemplateSlice';
-import {updateLottery} from '../../../features/lotteryListSlice'
+import {updateLottery} from '../../../features/lotteryListSlice';
 import {useSelector, useDispatch} from 'react-redux';
 import { RootState } from '../../../app/Store';
-import ImageUploader from '../../../components/ImageUploader/ImageUploader';
+import ViewHeader from '../../../components/ViewHeader/ViewHeader';
+import {adminRouts} from '../../../routs';
 
 import {validateCreateOnetimeLottery} from '../../../Utility/formValidation';
 import {NotificationType} from '../../../Utility/InterFacesAndEnum';
@@ -43,7 +44,9 @@ const UpdateOneTimeTemplate = () => {
     }
 
     let view  = Object.keys(templateObj).length > 0 ? 
-    <UpdateTemplateForm onCreateLottery={updateLotteryData} onCancel={() => {}} templateDetail={templateObj} /> :
+    <>
+    <ViewHeader title={`Update lottery`} isBackButtonRequired={true} backButtonRedirectionUrl={adminRouts.gamesList} />
+    <UpdateTemplateForm onCreateLottery={updateLotteryData} onCancel={() => {}} templateDetail={templateObj} /> </>:
      <div>Please wait</div>
 
     return view;

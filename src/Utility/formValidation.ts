@@ -176,7 +176,7 @@ export const validateCreateRepeatLottery = (obj:any) => {
             statusObj["status"] = false;
             statusObj["message"] = errorMessages.emptyGiftName;
         }
-        if (statusObj.status && giftImgs.length === 0) {
+        if (statusObj.status && giftImgs === null || giftImgs.length === 0) {
             statusObj["status"] = false;
             statusObj["message"] = errorMessages.emptyRewardImgs;
         }
