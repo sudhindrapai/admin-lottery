@@ -7,7 +7,7 @@ import FormBuilder from '../../FormBuilder/FormBuilder';
 import Button from '../../../components/UI/Button/Button';
 
 import {updateFormInputState, validateForm, updateFormSelectState, updateFormTimeState, updateFormDate} from '../../../Utility/Utility';
-import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement} from '../../../Utility/InterFacesAndEnum';
+import {FormElementType, customValidationType, InputVariant, InputTypes, NotificationType ,FormElement} from '../../../Utility/InterFacesAndEnum';
 
 import {adminRouts} from '../../../routs';
 import {createAuction, toggleAuctionCreation} from '../../../features/auctionList';
@@ -19,6 +19,9 @@ import {useNavigate} from 'react-router-dom';
 import {CreateLotteryFirstSection, CreateLotterySecondSection} from '../../Forms/Lottery/CreateLottery/RepeatedLottery/StyledCreateLottery';
 import {HeaderView,FormContainer, FormWrapper, SectionTitle, FormBody, TwoSections, ActionBtn, CheckboxContainer, CheckboxDesc} from './StyledCreateAuction';
 import {SelectedCheckbox, EmptyCheckbox} from './StyledCreateAuction';
+
+import {validateCreateAuction} from '../../../Utility/formValidation';
+import {toggleNotificationVisibility} from '../../../features/networkNotification';
 
 interface FormState {
     form: FormElement[],
@@ -507,7 +510,7 @@ const subTicketDetails: FormState = {
 const productDetails: FormState = {
     form:[{
         elementType:FormElementType.select,
-            value:"select",
+            value:"",
             id:"productType",
             isRequired:true,
             fullWidth: true,
@@ -521,13 +524,13 @@ const productDetails: FormState = {
             label:"Type",
             radioGroupValues:[],
             isPasswordHidden:true,
-            dropdownValues:["select", "Vehicle"],
+            dropdownValues:["", "vehicle"],
             selectedTime: null,
             slectedDate: null,
             disabled: false
     }, 
     {elementType:FormElementType.select,
-        value:"select",
+        value:"",
         id:"productCategory",
         isRequired:true,
         fullWidth: true,
@@ -541,7 +544,7 @@ const productDetails: FormState = {
         label:"Category",
         radioGroupValues:[],
         isPasswordHidden:true,
-        dropdownValues:["select", "car"],
+        dropdownValues:["", "car"],
         selectedTime: null,
         slectedDate: null,
         disabled: false
@@ -742,11 +745,27 @@ const CreateAuction:FC = () => {
         requestObj[formElement.id] = formElement.value
     }
 
-    requestObj["auctionStartDate"] = transformGMTToUTC(requestObj.auctionStartDate);
-    requestObj["auctionEndDate"] = transformGMTToUTC(requestObj.auctionEndDate);
-    requestObj["isMemberAuction"] = isForGoldMembers;
+    if (requestObj.auctionStartDate.length > 0 && requestObj.auctionEndDate.length > 0) {
+        requestObj["auctionStartDate"] = transformGMTToUTC(requestObj.auctionStartDate);
+        requestObj["auctionEndDate"] = transformGMTToUTC(requestObj.auctionEndDate);
+        requestObj["isMemberAuction"] = isForGoldMembers;
+    } else {
+        requestObj["auctionStartDate"] = "";
+        requestObj["auctionEndDate"] = "";
+        requestObj["isMemberAuction"] = isForGoldMembers;
+    }
 
-    dispatch(createAuction(requestObj));
+    let validatedObj = validateCreateAuction(requestObj);
+
+    if (validatedObj.status) {
+        dispatch(createAuction(requestObj));
+    } else {
+        dispatch(toggleNotificationVisibility({
+            isVisible: true,
+            status: NotificationType.error,
+            message: validatedObj.message
+        }));
+    }
 
     };
 

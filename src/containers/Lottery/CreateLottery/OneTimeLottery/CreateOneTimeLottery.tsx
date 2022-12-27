@@ -48,7 +48,6 @@ const CreateOneTimeLottery:FC = () => {
             let lotteryTicketDetails = ticketDetails.filter((ticketObj) => {
                 return ticketObj.settingFor === "LOTTERY"
             });
-            console.log(lotteryTicketDetails,"lotteryTicketDetails")
             setTicketDetails(lotteryTicketDetails);
         }
     },[ticketDetails]);

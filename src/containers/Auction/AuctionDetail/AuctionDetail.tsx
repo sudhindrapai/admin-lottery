@@ -9,7 +9,7 @@ import FormBuilder from '../../FormBuilder/FormBuilder';
 import Button from '../../../components/UI/Button/Button';
 
 import {updateFormInputState, validateForm, updateFormSelectState, updateFormTimeState, updateFormDate} from '../../../Utility/Utility';
-import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement} from '../../../Utility/InterFacesAndEnum';
+import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement,NotificationType} from '../../../Utility/InterFacesAndEnum';
 
 import {adminRouts} from '../../../routs';
 import {getAuctionDetailById, deleteAuction, toggleAuctionDeletionState,updateAuction} from '../../../features/auctionList';
@@ -21,6 +21,9 @@ import {HeaderView,FormContainer, FormWrapper, FormBody, TwoSections, ActionBtn}
 import {StatusContainer, StatusBody, StatusTitle,SectionTitle, Value, TwoSection, CheckboxContainer, CheckboxDesc, Table, EmptyTableBody} from './StyledAuctionDetail';
 import { RootState } from '../../../app/Store';
 import {SelectedCheckbox, EmptyCheckbox} from './StyledAuctionDetail';
+
+import {validateCreateAuction} from '../../../Utility/formValidation';
+import {toggleNotificationVisibility} from '../../../features/networkNotification';
 
 class TableHeader{
     constructor(public label:string, public isSortRequired: boolean, public isAscSorted: boolean, public isDscSorted:boolean, public id: string){}
@@ -529,7 +532,7 @@ const subTicketDetails: FormState = {
 const productDetails: FormState = {
     form:[{
         elementType:FormElementType.select,
-            value:"select",
+            value:"",
             id:"productType",
             isRequired:true,
             fullWidth: true,
@@ -543,13 +546,13 @@ const productDetails: FormState = {
             label:"Type",
             radioGroupValues:[],
             isPasswordHidden:true,
-            dropdownValues:["select", "Vehicle"],
+            dropdownValues:["", "vehicle"],
             selectedTime: null,
             slectedDate: null,
             disabled: false
     }, 
     {elementType:FormElementType.select,
-        value:"select",
+        value:"",
         id:"productCategory",
         isRequired:true,
         fullWidth: true,
@@ -563,7 +566,7 @@ const productDetails: FormState = {
         label:"Category",
         radioGroupValues:[],
         isPasswordHidden:true,
-        dropdownValues:["select", "car"],
+        dropdownValues:["", "car"],
         selectedTime: null,
         slectedDate: null,
         disabled: false
@@ -796,7 +799,17 @@ const CreateAuction:FC = () => {
     requestObj["isMemberAuction"] = false;
     requestObj["auctionType"] = detailResponse.auctionType;
     requestObj["auctionId"] = detailResponse.auctionId
-    dispatch(updateAuction(requestObj));
+
+    let validatedObj = validateCreateAuction(requestObj);
+    if (validatedObj.status) {
+        dispatch(updateAuction(requestObj));
+    } else {
+        dispatch(toggleNotificationVisibility({
+            isVisible: true,
+            status: NotificationType.error,
+            message: validatedObj.message
+        }));
+    }
     };
 
     return <Fragment>

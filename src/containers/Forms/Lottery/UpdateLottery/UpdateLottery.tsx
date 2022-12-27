@@ -580,9 +580,6 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
             ...scheduleFormValues,
             form:updatedArray
         });
-        console.log("handleScheduleDaysFormTimeInput",date,name);
-        let selectedDate = new Date(date)
-        
     };
     
     let scheduleDaysFormView = 

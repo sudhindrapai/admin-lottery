@@ -4,7 +4,7 @@ import {adminRouts} from '../routs'
 import {FormElement, customValidationType} from './InterFacesAndEnum';
 import moment from 'moment'
 
-const emailRegex = new RegExp(/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/);
+const emailRegex = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
 const characterRegex = new RegExp(/^[a-zA-Z. ]*$/);
 const numberRegex = new RegExp(/^[0-9]*$/)
 
