@@ -23,6 +23,7 @@ background-color: #ffffff;
 box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.12);
 border-radius: 8px;
 margin-top: 24px;
+margin-bottom: 15px;
 `;
 
 export const SectionTitle = styled.div`
@@ -107,3 +108,5 @@ padding-left: 7px;
 font-size: 12px;
 cursor: pointer;
 `;
+
+// export const BtnWrapper

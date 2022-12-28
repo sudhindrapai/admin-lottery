@@ -6,15 +6,25 @@ interface Status {
     requestObj:any
 }
 
+const checkForNaN = (value:any) => {
+    let updatedValue = value;
+
+    if (value === undefined || value === null || isNaN(value)) {
+        updatedValue = "";
+    }
+
+    return updatedValue
+}
+
 export const validateCreateOnetimeLottery = (obj:any) => {
-    let bSubTickets = obj.bronzeSubTickets;
-    let gSubTickets = obj.goldSubTickets;
-    let pSubTickets = obj.platinumSubTickets;
-    let sSubTickets = obj.silverSubTickets;
-    let bTicketPrice = obj.bronzeTicketPrice;
-    let gTicketPrice = obj.goldTicketPrice;
-    let sTicketPrice = obj.silverTicketPrice;
-    let pTicketPrice = obj.platinumTicketPrice;
+    let bSubTickets = checkForNaN(obj.bronzeSubTickets);
+    let gSubTickets = checkForNaN(obj.goldSubTickets);
+    let pSubTickets = checkForNaN(obj.platinumSubTickets);
+    let sSubTickets = checkForNaN(obj.silverSubTickets);
+    let bTicketPrice = checkForNaN(obj.bronzeTicketPrice);
+    let gTicketPrice = checkForNaN(obj.goldTicketPrice);
+    let sTicketPrice = checkForNaN(obj.silverTicketPrice);
+    let pTicketPrice = checkForNaN(obj.platinumTicketPrice);
     let lotteryType = obj.rewardType;
     let giftName = obj.rewardGiftName;
     let giftImgs = obj.rewardImages;
@@ -105,14 +115,14 @@ export const validateCreateOnetimeLottery = (obj:any) => {
 
 export const validateCreateRepeatLottery = (obj:any) => {
 
-    let bSubTickets = obj.bronzeSubTickets;
-    let gSubTickets = obj.goldSubTickets;
-    let pSubTickets = obj.platinumSubTickets;
-    let sSubTickets = obj.silverSubTickets;
-    let bTicketPrice = obj.bronzeTicketPrice;
-    let gTicketPrice = obj.goldTicketPrice;
-    let sTicketPrice = obj.silverTicketPrice;
-    let pTicketPrice = obj.platinumTicketPrice;
+    let bSubTickets = checkForNaN(obj.bronzeSubTickets);
+    let gSubTickets = checkForNaN(obj.goldSubTickets);
+    let pSubTickets = checkForNaN(obj.platinumSubTickets);
+    let sSubTickets = checkForNaN(obj.silverSubTickets);
+    let bTicketPrice = checkForNaN(obj.bronzeTicketPrice);
+    let gTicketPrice = checkForNaN(obj.goldTicketPrice);
+    let sTicketPrice = checkForNaN(obj.silverTicketPrice);
+    let pTicketPrice = checkForNaN(obj.platinumTicketPrice);
     let lotteryType = obj.rewardType;
     let giftName = obj.rewardGiftName;
     let giftImgs = obj.rewardImages;
@@ -363,4 +373,111 @@ export const validateCreateAuction = (obj:any) => {
 
 
     return statusObj;
+}
+
+export const validateCreateNotification = (obj:any) => {
+
+    console.log(obj,"[validateCreateNotification]")
+
+
+    let scheduleDate = obj.emailScheduleDate;
+    let subject = obj.emailSubject;
+    let body = obj.emailBody;
+    let attachments = obj.emailAttachments;
+
+    let statusObj:Status = {
+        status: true,
+        message:"",
+        requestObj:obj
+    }
+
+    if (statusObj.status && scheduleDate.length === 0) {
+        statusObj["status"] = false;
+        statusObj["message"] = "schedule date should not be empty";
+    }
+
+    if (statusObj.status && subject.length === 0) {
+        statusObj["status"] = false;
+        statusObj["message"] = "email subject should not be empty";
+    }
+
+    if (statusObj.status && body.length === 0) {
+        statusObj["status"] = false;
+        statusObj["message"] = "email body should not be empty";
+    }
+
+    if (statusObj.status && attachments.length === 0) {
+        statusObj["status"] = false;
+        statusObj["message"] = "email attachment should not be empty";
+    }
+
+    return statusObj
+}
+
+export const validateSettingsTicketsDetail = (obj:any,isFromLottery:boolean) => {
+
+    let bSubTickets = checkForNaN(obj.bronzeSubTickets);
+    let gSubTickets = checkForNaN(obj.goldSubTickets);
+    let pSubTickets = checkForNaN(obj.platinumSubTickets);
+    let sSubTickets = checkForNaN(obj.silverSubTickets);
+    let bTicketPrice = checkForNaN(obj.bronzeTicketPrice);
+    let gTicketPrice = checkForNaN(obj.goldTicketPrice);
+    let sTicketPrice = checkForNaN(obj.silverTicketPrice);
+    let pTicketPrice = checkForNaN(obj.platinumTicketPrice);
+
+    let statusObj:Status = {
+        status: true,
+        message:"",
+        requestObj:obj
+    }
+
+    let prefix = isFromLottery ? "lottery":"auction";
+
+
+    const updateMessage = (message) => {
+        return `${prefix} ${message}`;
+    };
+
+    if (statusObj.status && bSubTickets.length === 0) {
+        statusObj["status"] = false;
+        statusObj["message"] = updateMessage(errorMessages.emptyBronzeSubTickets);
+    }
+
+    if (statusObj.status && gSubTickets.length === 0) {
+        statusObj["status"] = false;
+        statusObj["message"] = updateMessage(errorMessages.emptyGoldSubTickets);
+    }
+
+    if (statusObj.status && pSubTickets.length === 0) {
+        statusObj["status"] = false;
+        statusObj["message"] = updateMessage(errorMessages.emptyPlatinumSubTickets);
+    } 
+
+    if (statusObj.status && sSubTickets.length === 0) {
+        statusObj["status"] = false;
+        statusObj["message"] = updateMessage(errorMessages.emptySilveerSubTickets);
+    }
+
+    if (statusObj.status && bTicketPrice.length === 0) {
+        statusObj["status"] = false;
+        statusObj["message"] = updateMessage(errorMessages.emptyBronzeTicketPrice);
+    }
+
+    if (statusObj.status && gTicketPrice.length === 0) {
+        statusObj["status"] = false;
+        statusObj["message"] = updateMessage(errorMessages.emptyGoldTicketPrice);
+    }
+
+    if (statusObj.status && sTicketPrice.length === 0) {
+        statusObj["status"] = false;
+        statusObj["message"] = updateMessage(errorMessages.emptySilverTicketPrice);
+    }
+
+    if (statusObj.status && pTicketPrice.length === 0) {
+        statusObj["status"] = false;
+        statusObj["message"] = updateMessage(errorMessages.emptyPlatinumTicketPrice);
+    }
+
+
+    return statusObj
 }

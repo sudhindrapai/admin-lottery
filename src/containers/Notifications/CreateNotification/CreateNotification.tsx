@@ -7,7 +7,7 @@ import Button from '../../../components/UI/Button/Button';
 import RichTextEditor from '../../../components/RichTextEditor/RichTextEditor';
 
 import {updateFormInputState, validateForm, updateFormSelectState, updateFormTimeState, updateFormDate} from '../../../Utility/Utility';
-import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement} from '../../../Utility/InterFacesAndEnum';
+import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement, NotificationType} from '../../../Utility/InterFacesAndEnum';
 
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState} from '../../../app/Store';
@@ -16,10 +16,13 @@ import {getUserList} from '../../../features/Users'
 import {useNavigate} from 'react-router-dom';
 import {adminRouts} from '../../../routs'
 
+import {validateCreateNotification} from '../../../Utility/formValidation';
+import {toggleNotificationVisibility} from '../../../features/networkNotification';
+
 import {transformGMTToUTC} from '../../../Utility/Utility'
 import {Wrapper, Container, FormSection, SectionTitle,
      FormBody, RichTextEditorContainer, UserListWrapper, UserListInput,
-      UsersListWrapper, UserDetail, TagsWrapper, TagWrapper, TagName,CloseWrapper} from './StyledCreateNotification'
+      UsersListWrapper, UserDetail, TagsWrapper, TagWrapper, TagName,CloseWrapper} from './StyledCreateNotification';
 
 interface FormState {
     form: FormElement[],
@@ -192,16 +195,32 @@ const CreateEmailNotification:FC = () => {
 
         for (let elementObj of createNotification.form) {
 
-            payload[elementObj.id] = elementObj["value"]
+                payload[elementObj.id] = elementObj["value"];
+            
         }
 
-        payload["emailScheduleDate"] = transformGMTToUTC(payload.emailScheduleDate)
+        if (payload.emailScheduleDate !== "") {
+            payload["emailScheduleDate"] = transformGMTToUTC(payload.emailScheduleDate)
+        }
+        
 
         payload["emailAttachments"] = imageNames;
         payload["emailBody"] = richtextEditer;
         payload["emailIds"] = customEmailIds;
 
-        dispatch(createAndScheduleEmailNotification(payload))
+        let validatedObj = validateCreateNotification(payload);
+
+        if (validatedObj.status) {
+            dispatch(createAndScheduleEmailNotification(payload));
+        } else{
+            dispatch(toggleNotificationVisibility(
+                {
+                    isVisible: true,
+                    status: NotificationType.error,
+                    message: validatedObj.message
+                }
+            ))
+        }
     }
 
     const addUserToSelectedList = (obj:any) => {
@@ -260,11 +279,13 @@ const CreateEmailNotification:FC = () => {
                 <RichTextEditorContainer>
                 <ImageUploader />
                 </RichTextEditorContainer>
-            </FormSection>
-            <Button
+                <RichTextEditorContainer>
+                <Button
                 title={"Send or schedule email"}
             btnSize ={ButtonSize.md} 
             btnVariant={ButtonVariant.primaryFilled} clicked={createEmailNotification} />
+            </RichTextEditorContainer>
+            </FormSection>
         </Container>
     </Wrapper>
 };

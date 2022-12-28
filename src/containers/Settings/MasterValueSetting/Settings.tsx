@@ -7,11 +7,14 @@ import {RootState} from '../../../app/Store';
 import {useSelector, useDispatch} from 'react-redux';
 import {getSettingsData, updateSettingsData} from '../../../features/settingsSlice'
 
-import {updateFormInputState, validateForm, updateFormSelectState, updateFormTimeState, updateFormDate} from '../../../Utility/Utility';
-import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement} from '../../../Utility/InterFacesAndEnum';
+import {updateFormInputState} from '../../../Utility/Utility';
+import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement, NotificationType} from '../../../Utility/InterFacesAndEnum';
 
 import {Wrapper,Container,BreadCrumbSection,Section, SectionTitle, 
     SectionBody, TwoSectonView, FormBody, AuctionView} from './StyledSettings';
+
+import {validateSettingsTicketsDetail} from '../../../Utility/formValidation';
+import {toggleNotificationVisibility} from '../../../features/networkNotification';
 
 interface FormState {
     form: FormElement[],
@@ -490,34 +493,34 @@ const Settings:FC = () => {
     //  ---------- auction ticket details -----------
 
     const handleAuctionTicketDetails = (event:React.ChangeEvent <HTMLTextAreaElement | HTMLInputElement>):void => {
-        let updatedStateArray = updateFormInputState(event, ticketDetail.form);
-        setTicketDetail({
-            ...ticketDetail,
+        let updatedStateArray = updateFormInputState(event, auctionTicketDetails.form);
+        setAuctioTicketDetails({
+            ...auctionTicketDetails,
             form: updatedStateArray
         });
     }
 
-    const auctionTicketDetalView = <FormBuilder formElements={ticketDetail.form} 
+    const auctionTicketDetalView = <FormBuilder formElements={auctionTicketDetails.form} 
     onInputChange = {handleAuctionTicketDetails} 
     onSelectValueChange={() => {}} 
     onChangeDate={() => {}} onChangeTime={() => {}} />;
 
     const handleAuctionSubTicketDetails = (event:React.ChangeEvent <HTMLTextAreaElement | HTMLInputElement>):void => {
-        let updatedStateArray = updateFormInputState(event, subticketDetails.form);
-        setSubticketDetails({
-            ...subticketDetails,
+        let updatedStateArray = updateFormInputState(event, auctionSubTicketDetails.form);
+        setAuctionSubTicketDetails({
+            ...auctionSubTicketDetails,
             form: updatedStateArray
         });
     }
 
-    const auctionSubTicketDetalView = <FormBuilder formElements={subticketDetails.form} 
+    const auctionSubTicketDetalView = <FormBuilder formElements={auctionSubTicketDetails.form} 
     onInputChange = {handleAuctionSubTicketDetails} 
     onSelectValueChange={() => {}} 
     onChangeDate={() => {}} onChangeTime={() => {}} />;
 
     //  ---------- end auction ticket details -------
 
-        //  ------------- ticket details -----------
+    //  ------------- ticket details -----------
 
         const handleTicketDetails = (event:React.ChangeEvent <HTMLTextAreaElement | HTMLInputElement>):void => {
             let updatedStateArray = updateFormInputState(event, ticketDetail.form);
@@ -566,9 +569,7 @@ const Settings:FC = () => {
     // --------- end auction base price -------
 
     const updateTicketDetail = (isFromLottery:boolean) => {
-        let payload:any = {
-
-        }
+        let payload:any = {}
         let lotteryData = {};
         let auctionData = {};
         for (let settingsObj of settingsData) {
@@ -592,7 +593,18 @@ const Settings:FC = () => {
                 ...createRequestObj(auctionSubTicketDetails.form),
             }
         }
-        dispatch(updateSettingsData(payload))
+
+        let validatedObj = validateSettingsTicketsDetail(payload,isFromLottery)
+
+        if (validatedObj.status) {
+            dispatch(updateSettingsData(payload));
+        } else {
+            dispatch(toggleNotificationVisibility({
+                isVisible: true,
+                status: NotificationType.error,
+                message: validatedObj.message
+            }))
+        }
     };
 
     const createRequestObj = (elementsArray:any) => {
@@ -640,7 +652,7 @@ const Settings:FC = () => {
                 </FormBody>
                 <AuctionView>
                 <Button
-                title={"Save"}
+                title={"Save and Update"}
             btnSize ={ButtonSize.md} 
             btnVariant={ButtonVariant.primaryFilled} clicked={() => {updateTicketDetail(true)}} />
             </AuctionView>
