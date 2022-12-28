@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const Wrapper = styled.div`
 width: 100%;
 box-sizing: border-box;
-height: 97vh;
+height: 85vh;
 width: 95vw;
 display: flex;
 align-items: center;
@@ -31,4 +31,13 @@ export const LoginForm = styled.form`
 width: 100%;
 box-sizing: border-box;
 margin-bottom: 30px;
+`;
+
+export const ForgotPswd = styled.div`
+width: 100%;
+box-sizing:border-box;
+text-align: right;
+font-size: 12px;
+cursor:pointer;
+color: rgba(0,0,0,0.5);
 `;

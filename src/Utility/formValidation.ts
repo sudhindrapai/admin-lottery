@@ -377,9 +377,6 @@ export const validateCreateAuction = (obj:any) => {
 
 export const validateCreateNotification = (obj:any) => {
 
-    console.log(obj,"[validateCreateNotification]")
-
-
     let scheduleDate = obj.emailScheduleDate;
     let subject = obj.emailSubject;
     let body = obj.emailBody;
@@ -480,4 +477,30 @@ export const validateSettingsTicketsDetail = (obj:any,isFromLottery:boolean) => 
 
 
     return statusObj
+}
+
+export const validateForgotPassword = (obj:any) => {
+
+    let emailId = obj.emailId;
+
+    let statusObj:Status = {
+        status: true,
+        message:"",
+        requestObj:obj
+    }
+
+    if (statusObj.status && emailId.length === 0) {
+        statusObj["message"] = "email id should not be empty";
+        statusObj["status"] = false;
+    } 
+    if (statusObj.status && emailId.length > 0) {
+        let isValidEmail = validateEmail(emailId);
+        if (isValidEmail === false) {
+            statusObj["status"] = false;
+            statusObj["message"] = "invalid email id";
+        }
+    }
+
+    return statusObj
+
 }

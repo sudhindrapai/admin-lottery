@@ -1,19 +1,19 @@
 import {FC, useState, useEffect} from 'react';
-import {Wrapper, Container, BrandLogo,LoginForm} from './StyledLogin';
+import {Wrapper, Container, BrandLogo,LoginForm, ForgotPswd} from './StyledLogin';
 import LogoSrc from '../../assets/images/headerLogo.svg';
 
 import FormBuilder from '../FormBuilder/FormBuilder';
 import Button from '../../components/UI/Button/Button';
 
 import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement} from '../../Utility/InterFacesAndEnum';
-import {updateFormInputState, validateForm} from '../../Utility/Utility';
+import {updateFormInputState} from '../../Utility/Utility';
 
 import { RootState } from '../../app/Store';
 import {useSelector, useDispatch} from 'react-redux';
 import {createLogin, toggleLogin} from '../../features/loginSlice';
 
 import {useNavigate} from 'react-router-dom';
-import {adminRouts} from '../../routs'
+import {adminRouts} from '../../routs';
 
 interface LoginForm {
     form: FormElement[],
@@ -104,7 +104,11 @@ const Login:FC = () => {
                 isAuthenticated: true
             }));
         }
-    },[isLogedIn])
+    },[isLogedIn]);
+
+    const redirectToForgotPassword = () => {
+        navigate(adminRouts.forgotPassword);
+    };
 
     const handleInputChange = (event:React.ChangeEvent <HTMLTextAreaElement | HTMLInputElement>):void => {
         let updatedStateArray = updateFormInputState(event, loginFormState.form);
@@ -131,6 +135,9 @@ const Login:FC = () => {
             <LoginForm>
                 <FormBuilder formElements={valeu.form} onInputChange = {handleInputChange} onSelectValueChange={() => {}} 
     onChangeDate={() => {}} onChangeTime={() => {}} />
+    <ForgotPswd onClick={redirectToForgotPassword}>
+    Forgot password?
+    </ForgotPswd>
             </LoginForm>
             <Button title={"Login"} btnSize={ButtonSize.lg} btnVariant={ButtonVariant.primaryFilled} clicked={handleLogin} >
                 Login
