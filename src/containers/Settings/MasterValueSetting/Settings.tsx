@@ -673,7 +673,7 @@ const Settings:FC = () => {
                 </FormBody>
                 <AuctionView>
                 <Button
-                title={"Save"}
+                title={"Save and Update"}
             btnSize ={ButtonSize.md} 
             btnVariant={ButtonVariant.primaryFilled} clicked={() => {updateTicketDetail(false)}} />
             </AuctionView>
@@ -687,7 +687,7 @@ const Settings:FC = () => {
                 {auctionBasePriceView}
                 <AuctionView>
                 <Button
-                title={"Save"}
+                title={"Save and Update"}
             btnSize ={ButtonSize.md} 
             btnVariant={ButtonVariant.primaryFilled} clicked={() => {updateAuctionBasePriceDetail()}} />
             </AuctionView>
