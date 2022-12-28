@@ -504,3 +504,47 @@ export const validateForgotPassword = (obj:any) => {
     return statusObj
 
 }
+
+export const validateResetPassword = (obj:any) => {
+    let newPassword = obj.newPassword;
+    let confirmPassword = obj.confirmPassword;
+    let otp = obj.otp;
+
+    let statusObj:Status = {
+        status:true,
+        message:"",
+        requestObj:obj
+    }
+
+    if (statusObj.status && newPassword.length === 0) {
+        statusObj["status"] = false;
+        statusObj["message"] = "new password should not be empty";
+        statusObj["requestObj"] = obj;
+    }
+
+    if (statusObj.status && confirmPassword.length === 0) {
+        statusObj["status"] = false;
+        statusObj["message"] = "confirm password should not be empty";
+        statusObj["requestObj"] = obj;
+    }
+
+    if (statusObj.status && newPassword !== confirmPassword) {
+        statusObj["status"] = false;
+        statusObj["message"] = "new and confirm password should be same";
+        statusObj["requestObj"] = obj;
+    }
+
+    if (statusObj.status && otp.length === 0) {
+        statusObj["status"] = false;
+        statusObj["message"] = "OTP should not be empty";
+        statusObj["requestObj"] = obj;
+    }
+
+    if (statusObj.status && otp.length > 0 && otp.length < 6) {
+        statusObj["status"] = false;
+        statusObj["message"] = "Please enter complete OTP";
+        statusObj["requestObj"] = obj;
+    }
+
+    return statusObj;
+}

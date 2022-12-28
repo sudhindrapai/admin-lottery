@@ -31,6 +31,7 @@ import EmailNotificationDetail from './containers/Notifications/EmailNotificatio
 import Profile from './containers/Profile/Profile';
 import TwoFa from './containers/2FA/TwoFa';
 import ForgotPassword from './containers/ForgotPassword/ForgotPassword';
+import ResetPassword from './containers/ResetPassword/ResetPassword'
 
 let accessToken = getLocalStorage(localStorageActionType.GET_ACCESS_TOKEN);
 
@@ -63,6 +64,7 @@ const routeToGetEmailNotificationDetail = (id:number | null) => {
 export const adminRouts = {
     rootPath: "/",
     forgotPassword:"/admin/forgot-password",
+    resetPassword:"/admin/reset-password",
     dashboard: "/admin/dashboard",
     lotteryList: "/admin/lottery/list",
     createRepeatedLottery:"/admin/lottery/create/repeated-lottery",
@@ -128,6 +130,7 @@ const AppRoute:FC = () => {
         </Routes> : <Routes>
         <Route path={adminRouts.login} element={<LoginForm />} />
         <Route path={adminRouts.twoFa} element={<TwoFa />} />
+        <Route path={adminRouts.resetPassword} element={<ResetPassword />} />
             <Route path={adminRouts.forgotPassword} element={<ForgotPassword />} />
         <Route path={"*"} element={<h3>404</h3>} />
         </Routes>

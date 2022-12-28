@@ -79,7 +79,7 @@ const loginFormState:LoginForm = {
             selectedTime: null,
             slectedDate: null,
             disabled: false
-        },
+        }
     ],
     isValidForm: false
 }

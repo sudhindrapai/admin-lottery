@@ -2,7 +2,7 @@ import {FC,useState} from 'react';
 import FormBuilder from '../FormBuilder/FormBuilder';
 import Button from '../../components/UI/Button/Button';
 
-import {Wrapper,Container, Title, SubTitle, CloseIcon} from './StyledForgotPassword'
+import {Wrapper,Container, Title, SubTitle, CloseIcon} from './StyledResetPassword'
 
 import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement, NotificationType} from '../../Utility/InterFacesAndEnum';
 import {updateFormInputState} from '../../Utility/Utility';
@@ -13,10 +13,10 @@ import {useSelector, useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 import {adminRouts} from '../../routs';
 
-import {validateForgotPassword} from '../../Utility/formValidation';
+import {validateResetPassword} from '../../Utility/formValidation';
 import {toggleNotificationVisibility} from '../../features/networkNotification'
 
-interface ForgotPswdForm {
+interface ResetPswdForm {
     form: FormElement[],
     isValidForm: boolean
 }
@@ -32,27 +32,69 @@ enum ButtonVariant {
     primaryLink = "primaryLink"
 }
 
-interface ForgotPswd {
+interface ResetPswd {
     emailId: string
 }
 
 
-const forgotPasswordState:ForgotPswdForm = {
+const resetPasswordState:ResetPswdForm = {
     form:[
         {
             elementType:FormElementType.input,
             value:"",
-            id:"emailId",
+            id:"newPassword",
             isRequired:true,
             fullWidth: true,
             isCustomValidationRequred: true,
             inputVariant: InputVariant.outlined,
-            inputType: InputTypes.text,
-            customValidationType: customValidationType.emailValidation,
+            inputType: InputTypes.password,
+            customValidationType: customValidationType.null,
             isValidInput:false,
             isTouched:false,
             errorMessage:"",
-            label:"EmailId",
+            label:"New Password",
+            radioGroupValues:[],
+            isPasswordHidden:true,
+            dropdownValues:[],
+            selectedTime: null,
+            slectedDate: null,
+            disabled: false
+        },
+        {
+            elementType:FormElementType.input,
+            value:"",
+            id:"confirmPassword",
+            isRequired:true,
+            fullWidth: true,
+            isCustomValidationRequred: true,
+            inputVariant: InputVariant.outlined,
+            inputType: InputTypes.password,
+            customValidationType: customValidationType.null,
+            isValidInput:false,
+            isTouched:false,
+            errorMessage:"",
+            label:"Confirm Password",
+            radioGroupValues:[],
+            isPasswordHidden:true,
+            dropdownValues:[],
+            selectedTime: null,
+            slectedDate: null,
+            disabled: false
+        },
+        {
+            elementType:FormElementType.input,
+            value:"",
+            id:"otp",
+            isRequired:true,
+            fullWidth: true,
+            isCustomValidationRequred: true,
+            inputVariant: InputVariant.outlined,
+            inputType: InputTypes.number,
+            customValidationType: customValidationType.null,
+            isValidInput:false,
+            isTouched:false,
+            errorMessage:"",
+            label:"OTP",
             radioGroupValues:[],
             isPasswordHidden:true,
             dropdownValues:[],
@@ -64,14 +106,14 @@ const forgotPasswordState:ForgotPswdForm = {
     isValidForm: false
 }
 
-const ForgotPassword:FC = () => {
+const ResetPassword:FC = () => {
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
 
     const isLogedIn = useSelector((state:RootState) => state.login.isLoggedin);
 
-    const [value, setValue] = useState<ForgotPswdForm>(forgotPasswordState);
+    const [value, setValue] = useState<ResetPswdForm>(resetPasswordState);
 
     const handleInputChange = (event:React.ChangeEvent <HTMLTextAreaElement | HTMLInputElement>):void => {
         let updatedStateArray = updateFormInputState(event, value.form);
@@ -85,14 +127,14 @@ const ForgotPassword:FC = () => {
         navigate(adminRouts.login);
     };
 
-    const handleForgotPswd = () => {
+    const handleResetPswd = () => {
         let payload:any = {};
         let formArray = value.form;
         for (let formObj of formArray) {
             payload[formObj.id] = formObj.value;
         }
 
-        let validatedObj = validateForgotPassword(payload);
+        let validatedObj = validateResetPassword(payload);
         if (validatedObj.status) {
             // send API request here
         } else {
@@ -108,17 +150,17 @@ const ForgotPassword:FC = () => {
         <Container>
             <CloseIcon onClick={redirectToLogin} />
             <Title>
-                Forgot Password
+                Reset Password
             </Title>
             <SubTitle>
-                Please enter your registred email id and we will send OTP to validate your Authenticity
+                Your Previous Password will be rest to new password
             </SubTitle>
         <FormBuilder formElements={value.form} onInputChange = {handleInputChange} onSelectValueChange={() => {}} 
     onChangeDate={() => {}} onChangeTime={() => {}} />
-            <Button title={"Send OTP"} btnSize={ButtonSize.lg} btnVariant={ButtonVariant.primaryFilled} clicked={handleForgotPswd} />
+            <Button title={"Update password"} btnSize={ButtonSize.lg} btnVariant={ButtonVariant.primaryFilled} clicked={handleResetPswd} />
             </Container>
             </Wrapper>
 
 };
 
-export default ForgotPassword
+export default ResetPassword
