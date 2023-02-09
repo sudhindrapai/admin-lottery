@@ -88,13 +88,14 @@ const ImageUploaderSlice = createSlice({
             return {
                 ...state,
                 images: updatedArray,
-                imageNames: action.payload.names
+                imageNames: [...state.imageNames,...action.payload.names]
             }
         },
         setUpdateImgDetails:(state,action:PayloadAction<any>)=>{
             return{
                 ...state,
-                images:action.payload.images
+                images:action.payload.images,
+                imageNames:action.payload.imageNames
             }
         },
         deleteImage:(state,action:PayloadAction<{imgUrl:string}>) => {

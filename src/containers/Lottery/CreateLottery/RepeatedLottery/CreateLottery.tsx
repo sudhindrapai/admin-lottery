@@ -69,7 +69,7 @@ const CreateLottery:FC = () => {
     return <Fragment>
         <HeaderSection>
         <Header title="Create a Lottery"  isBackButtonRequired={true} 
-        backButtonRedirectionUrl={appEndpoints.adminRouts.lotteryList} />
+        backButtonRedirectionUrl={appEndpoints.adminRouts.gamesList} />
         </HeaderSection>
         <LotteryContent>
             <CreateLotteryForm ticketObj={lotteryTicketDetails} onCreateLottery={onCreate} onCancel={redirectToList}  />

@@ -15,6 +15,7 @@ box-sizing: border-box;
 padding: 30px;
 background-color: #ffffff;
 margin-top: 30px;
+width: calc(100vw - 341px);
 `;
 
 export const GamesHeaders = styled.div`

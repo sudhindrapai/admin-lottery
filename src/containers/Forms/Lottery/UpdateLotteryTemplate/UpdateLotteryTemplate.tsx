@@ -527,7 +527,7 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
 
     const dispatch = useDispatch();
 
-    const imgList = useSelector((state:RootState) => state.images.images);
+    const imgList = useSelector((state:RootState) => state.images.imageNames);
 
     const [lotteryName, setLotteryName] = useState<CreateLottery>(LotteryNameForm);
     const [lotterySettingForm, setLotterySettingForm] = useState<CreateLottery>(lotterySettingsForm);
@@ -567,10 +567,21 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
             let lotteryEndTime = templateDetail.lotteryEndTime;
             let lotteryStartDay = templateDetail.lotteryStartDay;
             let lotteryEndDay = templateDetail.lotteryEndDay;
-            let images = templateDetail.rewardImages ? [] : templateDetail.rewardImages
+            let images = templateDetail.rewardImages ? templateDetail.rewardImages : [];
+
+            let imageNames:any = [];
+            for (let imageString of images) {
+                if (imageString !== undefined && imageString !== null && imageString.length > 0) {
+                    let imageArray = imageString.split("download/");
+                    let imageNameCount = (imageArray.length)-1;
+                    let imageName = imageArray[imageNameCount];
+                    imageNames.push(imageName)
+                }
+            }
 
             dispatch(setUpdateImgDetails({
-                images:images
+                images:images,
+                imageNames:imageNames
             }))
 
             if (ticketType === "Money Lottery") {

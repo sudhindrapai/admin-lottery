@@ -1,14 +1,20 @@
-import {FC, useEffect} from 'react';
+import {FC, useState,useEffect} from 'react';
 import Button from '../../../components/UI/Button/Button';
 import ViewHeader from '../../../components/ViewHeader/ViewHeader';
 import {BreadCrumbs} from './StyledLotteryGame';
 import {useSelector, useDispatch} from 'react-redux';
+import Modal from '../../../components/Modal/Modal';
 import {getTemplateList} from '../../../features/templateListslice';
 import {GamesView, GamesHeaders, GameHeader, TemplateList, TemplatLineItem, TemplateId,
      TemplateItem, ActiveStatus,TemplateListHeader, DeactiveStatus, DotIcon} from './StyledLotteryGame';
+import {LotteryOptionsList,LotteryOption,LotteryTypeTitle} from '../LotteryList/StyledLottery'
 import { RootState } from '../../../app/Store';
 import {transformDate} from '../../../Utility/Utility';
 import {useNavigate} from 'react-router-dom';
+import {adminRouts} from '../../../routs';
+
+import oneTimeLotteryImgSrc from '../../../assets/images/oneTimeLottery.svg';
+import repeatedLotteryImgSrc from '../../../assets/images/repeatedLottery.svg';
 
 enum ButtonSize {
     sm = "small",
@@ -25,6 +31,7 @@ const LotteryTemplateList = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     let templateList = useSelector((state:RootState) => state.templateList.templateList);
+    const [createLotteryModal, setCreateLotteryModalStatus] = useState(false);
     useEffect(()=> {
         dispatch(getTemplateList());
     },[]);
@@ -62,13 +69,44 @@ const LotteryTemplateList = () => {
                     <DotIcon/>Disabled
                 </DeactiveStatus>}
             </TemplateItem>
+             <TemplateItem>
+                 Action
+             </TemplateItem>
         </TemplatLineItem>
     });
 
+    const redirectToCreateLottery = (type: number):void => {
+        if (type === 1) {
+            navigate(adminRouts.createOneTimeLottery);
+        } else {
+            navigate(adminRouts.createRepeatedLottery);
+        }
+    }
+
     return<>
+    <Modal isOpen={createLotteryModal} 
+        name={"Create lottery option modal"} 
+        title={"Create Lottery"} toggleModal={() => {setCreateLotteryModalStatus(!createLotteryModal)}} >
+            <LotteryOptionsList>
+                <LotteryOption onClick={() => {redirectToCreateLottery(1)}}>
+            <img src={oneTimeLotteryImgSrc} />
+            <LotteryTypeTitle>
+                One time Lottery
+            </LotteryTypeTitle>
+            </LotteryOption>
+            <LotteryOption onClick={() => {redirectToCreateLottery(2)}}>
+            <img src={repeatedLotteryImgSrc} />
+            <LotteryTypeTitle>
+            Repeated Lottery
+            </LotteryTypeTitle>
+            </LotteryOption>
+            </LotteryOptionsList>
+        </Modal>
     <BreadCrumbs>
     <ViewHeader title={"Lottery Templates"} isNeedCreateButton={false} btnText={"Test button"}
      routePath={"/"} />
+     <Button title={"+ Create Lottery"} btnSize={ButtonSize.md} btnVariant={ButtonVariant.primaryFilled} 
+     clicked={() => {setCreateLotteryModalStatus(true)}} />
      </BreadCrumbs>
      <GamesView>
          <TemplateListHeader>
@@ -89,6 +127,9 @@ const LotteryTemplateList = () => {
              </TemplateItem>
              <TemplateItem>
              Status
+             </TemplateItem>
+             <TemplateItem>
+             Action
              </TemplateItem>
          </TemplateListHeader>
          <TemplateList>

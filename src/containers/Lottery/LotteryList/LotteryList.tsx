@@ -7,9 +7,7 @@ import TrafficLight from '../../../components/TrafficLight/TrafficLight';
 import EmptyTableView from '../../../components/EmptyTableView/EmptyTableView';
 import Button from '../../../components/UI/Button/Button';
 import {useNavigate} from 'react-router-dom';
-import {adminRouts} from '../../../routs';
 import {transformDate,tablePagination,searchTableData, sortTableValues} from '../../../Utility/Utility';
-import Modal from '../../../components/Modal/Modal';
 import TableHeaderComponent from '../../../components/TableHeader/TableHeader';
 import TableFooter from '../../../components/TableFooter/TableFooter';
 import {BreadcrumbSection, 
@@ -21,10 +19,6 @@ import {BreadcrumbSection,
      DropdownContainer, DropdownOptionsContainer, DropdownOption, 
      DropdownActiveOption, SearchSectionContainer, Input, LotteryOptionsList, LotteryOption,
       LotteryTypeTitle, Live, Upcoming} from './StyledLottery';
-import {ChevronDownIcon, FilterIcon} from './StyledLottery';
-
-import oneTimeLotteryImgSrc from '../../../assets/images/oneTimeLottery.svg';
-import repeatedLotteryImgSrc from '../../../assets/images/repeatedLottery.svg';
 
 enum ButtonSize {
     sm = "small",
@@ -95,8 +89,6 @@ const LotteryList:FC = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const [createLotteryModal, setCreateLotteryModalStatus] = useState(false);
-
     const [tabMenu, setTabMenu] = useState(tabMenuViewList);
 
     const [tableHeaderValues, setHeaderValues] = useState(tableHeaders);
@@ -125,14 +117,6 @@ const LotteryList:FC = () => {
             setResponseData([]);
         }
     },[lotteryList]);
-
-    const redirectToCreateLottery = (type: number):void => {
-        if (type === 1) {
-            navigate(adminRouts.createOneTimeLottery);
-        } else {
-            navigate(adminRouts.createRepeatedLottery);
-        }
-    }
 
     const redirectToLotteryDetail = (lotteryId:number):void => {
         navigate(`/admin/lottery/view/${lotteryId}`, {state:lotteryId});
@@ -171,7 +155,6 @@ const LotteryList:FC = () => {
         let sortedArray:any = sortTableValues(originalResponse, id, !isSortAsc);
         setPageNumber(1);
         setOriginalResponse(sortedArray);
-        // tableHeaderValues, setHeaderValues
         let pagedResponse = tablePagination(sortedArray,1);
         setResponseData(pagedResponse.data);
         let updatedTableHeaders:any = [];
@@ -246,29 +229,9 @@ const LotteryList:FC = () => {
     });
 
     return <Fragment>
-        <Modal isOpen={createLotteryModal} 
-        name={"Create lottery option modal"} 
-        title={"Create Lottery"} toggleModal={() => {setCreateLotteryModalStatus(!createLotteryModal)}} >
-            <LotteryOptionsList>
-                <LotteryOption onClick={() => {redirectToCreateLottery(1)}}>
-            <img src={oneTimeLotteryImgSrc} />
-            <LotteryTypeTitle>
-                One time Lottery
-            </LotteryTypeTitle>
-            </LotteryOption>
-            <LotteryOption onClick={() => {redirectToCreateLottery(2)}}>
-            <img src={repeatedLotteryImgSrc} />
-            <LotteryTypeTitle>
-            Repeated Lottery
-            </LotteryTypeTitle>
-            </LotteryOption>
-            </LotteryOptionsList>
-        </Modal>
         <BreadcrumbSection>
     <ViewHeader title={"Lottery"} isNeedCreateButton={true} btnText={"Test button"}
      routePath={"/"} />
-     <Button title={"+ Create Lottery"} btnSize={ButtonSize.md} btnVariant={ButtonVariant.primaryFilled} 
-     clicked={() => {setCreateLotteryModalStatus(true)}} />
      </BreadcrumbSection>
      <ContentSection>
          <SearchSectionContainer>
@@ -295,7 +258,3 @@ const LotteryList:FC = () => {
 };
 
 export default LotteryList
-
-function queryParams(queryParams: any, string: any): import("@reduxjs/toolkit").AsyncThunkAction<void, string, {}> {
-    throw new Error('Function not implemented.');
-}

@@ -4,7 +4,7 @@ import ImageUploader from '../../../../../components/ImageUploader/ImageUploader
 import FormBuilder from './../../../../FormBuilder/FormBuilder';
 import {RootState} from '../../../../../app/Store'
 import {useSelector} from 'react-redux'
-import {updateFormInputState, validateForm, updateFormSelectState, updateFormTimeState, updateFormDate, transformGMTToUTC} from '../../../../../Utility/Utility';
+import {updateFormInputState, updateFormSelectState, updateFormTimeState, updateFormDate, transformGMTToUTC} from '../../../../../Utility/Utility';
 import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement} from '../../../../../Utility/InterFacesAndEnum';
 import {WeekNames, FormSectionContainer,LotteryTypeTitle,LotteryTypeValue,
     CreateLotteryContainer, SectionTitle, FormElementTitle, 
