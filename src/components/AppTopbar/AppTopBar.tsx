@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Wrapper, ProfielWapper, DropdownContainer, DropdownOption, ProfileImage} from './StyledAppTopBar';
+import {Wrapper, ProfielWapper, DropdownContainer, DropdownOption, ProfileImage, ActiveUsers} from './StyledAppTopBar';
 import ProfileImageSrc from '../../assets/images/profileavtar.webp';
 
 import * as localStorageActionType from '../../LocalStorage/ActionTypes';
@@ -23,7 +23,9 @@ const AppTopBar:FC = () => {
     }
 
     return (<Wrapper>
-        23
+        <ActiveUsers>
+            Active Users: <span>{23}</span>
+        </ActiveUsers>
         <ProfielWapper>
             <ProfileImage src={ProfileImageSrc} />
         <DropdownContainer>

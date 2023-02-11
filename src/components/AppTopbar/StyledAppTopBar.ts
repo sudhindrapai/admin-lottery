@@ -57,3 +57,13 @@ cursor: pointer;
     border-bottom: none;
 }
 `;
+
+export const ActiveUsers = styled.div`
+font-size: 12px;
+margin-right: 30px;
+& span{
+    color: #5E5ADB;
+    font-weight: bold;
+    font-size: 18px;
+}
+`;
