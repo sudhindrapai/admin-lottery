@@ -614,22 +614,28 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
                 });
 
                 let updatedScheduleForm = scheduleFormValues.form.map((scheduleObj) => {
-                    let updatedValue = scheduleObj.value;
+                    let updatedValue;
                     if (scheduleObj.id === "lotteryStartDay") {
                         updatedValue = lotteryStartDay
                     } else if (scheduleObj.id === "lotteryEndDay") {
                         updatedValue = lotteryEndDay
                     } else if (scheduleObj.id === "lotteryEndTime") {
-                        updatedValue = lotteryEndTime;
+                        let timesArray = lotteryEndTime.split(":");
+                        let dateObj = new Date().setHours(timesArray[0],timesArray[1],timesArray[2]);
+                        updatedValue = dateObj;
                     } else if (scheduleObj.id === "lotteryStartTime") {
-                        updatedValue = lotteryStartTime
+                        let timesArray = lotteryStartTime.split(":");
+                        let dateObj = new Date().setHours(timesArray[0],timesArray[1],timesArray[2]);
+                        updatedValue = dateObj
                     }
 
                     return{
                         ...scheduleObj,
                         value:updatedValue
-                    }
+                    
+                }
                 });
+                
                 setScheduleFormValues({
                     ...scheduleFormValues,
                     form: updatedScheduleForm
@@ -793,8 +799,6 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
         });
     };
     
-    console.log(scheduleFormValues.form,"[]")
-
     let scheduleDaysFormView = 
     <FormBuilder formElements={scheduleFormValues.form} 
     onInputChange = {handleLotteryTicketPriceInputChange} 
@@ -850,11 +854,6 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
         }
 
         for (let formObj of completeFormArray) {
-            // if (formObj.id === "lotteryStartDate" || formObj.id === "lotteryEndDate") {
-            //     completeObject[formObj.id] = new Date(formObj.value);
-            // } else {
-            //     completeObject[formObj.id] = formObj.value;
-            // }
 
             if (formObj.id === "lotteryEndTime" || formObj.id === "lotteryStartTime") {
                 if (completeObject[formObj.id] === "") {
@@ -882,14 +881,6 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
     const redirectToLotteryList = () => {
         onCancel();
     };
-
-    const triggerUploadImage = () => {
-            uploadImageRef?.current?.click();
-    };
-
-    const uplodImage = (event) => {
-        console.log(event)
-    }
 
     return(
         <CreateLotteryContainer>

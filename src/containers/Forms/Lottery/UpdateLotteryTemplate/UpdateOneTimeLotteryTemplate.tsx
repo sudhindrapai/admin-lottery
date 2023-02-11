@@ -3,7 +3,7 @@ import Button from '../../../../components/UI/Button/Button';
 
 import ImageUploader from '../../../../components/ImageUploader/ImageUploader';
 import FormBuilder from '../../../FormBuilder/FormBuilder';
-import {updateFormInputState, validateForm, updateFormSelectState, updateFormTimeState, updateFormDate} from '../../../../Utility/Utility';
+import {updateFormInputState, validateForm, updateFormSelectState, transformGMTToUTC, updateFormDate} from '../../../../Utility/Utility';
 import {FormElementType, customValidationType, InputVariant, InputTypes, FormElement} from '../../../../Utility/InterFacesAndEnum';
 import {WeekNames, FormSectionContainer,LotteryTypeTitle,LotteryTypeValue,CreateLotteryContainer, SectionTitle,UploadImageBtnSection, FormElementTitle, CreateLotteryFirstSection, CreateLotterySecondSection, TwoFormSection, FormView, Action} from '../CreateLottery/RepeatedLottery/StyledCreateLottery';
 
@@ -469,7 +469,7 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
     const [selectedLotteryType, setLotteryType] = useState(3);
 
 
-    const imgList = useSelector((state:RootState) => state.images.images);
+    const imgList = useSelector((state:RootState) => state.images.imageNames);
     
     useEffect(() => {
 
@@ -490,10 +490,21 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
             let giftName = templateDetail.rewardGiftName;
             let lotteryStartTime = templateDetail.lotteryStartTime;
             let lotteryEndTime = templateDetail.lotteryEndTime;
-            let images = templateDetail.rewardImages ? [] : templateDetail.rewardImages
+            let images = templateDetail.rewardImages ? templateDetail.rewardImages : [];
+
+            let imageNames:any = [];
+            for (let imageString of images) {
+                if (imageString !== undefined && imageString !== null && imageString.length > 0) {
+                    let imageArray = imageString.split("download/");
+                    let imageNameCount = (imageArray.length)-1;
+                    let imageName = imageArray[imageNameCount];
+                    imageNames.push(imageName)
+                }
+            }
 
             dispatch(setUpdateImgDetails({
-                images:images
+                images:images,
+                imageNames:imageNames
             }))
 
             if (ticketType === "Money Lottery") {
@@ -524,13 +535,25 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
                     form: updatedMoneyForm
                 });
 
+                let startDateArray = startDate.split("-");
+                let startTimeArray = lotteryStartTime.split(":");
+                let updatedStartDate:any = new Date().setFullYear(startDateArray[0],startDateArray[1]-1,startDateArray[2])
+                updatedStartDate = new Date(updatedStartDate).setHours(startTimeArray[0],startTimeArray[1],startTimeArray[2])
+                
+                let endDateArray = endDate.split("-");
+                let endTimeArray = lotteryEndTime.split(":")
+                let updatedEndDate:any = new Date().setFullYear(endDateArray[0],endDateArray[1]-1,endDateArray[2])
+                updatedEndDate = new Date(updatedEndDate).setHours(endTimeArray[0],endTimeArray[1],endTimeArray[2]);
+
                 let updatedScheduleForm = scheduleFormValues.form.map((scheduleObj) => {
+
                     return{
                         ...scheduleObj,
                         value: scheduleObj.id === "lotteryStartDate" ? 
-                        startDate : scheduleObj.id === "lotteryEndDate" ? endDate : scheduleObj.slectedDate
+                        new Date(updatedStartDate) : scheduleObj.id === "lotteryEndDate" ? (updatedEndDate) : scheduleObj.slectedDate
                     }
                 });
+                
                 setScheduleFormValues({
                     ...scheduleFormValues,
                     form: updatedScheduleForm
@@ -715,7 +738,8 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
 
         for (let formObj of completeFormArray) {
             if (formObj.id === "lotteryStartDate" || formObj.id === "lotteryEndDate") {
-                completeObject[formObj.id] = new Date(formObj.value);
+                console.log(new Date(transformGMTToUTC(formObj.value)),"formObj")
+                completeObject[formObj.id] = (transformGMTToUTC(formObj.value));
             } else {
                 completeObject[formObj.id] = formObj.value;
             }
