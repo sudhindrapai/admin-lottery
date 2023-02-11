@@ -382,7 +382,32 @@ const auctionBasePriceState: FormState = {
             isValidInput:false,
             isTouched:false,
             errorMessage:"",
-            label:"Auction Base Pricr",
+            label:"Auction Base Price",
+            radioGroupValues:[],
+            isPasswordHidden:true,
+            dropdownValues:[],
+            selectedTime: null,
+            slectedDate: null,
+            disabled: false
+    }],
+    isValidForm: true
+}
+
+const subscriptionPriceState: FormState = {
+    form:[{
+        elementType:FormElementType.input,
+            value:"",
+            id:"safetyDepositAmount",
+            isRequired:true,
+            fullWidth: true,
+            isCustomValidationRequred: true,
+            inputVariant: InputVariant.outlined,
+            inputType: InputTypes.number,
+            customValidationType: customValidationType.numberValidation,
+            isValidInput:false,
+            isTouched:false,
+            errorMessage:"",
+            label:"User Subscription Price",
             radioGroupValues:[],
             isPasswordHidden:true,
             dropdownValues:[],
@@ -402,6 +427,7 @@ const Settings:FC = () => {
     const [auctionTicketDetails, setAuctioTicketDetails] = useState(AuctionTicketDetails);
     const [auctionSubTicketDetails, setAuctionSubTicketDetails] = useState(AuctionSubTicketDetails);
     const [auctionBasePrice, setAuctionBasePrice] = useState(auctionBasePriceState);
+    const [subscriptionPrice, setSubscriptionPrice] = useState(subscriptionPriceState);
 
     const settingsData = useSelector((state:RootState) => state.settings.data);
 
@@ -568,6 +594,21 @@ const Settings:FC = () => {
 
     // --------- end auction base price -------
 
+    //  ------- user subscription price -------
+    const handleSubscriptionPriceDetails = (event:React.ChangeEvent <HTMLTextAreaElement | HTMLInputElement>):void => {
+        let updatedStateArray = updateFormInputState(event, subscriptionPrice.form);
+        setSubscriptionPrice({
+            ...subscriptionPrice,
+            form: updatedStateArray
+        });
+    }
+
+    const subscriptionPriceView = <FormBuilder formElements={auctionBasePrice.form} 
+                onInputChange = {handleSubscriptionPriceDetails} 
+                onSelectValueChange={() => {}} 
+                onChangeDate={() => {}} onChangeTime={() => {}} />;
+    //  ------- end user subscription price ----
+
     const updateTicketDetail = (isFromLottery:boolean) => {
         let payload:any = {}
         let lotteryData = {};
@@ -616,9 +657,7 @@ const Settings:FC = () => {
     }
 
     const updateAuctionBasePriceDetail = () => {
-        let payload:any = {
-
-        }
+        let payload:any = {}
         let auctionData = {};
         for (let settingsObj of settingsData) {
             if (settingsObj.settingFor === "AUCTION") {
@@ -631,6 +670,8 @@ const Settings:FC = () => {
         }
         dispatch(updateSettingsData(payload))
     }
+
+    const updateUserSubscriptionPrice = () => {};
  
     return <Wrapper>
         <Container>
@@ -690,6 +731,20 @@ const Settings:FC = () => {
                 title={"Save and Update"}
             btnSize ={ButtonSize.md} 
             btnVariant={ButtonVariant.primaryFilled} clicked={() => {updateAuctionBasePriceDetail()}} />
+            </AuctionView>
+            </SectionBody>
+        </Section>
+        <Section>
+            <SectionTitle>
+                User Subscription Price
+            </SectionTitle>
+            <SectionBody>
+                {subscriptionPriceView}
+                <AuctionView>
+                <Button
+                title={"Save and Update"}
+            btnSize ={ButtonSize.md} 
+            btnVariant={ButtonVariant.primaryFilled} clicked={() => {updateUserSubscriptionPrice()}} />
             </AuctionView>
             </SectionBody>
         </Section>
