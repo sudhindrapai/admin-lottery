@@ -37,11 +37,12 @@ justify-content: center;
 max-width: 160px;
 `;
 
-export const TemplateList =  styled.div`
-width: 100%;
-box-sizing: border-box;
-display: flex;
-flex-flow: column;
+export const TemplateItem = styled.div`
+font-weight: 400;
+font-size: 14px;
+color: #200E32; 
+max-width: 160px;
+min-width: 160px;
 `;
 
 export const TemplatLineItem = styled.div`
@@ -56,7 +57,28 @@ border-radius: 10px;
 height: 68px;
 margin-bottom: 16px;
 padding: 10px;
+${TemplateItem}:nth-child(6){
+    color: red;
+    min-width: 140px;
+    max-width: unset;
+}
+${TemplateItem}:nth-child(7){
+    color: #219653 !important;
+    border: 1px solid #3957E8;
+    border-radius: 4px;
+    min-width: unset;
+    max-width: unset;
+}
 `;
+
+export const TemplateList =  styled.div`
+width: 100%;
+box-sizing: border-box;
+display: flex;
+flex-flow: column;
+`;
+
+
 
 export const TemplateId = styled.div`
 font-size: 14px;
@@ -70,14 +92,6 @@ cursor: pointer;
 `;
 
 export const LotteryReward = styled.div`
-font-weight: 400;
-font-size: 14px;
-color: #200E32; 
-max-width: 160px;
-min-width: 160px;
-`;
-
-export const TemplateItem = styled.div`
 font-weight: 400;
 font-size: 14px;
 color: #200E32; 
@@ -117,5 +131,11 @@ margin-bottom: 20px;
 
 export const DotIcon = styled(Dot)`
 /* width:10px */
-height:20px
+height:20px;
+`;
+
+export const PublishBtn = styled.div`
+padding: 8px 16px;
+color: #000000;
+cursor:pointer;
 `;

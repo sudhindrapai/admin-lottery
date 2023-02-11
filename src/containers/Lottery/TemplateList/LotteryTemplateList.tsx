@@ -6,7 +6,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import Modal from '../../../components/Modal/Modal';
 import {getTemplateList} from '../../../features/templateListslice';
 import {GamesView, GamesHeaders, GameHeader, TemplateList, TemplatLineItem, TemplateId,
-     TemplateItem, ActiveStatus,TemplateListHeader, DeactiveStatus, DotIcon} from './StyledLotteryGame';
+     TemplateItem, ActiveStatus,TemplateListHeader, DeactiveStatus, DotIcon, PublishBtn} from './StyledLotteryGame';
 import {LotteryOptionsList,LotteryOption,LotteryTypeTitle} from '../LotteryList/StyledLottery'
 import { RootState } from '../../../app/Store';
 import {transformDate} from '../../../Utility/Utility';
@@ -44,6 +44,10 @@ const LotteryTemplateList = () => {
         }
     }
 
+    const publishLottery = (id:number) => {
+        console.log(id,"publishLottery")
+    };
+
     let templateListView = templateList.map((templateObj:any) => {
         return <TemplatLineItem>
             <TemplateId onClick={() => {redirectToTemplateList(templateObj.lotteryId, templateObj.isRepeat)}}>
@@ -70,7 +74,9 @@ const LotteryTemplateList = () => {
                 </DeactiveStatus>}
             </TemplateItem>
              <TemplateItem>
-                 Action
+                 <PublishBtn onClick={() => {publishLottery(templateObj.lotteryId)}}>
+                     Publish
+                 </PublishBtn>
              </TemplateItem>
         </TemplatLineItem>
     });
