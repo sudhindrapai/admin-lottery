@@ -508,7 +508,7 @@ isValidForm: false
 }
 
 class RepeatLotteryWeeObj {
-    constructor(public label: string, public id: string, public isSelected: boolean, public isStartDay: boolean, public isEndDay:boolean){}
+    constructor(public label: string, public id: string, public isSelected: boolean, public isStartDay: boolean, public isEndDay:boolean, public index:number){}
 }
 
 interface LotteryProps {
@@ -532,13 +532,13 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
     const [scheduleFormValues, setScheduleFormValues] = useState<CreateLottery>(scheduleDaysForm);
     const [selectedLotteryType, setLotteryType] = useState(3);
     const [weeks, setRepeatWeek] = useState([
-        new RepeatLotteryWeeObj("Sunday", "Sunday_1", false, false, false),
-        new RepeatLotteryWeeObj("Monda", "monday_2", false, false, false),
-        new RepeatLotteryWeeObj("Tuesday","tuesday_3",false, false, false),
-        new RepeatLotteryWeeObj("Wednesday","wednesday_4",false, false, false),
-        new RepeatLotteryWeeObj("Thursday", "thursday_5", false, false, false),
-        new RepeatLotteryWeeObj("Friday","friday_6",false, false, false),
-        new RepeatLotteryWeeObj("Saturday", "saturday_7",false, false, false)
+        new RepeatLotteryWeeObj("Sunday", "Sunday_1", false, false, false,7),
+        new RepeatLotteryWeeObj("Monda", "monday_2", false, false, false,1),
+        new RepeatLotteryWeeObj("Tuesday","tuesday_3",false, false, false,2),
+        new RepeatLotteryWeeObj("Wednesday","wednesday_4",false, false, false,3),
+        new RepeatLotteryWeeObj("Thursday", "thursday_5", false, false, false,4),
+        new RepeatLotteryWeeObj("Friday","friday_6",false, false, false,5),
+        new RepeatLotteryWeeObj("Saturday", "saturday_7",false, false, false,6)
     ]);
 
     const imagesList = useSelector((state:RootState) => state.images.images);
@@ -756,7 +756,6 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
         }
 
         completeObject["rewardImages"] = imagesList;
-        
         onCreateLottery(completeObject);
     };
 

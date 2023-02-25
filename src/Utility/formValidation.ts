@@ -213,7 +213,6 @@ export const validateCreateRepeatLottery = (obj:any) => {
 
 export const validateCreateAuction = (obj:any) => {
 
-    console.log(obj)
     let bSubTickets = obj.bronzeSubTickets;
     let gSubTickets = obj.goldSubTickets;
     let pSubTickets = obj.platinumSubTickets;

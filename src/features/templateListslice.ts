@@ -10,7 +10,8 @@ import {NotificationType} from '../Utility/InterFacesAndEnum';
 import {handle401Status} from '../Utility/Utility';
 
 const initialState = {
-    templateList: []
+    templateList: [],
+    isTemplateDeleted:false
 }
 
 interface SetGameListProps {
@@ -19,6 +20,14 @@ interface SetGameListProps {
 
 interface PublishRequestProps {
     templateId:number
+}
+
+interface RemoveTemplateProps {
+    templateId: number
+}
+
+interface UpdateStatus {
+    status: boolean
 }
 
 export const getTemplateList = createAsyncThunk(
@@ -117,6 +126,20 @@ export const publishLottery = createAsyncThunk(
     }
 );
 
+export const removeTemplate = createAsyncThunk(
+    'remove template',
+    async (payload: RemoveTemplateProps, {dispatch}) => {
+        await fetch(`${endpoints.removeLotteryTemplate}?lotteryId=${payload.templateId}`)
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            console.log(data);
+            dispatch(setTemplateRemoveStatus({status:true}))
+        })
+    }
+);
+
 const gamesList = createSlice({
     name: 'games list slice',
     initialState: initialState,
@@ -126,9 +149,15 @@ const gamesList = createSlice({
                 ...state,
                 templateList: action.payload.templateList
             }
+        },
+        setTemplateRemoveStatus: (state, action:PayloadAction<UpdateStatus>) => {
+            return {
+                ...state,
+                isTemplateDeleted: action.payload.status
+            }
         }
     }
 });
 
-export const {setTemplateList} = gamesList.actions;
+export const {setTemplateList,setTemplateRemoveStatus} = gamesList.actions;
 export default gamesList.reducer;

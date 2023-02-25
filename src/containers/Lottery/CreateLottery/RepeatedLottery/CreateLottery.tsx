@@ -17,6 +17,8 @@ import {validateCreateRepeatLottery} from '../../../../Utility/formValidation';
 import {NotificationType} from '../../../../Utility/InterFacesAndEnum';
 import {toggleNotificationVisibility} from '../../../../features/networkNotification';
 
+const weekNames = ["Monday","Tuesday","Wednesday","Thrusday","Friday","Saturday","Sunday"];
+
 const CreateLottery:FC = () => {
     const dispatch = useDispatch();
 
@@ -30,7 +32,16 @@ const CreateLottery:FC = () => {
     const onCreate = (obj:any) => {
         let validatedObj = validateCreateRepeatLottery(obj);
         if (validatedObj.status) {
-            dispatch(createLottery(obj))
+
+            let updatedPayload = {
+                ...obj,
+                lotteryEndDay: weekNames.indexOf(obj.lotteryEndDay) + 1,
+                lotteryStartDay: weekNames.indexOf(obj.lotteryStartDay) + 1
+            }
+
+            console.log(updatedPayload,"onCreate")
+
+            // dispatch(createLottery(obj))
         } else {
             dispatch(toggleNotificationVisibility({
                 isVisible: true,

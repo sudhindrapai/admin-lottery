@@ -31,3 +31,4 @@ export const createEmailNotification = `${baseUrl}/kingsrings/api/v1/email/creat
 export const updateLottery = `${baseUrl}/kingsrings/api/v1/lottery/update`;
 export const publishLottery = `${baseUrl}/kingsrings/api/v1/lottery/publish/`; /** 17 - template id */
 export const getUserCount = `${baseUrl}/kingsrings/api/v1/dashboard/activeuserscount`;
+export const removeLotteryTemplate = `${baseUrl}/kingsrings/api/v1/lottery/delete`; /** ?lotteryId=4 */
