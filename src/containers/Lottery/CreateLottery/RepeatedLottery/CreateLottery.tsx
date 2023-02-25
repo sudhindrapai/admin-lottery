@@ -39,9 +39,7 @@ const CreateLottery:FC = () => {
                 lotteryStartDay: weekNames.indexOf(obj.lotteryStartDay) + 1
             }
 
-            console.log(updatedPayload,"onCreate")
-
-            // dispatch(createLottery(obj))
+            dispatch(createLottery(obj))
         } else {
             dispatch(toggleNotificationVisibility({
                 isVisible: true,
