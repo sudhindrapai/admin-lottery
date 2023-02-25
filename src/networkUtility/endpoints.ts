@@ -29,3 +29,5 @@ export const getEmailNotificationDetail = `${baseUrl}/kingsrings/api/v1/email/li
 export const deleteEmailNotificationEndPoint = `${baseUrl}/kingsrings/api/v1/email/delete`; /** ?emailNotificationId=7 */
 export const createEmailNotification = `${baseUrl}/kingsrings/api/v1/email/create`;
 export const updateLottery = `${baseUrl}/kingsrings/api/v1/lottery/update`;
+export const publishLottery = `${baseUrl}/kingsrings/api/v1/lottery/publish/`; /** 17 - template id */
+export const getUserCount = `${baseUrl}/kingsrings/api/v1/dashboard/activeuserscount`;

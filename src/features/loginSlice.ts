@@ -3,6 +3,7 @@ import {createSlice, PayloadAction, createAsyncThunk} from '@reduxjs/toolkit';
 
 import * as localStorageActionType from '../LocalStorage/ActionTypes';
 import {setLocalStorage} from '../LocalStorage/SetLocalStorage';
+import {getLocalStorage} from '../LocalStorage/GetLocalStorage'
 
 import {toggleNotificationVisibility} from './networkNotification';
 import {NotificationType} from '../Utility/InterFacesAndEnum';
@@ -12,7 +13,8 @@ import {handle401Status} from '../Utility/Utility';
 interface LoginState {
     isLoading: boolean,
     isLoggedin: boolean,
-    isAuthenticated: boolean
+    isAuthenticated: boolean,
+    activeUserCount:number
 }
 
 interface Loading {
@@ -27,7 +29,8 @@ interface Login {
 const loginInitialState:LoginState = {
     isLoading: false,
     isLoggedin: false,
-    isAuthenticated: false
+    isAuthenticated: false,
+    activeUserCount: 0
 }
 
 interface SigninAccount {
@@ -43,7 +46,7 @@ export const createLogin = createAsyncThunk(
         }))
         const response = await fetch(endPoint.login,
         {
-            method: 'post',
+            method: 'POST',
             body: JSON.stringify(loginObj),
             headers:{
                 "Content-type": "application/json; charset=UTF-8",
@@ -102,6 +105,27 @@ export const createLogin = createAsyncThunk(
             }));
         })
     }
+);
+
+export const getActiveUserCount = createAsyncThunk(
+    'get active user count',
+    async (payload:void,{dispatch}) => {
+        await fetch(endPoint.getUserCount,{
+            method: 'GET',
+            headers:{
+                Authorization: `Bearer ${getLocalStorage(localStorageActionType.GET_ACCESS_TOKEN)}`,
+                "Content-type": "application/json; charset=UTF-8",
+            }
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            dispatch(setActiveUserCount({
+                count:data.result
+            }))
+        })
+    }
 )
 
 const loginSlice = createSlice({
@@ -123,9 +147,15 @@ const loginSlice = createSlice({
                 isLoggedin: action.payload.isLoggedin,
                 isAuthenticated: action.payload.isAuthenticated
             }
+        },
+        setActiveUserCount: (state, action: PayloadAction<{count:number}>) => {
+            return {
+                ...state,
+                activeUserCount:action.payload.count
+            }
         }
     }
 });
 
-export const {resetLoginState, toggleLoading, toggleLogin} = loginSlice.actions;
+export const {resetLoginState, toggleLoading, toggleLogin, setActiveUserCount} = loginSlice.actions;
 export default loginSlice.reducer;

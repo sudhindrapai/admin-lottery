@@ -4,8 +4,8 @@ import ViewHeader from '../../../components/ViewHeader/ViewHeader';
 import {BreadCrumbs} from './StyledLotteryGame';
 import {useSelector, useDispatch} from 'react-redux';
 import Modal from '../../../components/Modal/Modal';
-import {getTemplateList} from '../../../features/templateListslice';
-import {GamesView, GamesHeaders, GameHeader, TemplateList, TemplatLineItem, TemplateId,
+import {getTemplateList,publishLottery} from '../../../features/templateListslice';
+import {GamesView,TemplateList, TemplatLineItem, TemplateId,
      TemplateItem, ActiveStatus,TemplateListHeader, DeactiveStatus, DotIcon, PublishBtn} from './StyledLotteryGame';
 import {LotteryOptionsList,LotteryOption,LotteryTypeTitle} from '../LotteryList/StyledLottery'
 import { RootState } from '../../../app/Store';
@@ -32,6 +32,7 @@ const LotteryTemplateList = () => {
     const dispatch = useDispatch();
     let templateList = useSelector((state:RootState) => state.templateList.templateList);
     const [createLotteryModal, setCreateLotteryModalStatus] = useState(false);
+
     useEffect(()=> {
         dispatch(getTemplateList());
     },[]);
@@ -44,8 +45,8 @@ const LotteryTemplateList = () => {
         }
     }
 
-    const publishLottery = (id:number) => {
-        console.log(id,"publishLottery")
+    const publishTemplate = (id:number) => {
+        dispatch(publishLottery({templateId:id}));
     };
 
     let templateListView = templateList.map((templateObj:any) => {
@@ -74,7 +75,7 @@ const LotteryTemplateList = () => {
                 </DeactiveStatus>}
             </TemplateItem>
              <TemplateItem>
-                 <PublishBtn onClick={() => {publishLottery(templateObj.lotteryId)}}>
+                 <PublishBtn onClick={() => {publishTemplate(templateObj.lotteryId)}}>
                      Publish
                  </PublishBtn>
              </TemplateItem>

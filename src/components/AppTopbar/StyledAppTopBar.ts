@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import {Refresh} from '@styled-icons/material-outlined/Refresh';
 
 export const ProfileImage = styled.img`
 height: 70px;
@@ -66,4 +67,14 @@ margin-right: 30px;
     font-weight: bold;
     font-size: 18px;
 }
+`;
+
+export const RefreshIcon = styled(Refresh)`
+color: #3a57e8;
+height: 18px;
+`;
+
+export const RefreshSection = styled.span`
+cursor: pointer;
+padding-left: 10px;
 `;

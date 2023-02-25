@@ -17,6 +17,10 @@ interface SetGameListProps {
     templateList:[]
 }
 
+interface PublishRequestProps {
+    templateId:number
+}
+
 export const getTemplateList = createAsyncThunk(
     'get games list',
     async (payload, {dispatch}) => {
@@ -85,6 +89,30 @@ export const getTemplateList = createAsyncThunk(
                 status: NotificationType.error,
                 message: "Something went wrong"
             }));
+        })
+    }
+);
+
+export const publishLottery = createAsyncThunk(
+    'publish lottery',
+    async (payload:PublishRequestProps, {dispatch}) => {
+        await fetch(`${endpoints.publishLottery}${payload.templateId}`, {
+            method: 'POST',
+            headers:{
+                Authorization: `Bearer ${getLocalStorage(localStorageActiontype.GET_ACCESS_TOKEN)}`,
+                "Content-type": "application/json; charset=UTF-8",
+            }
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            if (data.statusCode === 401) {
+                handle401Status();
+            } else if (data.statusCode === 200) {
+                dispatch(getTemplateList())
+            }
+
         })
     }
 );
