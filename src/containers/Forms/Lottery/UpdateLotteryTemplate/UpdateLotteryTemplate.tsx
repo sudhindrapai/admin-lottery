@@ -519,6 +519,8 @@ interface LotteryProps {
     templateDetail:any
 }
 
+const weekNames = ["Monday","Tuesday","Wednesday","Thrusday","Friday","Saturday","Sunday"];
+
 const CreateLotteryForm:FC<LotteryProps> = (props) => {
 
     const {onCreateLottery, onCancel, templateDetail} = props;
@@ -572,7 +574,7 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
             let imageNames:any = [];
             for (let imageString of images) {
                 if (imageString !== undefined && imageString !== null && imageString.length > 0) {
-                    let imageArray = imageString.split("download/");
+                    let imageArray = imageString.split("/");
                     let imageNameCount = (imageArray.length)-1;
                     let imageName = imageArray[imageNameCount];
                     imageNames.push(imageName)
@@ -616,9 +618,9 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
                 let updatedScheduleForm = scheduleFormValues.form.map((scheduleObj) => {
                     let updatedValue;
                     if (scheduleObj.id === "lotteryStartDay") {
-                        updatedValue = lotteryStartDay
+                        updatedValue = weekNames[lotteryStartDay - 1];
                     } else if (scheduleObj.id === "lotteryEndDay") {
-                        updatedValue = lotteryEndDay
+                        updatedValue = weekNames[lotteryEndDay - 1];
                     } else if (scheduleObj.id === "lotteryEndTime") {
                         let timesArray = lotteryEndTime.split(":");
                         let dateObj = new Date().setHours(timesArray[0],timesArray[1],timesArray[2]);
@@ -837,7 +839,7 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
 
     const createTicketHandler = () => {
 
-        let completeObject = {
+        let completeObject:any = {
         };
 
         let completeFormArray = [
@@ -874,6 +876,12 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
         completeObject["isMemberLottery"] = false;
         completeObject["lotteryId"] = templateDetail.lotteryId;
         completeObject["rewardImages"] = imgList;
+
+        completeObject = {
+            ...completeObject,
+            lotteryEndDay: weekNames.indexOf(completeObject.lotteryEndDay) + 1,
+            lotteryStartDay: weekNames.indexOf(completeObject.lotteryStartDay) + 1
+        }
         
         onCreateLottery(completeObject);
     };

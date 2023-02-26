@@ -541,7 +541,7 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
         new RepeatLotteryWeeObj("Saturday", "saturday_7",false, false, false,6)
     ]);
 
-    const imagesList = useSelector((state:RootState) => state.images.images);
+    const imagesList = useSelector((state:RootState) => state.images.imageNames);
 
     useEffect(() => {
         if (ticketObj && ticketObj.length > 0) {

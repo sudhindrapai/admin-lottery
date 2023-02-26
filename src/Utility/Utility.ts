@@ -233,7 +233,6 @@ export const transformDate = (dateObj:Date): string => {
 };
 
 export const sortTableValues = (response:any, objeckKey:string, isSortAsc:boolean) => {
-    console.log(response,objeckKey,isSortAsc);
     let arrayForSort  = [...response]
     let sortedResponse = arrayForSort.sort((obj1:any, obj2:any) => {
         if (isSortAsc) {

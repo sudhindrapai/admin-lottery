@@ -13,6 +13,7 @@ import {getSettingsData} from '../../../../features/settingsSlice'
 import {useDispatch, useSelector} from 'react-redux';
 import { RootState } from '../../../../app/Store';
 
+import {transformGMTToUTC} from '../../../../Utility/Utility';
 import {validateCreateRepeatLottery} from '../../../../Utility/formValidation';
 import {NotificationType} from '../../../../Utility/InterFacesAndEnum';
 import {toggleNotificationVisibility} from '../../../../features/networkNotification';
@@ -34,12 +35,26 @@ const CreateLottery:FC = () => {
         if (validatedObj.status) {
 
             let updatedPayload = {
+                ...obj
+            }
+
+            for (let objKey in updatedPayload) {
+                if (objKey === "lotteryEndTime" || objKey === "lotteryStartTime") {
+                    if (updatedPayload[objKey] === "") {
+                        updatedPayload[objKey] = "";
+                    } else {
+                        updatedPayload[objKey] = (transformGMTToUTC(updatedPayload[objKey]));
+                    }
+                }
+            }
+
+            updatedPayload = {
                 ...obj,
                 lotteryEndDay: weekNames.indexOf(obj.lotteryEndDay) + 1,
                 lotteryStartDay: weekNames.indexOf(obj.lotteryStartDay) + 1
             }
 
-            dispatch(createLottery(obj))
+            dispatch(createLottery(updatedPayload))
         } else {
             dispatch(toggleNotificationVisibility({
                 isVisible: true,

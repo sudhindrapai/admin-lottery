@@ -495,7 +495,7 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
             let imageNames:any = [];
             for (let imageString of images) {
                 if (imageString !== undefined && imageString !== null && imageString.length > 0) {
-                    let imageArray = imageString.split("download/");
+                    let imageArray = imageString.split("/");
                     let imageNameCount = (imageArray.length)-1;
                     let imageName = imageArray[imageNameCount];
                     imageNames.push(imageName)

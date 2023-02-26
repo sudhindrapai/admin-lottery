@@ -545,7 +545,6 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
             let updatedArray = updateFormSelectState(value, name, lotterySettingForm.form);
             console.log(value,"value")
             if (value === "Money Lottery") {
-                console.log(value)
                 setLotteryType(1);
             } else if (value === "Gift Lottery") {
                 setLotteryType(2);
@@ -610,9 +609,6 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
             ...scheduleFormValues,
             form:updatedArray
         });
-        console.log("handleScheduleDaysFormTimeInput",date,name);
-        let selectedDate = new Date(date)
-        
     };
     
     let scheduleDaysFormView = 
@@ -667,7 +663,6 @@ const CreateLotteryForm:FC<LotteryProps> = (props) => {
             completeObject.rewardType = "G"
         }
 
-        console.log(completeObject);
         onCreateLottery(completeObject)
     };
 

@@ -2,8 +2,7 @@ import {FC, useEffect, useState} from 'react';
 import * as appEndpoints from '../../../../routs';
 import ViewHeader from '../../../../components/ViewHeader/ViewHeader';
 import {Container}from './StyledOneTimeLottery';
-import OneTimeLotteryForm from '../../../Forms/Lottery/CreateLottery/OneTimeLottery/CreateOneTimeLottery'
-import Button from '../../../../components/UI/Button/Button';
+import OneTimeLotteryForm from '../../../Forms/Lottery/CreateLottery/OneTimeLottery/CreateOneTimeLottery';
 import {HeaderSection, LotteryContent} from '../RepeatedLottery/StyledCreateLottery';
 
 import {useNavigate} from 'react-router-dom';
