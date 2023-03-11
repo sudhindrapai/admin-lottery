@@ -229,7 +229,9 @@ export const monthNames = (monthNumber:number): string => {
 
 export const transformDate = (dateObj:Date): string => {
     let date = new Date(dateObj);
-    return `${date.getDate()} ${monthNames(date.getMonth())} ${date.getFullYear()}`
+    return `${date.getDate()} ${monthNames(date.getMonth())} ${date.getFullYear()} 
+    at ${date.getHours() >12 ? addPaddingZero(date.getHours() - 12) : addPaddingZero(date.getHours())}:${addPaddingZero(date.getMinutes())} 
+    ${date.getHours() >= 12 ? "PM" : "AM"}`
 };
 
 export const sortTableValues = (response:any, objeckKey:string, isSortAsc:boolean) => {

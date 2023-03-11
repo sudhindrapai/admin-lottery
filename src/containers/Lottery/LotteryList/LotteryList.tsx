@@ -44,13 +44,13 @@ class TableHeader{
 }
 
 let tableHeaders = [
-    new TableHeader("Lottery ID", true, true, false, 'lotteryGameId'),
-    new TableHeader("Lottery price", true, false, false, 'rewardAmount'),
-    new TableHeader("Start date", false, false, false, 'Start_date'),
-    new TableHeader("End date", false, false, false, 'End_date'),
-    new TableHeader("Received amount", true, false, false, 'amountCollected'),
-    new TableHeader("users joined", true, false, false, 'noOfUsersJoined'),
-    new TableHeader("Status", false, false, false, 'Status')
+    new TableHeader("Lottery Game No", true, true, false, 'lotteryGameId'),
+    new TableHeader("Lottery Reward", true, false, false, 'rewardAmount'),
+    new TableHeader("Start Date", false, false, false, 'Start_date'),
+    new TableHeader("End Date", false, false, false, 'End_date'),
+    new TableHeader("Received Amount", true, false, false, 'amountCollected'),
+    new TableHeader("Users Joined", true, false, false, 'noOfUsersJoined'),
+    new TableHeader("Lottery Status", false, false, false, 'Status')
 ]
 
 let tabMenuViewList = [

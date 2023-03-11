@@ -15,7 +15,7 @@ import {adminRouts} from '../../../routs';
 
 import oneTimeLotteryImgSrc from '../../../assets/images/oneTimeLottery.svg';
 import repeatedLotteryImgSrc from '../../../assets/images/repeatedLottery.svg';
-
+const weekNames = ["Monday","Tuesday","Wednesday","Thrusday","Friday","Saturday","Sunday"];
 enum ButtonSize {
     sm = "small",
     md = "medium",
@@ -61,10 +61,10 @@ const LotteryTemplateList = () => {
                 {templateObj.isRepeat ? "Repeated Lottery": "One Time Lottery"}
             </TemplateItem>
             <TemplateItem>
-            {templateObj.isRepeat ? templateObj.lotteryStartDay: transformDate(templateObj.lotteryStartDate)}
+            {templateObj.isRepeat ? weekNames[templateObj.lotteryStartDay - 1]: transformDate(templateObj.lotteryStartDate)}
             </TemplateItem>
             <TemplateItem>
-            {templateObj.isRepeat ? templateObj.lotteryEndDay: transformDate(templateObj.lotteryEndDate)}
+            {templateObj.isRepeat ? weekNames[templateObj.lotteryEndDay - 1]: transformDate(templateObj.lotteryEndDate)}
             </TemplateItem>
             <TemplateItem>
                 { templateObj.isActive ? <ActiveStatus>

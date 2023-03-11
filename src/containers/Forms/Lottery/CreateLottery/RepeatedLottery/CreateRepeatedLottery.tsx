@@ -308,27 +308,27 @@ const lotteryMoneyForm: CreateLottery = {
 
 const scheduleDaysForm: CreateLottery = {
     form:[
-        {
-            elementType:FormElementType.select,
-            value:"Weekly",
-            id:"repeatType",
-            isRequired:true,
-            fullWidth: true,
-            isCustomValidationRequred: true,
-            inputVariant: InputVariant.outlined,
-            inputType: InputTypes.number,
-            customValidationType: customValidationType.numberValidation,
-            isValidInput:false,
-            isTouched:false,
-            errorMessage:"",
-            label:"Repeat Type",
-            radioGroupValues:[],
-            isPasswordHidden:true,
-            dropdownValues:["Weekly"],
-            selectedTime: null,
-            slectedDate: null,
-            disabled: false
-        },
+        // {
+        //     elementType:FormElementType.select,
+        //     value:"Weekly",
+        //     id:"repeatType",
+        //     isRequired:true,
+        //     fullWidth: true,
+        //     isCustomValidationRequred: true,
+        //     inputVariant: InputVariant.outlined,
+        //     inputType: InputTypes.number,
+        //     customValidationType: customValidationType.numberValidation,
+        //     isValidInput:false,
+        //     isTouched:false,
+        //     errorMessage:"",
+        //     label:"Repeat Type",
+        //     radioGroupValues:[],
+        //     isPasswordHidden:true,
+        //     dropdownValues:["Weekly"],
+        //     selectedTime: null,
+        //     slectedDate: null,
+        //     disabled: false
+        // },
         {
             elementType:FormElementType.datePicker,
             value:"",

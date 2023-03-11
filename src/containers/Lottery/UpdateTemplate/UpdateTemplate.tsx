@@ -10,7 +10,7 @@ import { RootState } from '../../../app/Store';
 import {setUpdateImgDetails} from '../../../features/imageUploaderSlice';
 import {adminRouts} from '../../../routs';
 
-import {Breadcrumbs} from './StyledUpdateTemplate';
+import {Breadcrumbs, DeleteBtn} from './StyledUpdateTemplate';
 
 import {validateCreateRepeatLottery} from '../../../Utility/formValidation';
 import {NotificationType} from '../../../Utility/InterFacesAndEnum';
@@ -50,12 +50,16 @@ const UpdateTemplate:FC = () => {
         }
     },[]);
 
+    const navigateToView = (path:string):void => {
+        navigation(path);
+    };
+
     useEffect(() => {
         if (isTemplateDelete === true) {
             dispatch(setTemplateRemoveStatus({status:false}));
-            navigation(`${adminRouts.gamesList}`);
+            navigateToView(`${adminRouts.gamesList}`);
         }
-    },[isTemplateDelete])
+    },[isTemplateDelete]);
 
     const updateLotteryDetails = (updateObj:any) => {
         let validatedObj = validateCreateRepeatLottery(updateObj);
@@ -78,10 +82,13 @@ const UpdateTemplate:FC = () => {
     <>
      <Breadcrumbs>
     <ViewHeader title={`Update lottery`} isBackButtonRequired={true} backButtonRedirectionUrl={adminRouts.gamesList} />
-    <Button title={"Delete"} btnSize={ButtonSize.md} btnVariant={ButtonVariant.secondary} 
-     clicked={() => {deleteTemplate(templateObj)}} />
+    {/* <Button title={"Delete"} btnSize={ButtonSize.md} btnVariant={ButtonVariant.secondary} 
+     clicked={() => {deleteTemplate(templateObj)}} /> */}
+     <DeleteBtn onClick={() => {deleteTemplate(templateObj)}}>
+    Delete
+    </DeleteBtn>
     </Breadcrumbs>
-    <UpdateTemplateForm onCreateLottery={updateLotteryDetails} onCancel={() => {}} templateDetail={templateObj} /> </> : 
+    <UpdateTemplateForm onCreateLottery={updateLotteryDetails} onCancel={() => {navigateToView(adminRouts.gamesList)}} templateDetail={templateObj} /> </> : 
     <div>Please wait</div>
 
     return view
