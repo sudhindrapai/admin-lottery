@@ -5,7 +5,7 @@ import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 
 import {toggleNotificationVisibility} from './networkNotification';
 import {NotificationType} from '../Utility/InterFacesAndEnum';
-
+import {toggleLoader} from './loader'
 import {handle401Status} from '../Utility/Utility';
 
 const promotionInitialState = {
@@ -37,6 +37,9 @@ interface SetImgDetails {
 export const getPromotionList = createAsyncThunk(
     'get promotion list',
     async(payload:string,{dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }));
         await fetch(`${endpoints.getPromotionList}?promotionPage=${payload}`,{
             method: 'GET',
             headers: {
@@ -78,12 +81,20 @@ export const getPromotionList = createAsyncThunk(
                 message: "Something went wrong"
             }));
         })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
+            }));
+        });
     }
 );
 
 export const uploadPromotionImages = createAsyncThunk(
     'upload image',
     async (payload:any, {dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }));
         await fetch(endpoints.uploadImage,{
             method: "POST",
             headers:{
@@ -122,12 +133,20 @@ export const uploadPromotionImages = createAsyncThunk(
                 message: "something went wrong!"
             }));
         })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
+            }));
+        })
     }
 );
 
 export const updatePromotion = createAsyncThunk(
     'update promotion section',
     async (payload:any, {dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }));
         await fetch(endpoints.updatePromotionSection,{
             method: 'PUT',
             headers:{
@@ -144,6 +163,11 @@ export const updatePromotion = createAsyncThunk(
                 handle401Status();
             }
 
+        })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
+            }));
         })
     }
 )

@@ -4,7 +4,7 @@ import * as localStorageActiontype from '../LocalStorage/ActionTypes';
 import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 import {toggleNotificationVisibility} from './networkNotification';
 import {NotificationType} from '../Utility/InterFacesAndEnum';
-
+import {toggleLoader} from './loader'
 import {handle401Status} from '../Utility/Utility';
 
 
@@ -76,6 +76,9 @@ const emailNotificationSlice = createSlice({
 export const getEmailNotificationList = createAsyncThunk(
     'get email notifications list',
     async (payload:void, {dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }));
         await fetch (endpoints.getEmailNotificationList,{
             method: 'GET',
             headers: {
@@ -98,12 +101,20 @@ export const getEmailNotificationList = createAsyncThunk(
                 }))
             }
         })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
+            }));
+        })
     }
 );
 
 export const getNotificationDetail = createAsyncThunk(
     'get email notification detail', 
     async (payload:number, {dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }));
         await fetch(`${endpoints.getEmailNotificationDetail}${payload}`,{
             method: 'GET',
             headers: {
@@ -128,12 +139,20 @@ export const getNotificationDetail = createAsyncThunk(
 
             }
         })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
+            }));
+        });
     }
     );
 
 export const deleteEmailNotification = createAsyncThunk(
         'Delete Email Notification',
     async(payload:string,{dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }));
         await fetch(`${endpoints.deleteEmailNotificationEndPoint}?${payload}`, {
             method: 'DELETE',
             headers: {
@@ -156,12 +175,20 @@ export const deleteEmailNotification = createAsyncThunk(
                 }))
             }
         })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
+            }));
+        });
     }
     );
 
     export const createAndScheduleEmailNotification = createAsyncThunk(
         'Create and Schedules email notifications',
         async(payload:CreateEmailNotificationPayload, {dispatch}) => {
+            dispatch(toggleLoader({
+                isLoading: true
+            }));
             await fetch(endpoints.createEmailNotification,{
                 method: 'POST',
                 headers: {
@@ -184,6 +211,11 @@ export const deleteEmailNotification = createAsyncThunk(
                         status:true
                     }))
                 }
+            })
+            .finally(() => {
+                dispatch(toggleLoader({
+                    isLoading: false
+                }));
             })
         }
     );

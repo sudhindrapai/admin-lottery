@@ -118,22 +118,22 @@ const LotteryTemplateList = () => {
      <GamesView>
          <TemplateListHeader>
              <TemplateItem>
-             TEMPLATE ID
+             Template ID
              </TemplateItem>
              <TemplateItem>
-             Reward
+             Lottery Reward
              </TemplateItem>
              <TemplateItem>
-             Repeat/One time lottery
+             Lottery Type
              </TemplateItem>
              <TemplateItem>
-             Start date/ Day
+             Start Date/ Day
              </TemplateItem>
              <TemplateItem>
              End Date/ Day
              </TemplateItem>
              <TemplateItem>
-             Status
+             Lottery Status
              </TemplateItem>
              <TemplateItem>
              Action

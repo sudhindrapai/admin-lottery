@@ -4,7 +4,7 @@ import * as localStorageActiontype from '../LocalStorage/ActionTypes';
 import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 import {toggleNotificationVisibility} from './networkNotification';
 import {NotificationType} from '../Utility/InterFacesAndEnum';
-
+import {toggleLoader} from './loader'
 import {handle401Status} from '../Utility/Utility';
 
 interface SettingsNode {
@@ -48,6 +48,9 @@ const settingsSlice = createSlice({
 export const getSettingsData = createAsyncThunk(
     'get settings data',
     async (payload:void, {dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }));
         await fetch (endpoints.getSettingsData, {
             method: 'GET',
             headers: {
@@ -88,12 +91,20 @@ export const getSettingsData = createAsyncThunk(
                 message: "Something went wrong"
             }));
         })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
+            }));
+        });
     }
 );
 
 export const updateSettingsData = createAsyncThunk(
     'Updated lottery or auction data',
     async(payload:SettingsNode | {}, {dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }));
         await fetch(endpoints.updatedSettingsData, {
             method: 'PUT',
             headers: {
@@ -132,6 +143,11 @@ export const updateSettingsData = createAsyncThunk(
                 message: "Something went wrong"
             }));
         })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
+            }));
+        });
     });
 
 export const {setData} = settingsSlice.actions;

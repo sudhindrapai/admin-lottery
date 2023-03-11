@@ -6,7 +6,7 @@ import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 
 import {toggleNotificationVisibility} from './networkNotification';
 import {NotificationType} from '../Utility/InterFacesAndEnum';
-
+import {toggleLoader} from './loader'
 import {handle401Status} from '../Utility/Utility';
 
 const initialState = {
@@ -33,6 +33,9 @@ interface UpdateStatus {
 export const getTemplateList = createAsyncThunk(
     'get games list',
     async (payload, {dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }));
         await fetch (endpoints.getTemplateList, {
             method: 'GET',
             headers: {
@@ -99,12 +102,20 @@ export const getTemplateList = createAsyncThunk(
                 message: "Something went wrong"
             }));
         })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
+            }));
+        });
     }
 );
 
 export const publishLottery = createAsyncThunk(
     'publish lottery',
     async (payload:PublishRequestProps, {dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }));
         await fetch(`${endpoints.publishLottery}${payload.templateId}`, {
             method: 'POST',
             headers:{
@@ -123,12 +134,20 @@ export const publishLottery = createAsyncThunk(
             }
 
         })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
+            }));
+        })
     }
 );
 
 export const removeTemplate = createAsyncThunk(
     'remove template',
     async (payload: RemoveTemplateProps, {dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }));
         await fetch(`${endpoints.removeLotteryTemplate}?lotteryId=${payload.templateId}`)
         .then((response) => {
             return response.json();
@@ -136,6 +155,11 @@ export const removeTemplate = createAsyncThunk(
         .then((data) => {
             console.log(data);
             dispatch(setTemplateRemoveStatus({status:true}))
+        })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
+            }));
         })
     }
 );

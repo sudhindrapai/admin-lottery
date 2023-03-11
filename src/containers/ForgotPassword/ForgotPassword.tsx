@@ -52,7 +52,7 @@ const forgotPasswordState:ForgotPswdForm = {
             isValidInput:false,
             isTouched:false,
             errorMessage:"",
-            label:"EmailId",
+            label:"Email ID",
             radioGroupValues:[],
             isPasswordHidden:true,
             dropdownValues:[],

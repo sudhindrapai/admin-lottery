@@ -5,7 +5,7 @@ import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 
 import {toggleNotificationVisibility} from './networkNotification';
 import {NotificationType} from '../Utility/InterFacesAndEnum';
-
+import {toggleLoader} from './loader'
 import {handle401Status} from '../Utility/Utility';
 
 interface UsersStateType {
@@ -20,49 +20,13 @@ const usersInitialState:UsersStateType = {
     users:[]
 }
 
-const usersList = [
-    {
-        userId: "1212121",
-        userName: "Sudhindra",
-        joinedDate: new Date(),
-        totalPurchase: 100000,
-        joinedLotteries:3,
-        joinedAuction:4,
-        isGoldMember:false
-    },
-    {
-        userId: "1212123",
-        userName: "Ganesh",
-        joinedDate: new Date(),
-        totalPurchase: 100000,
-        joinedLotteries:3,
-        joinedAuction:4,
-        isGoldMember:true
-    },
-    {
-        userId: "1212124",
-        userName: "Kiran",
-        joinedDate: new Date(),
-        totalPurchase: 100000,
-        joinedLotteries:3,
-        joinedAuction:4,
-        isGoldMember:false
-    },
-    {
-        userId: "1212125",
-        userName: "Kalyan",
-        joinedDate: new Date(),
-        totalPurchase: 100000,
-        joinedLotteries:3,
-        joinedAuction:4,
-        isGoldMember:true
-    }
-];
-
 
 export const getUserList = createAsyncThunk(
     'get users list',
     async (payload:string, {dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }));
         await fetch(`${endpoints.getUserList}`,{
             method: 'GET',
             headers:{
@@ -88,6 +52,11 @@ export const getUserList = createAsyncThunk(
                 isVisible: true,
                 status: NotificationType.error,
                 message: "Something went wrong"
+            }));
+        })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
             }));
         })
     }

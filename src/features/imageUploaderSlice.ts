@@ -6,7 +6,7 @@ import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 
 import {toggleNotificationVisibility} from './networkNotification';
 import {NotificationType} from '../Utility/InterFacesAndEnum';
-
+import {toggleLoader} from './loader'
 import {handle401Status} from '../Utility/Utility';
 
 interface UploaderState{
@@ -36,6 +36,9 @@ const imageUploaderInitialState: UploaderState = {
 export const uploadImage = createAsyncThunk(
     'upload image',
     async (payload:any, {dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }));
         await fetch(endpoints.uploadImage,{
             method: "POST",
             headers:{
@@ -66,6 +69,11 @@ export const uploadImage = createAsyncThunk(
                 isVisible: true,
                 status: NotificationType.error,
                 message: "something went wrong!!!!"
+            }));
+        })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
             }));
         })
     }

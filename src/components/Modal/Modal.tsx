@@ -9,7 +9,7 @@ interface ModalProps {
   toggleModal():void
 }
 
-const MoalComponent:FC<ModalProps> = (props) => {
+const ModalComponent:FC<ModalProps> = (props) => {
   const {isOpen, name, title, children, toggleModal} = props;
     return <Modal
     open={isOpen}
@@ -29,4 +29,4 @@ const MoalComponent:FC<ModalProps> = (props) => {
   </Modal>
 };
 
-export default MoalComponent
+export default ModalComponent

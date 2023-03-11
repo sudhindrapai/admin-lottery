@@ -5,7 +5,7 @@ import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 import {toggleNotificationVisibility} from './networkNotification';
 import {NotificationType} from '../Utility/InterFacesAndEnum';
 import {handle401Status} from '../Utility/Utility';
-
+import {toggleLoader} from './loader'
 interface AuctonObj{
     auctionId: number,
       auctionTitle: string,
@@ -110,6 +110,9 @@ interface SetAuctionRequest {
 export const getAuctions = createAsyncThunk(
     'get all auctions',
     async (queryParams:string, {dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }));
         await fetch (`${endpoints.getApprovedAuctionList}?${queryParams}`,{
             method: 'GET',
             headers:{
@@ -159,6 +162,11 @@ export const getAuctions = createAsyncThunk(
                 message: "Something went wrong"
             }));
         })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
+            }));
+        })
     }
 );
 
@@ -166,6 +174,9 @@ export const getAuctions = createAsyncThunk(
 export const getAuctionRequest = createAsyncThunk(
     'get auction request list',
     async (payload: string, {dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }));
         await fetch(`${endpoints.getAuctionRequestList}?${payload}`, {
             method: 'GET',
             headers:{
@@ -206,12 +217,20 @@ export const getAuctionRequest = createAsyncThunk(
                 message: "Someting went wrong"
             }));
         })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
+            }));
+        });
     }
 );
 
 export const createAuction = createAsyncThunk(
     'Create auction',
     async(payload:any, {dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }));
         payload["publicUserId"] = getLocalStorage(localStorageActiontype.GET_PUBLIC_USER_ID);
         await fetch(endpoints.areateAuction, {
             method: 'POST',
@@ -254,12 +273,20 @@ export const createAuction = createAsyncThunk(
                 message: "Something went wrong!"
             }));
         })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
+            }));
+        });
     }
 );
 
 export const getAuctionDetailById = createAsyncThunk(
     'get auction detail by auction id',
     async(payload:string,{dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }));
         await fetch(`${endpoints.getAuctionById}${payload}`,{
             method: 'GET',
             headers:{
@@ -300,12 +327,20 @@ export const getAuctionDetailById = createAsyncThunk(
                 message: "Something went wrong!"
             }));
         })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
+            }));
+        });
     }
 );
 
 export const approveUserAuction = createAsyncThunk(
     'approve auction',
     async (payload:any, {dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }));
         await fetch (endpoints.approveUserAuction,{
             method: 'PUT',
             headers:{
@@ -342,12 +377,20 @@ export const approveUserAuction = createAsyncThunk(
                 message: "Something went wrong!"
             }));
         })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
+            }));
+        });
     }
 );
 
 export const deleteAuction = createAsyncThunk(
     'delete auction',
     async(payload:string,{dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }));
         await fetch(`${endpoints.deleteAuction}?${payload}`,{
             method:'DELETE',
             headers:{
@@ -383,12 +426,20 @@ export const deleteAuction = createAsyncThunk(
                 message: "Something went wrong"
             }));
         })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
+            }));
+        });
     }
 );
 
 export const updateAuction = createAsyncThunk(
     'updateAuction',
     async (payload:any,{dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }));
         let endpoint = payload.auctionType === "U" ? endpoints.updateUserAuction : endpoints.updateAdminAuction;
         await fetch(endpoint,{
             method: 'PUT',
@@ -426,6 +477,11 @@ export const updateAuction = createAsyncThunk(
                 isVisible: true,
                 status: NotificationType.error,
                 message: "Something went wrong!"
+            }));
+        })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
             }));
         })
     }

@@ -6,6 +6,7 @@ import * as localStorageActiontype from '../LocalStorage/ActionTypes';
 import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 
 import {toggleNotificationVisibility} from './networkNotification';
+import {toggleLoader} from './loader'
 import {NotificationType} from '../Utility/InterFacesAndEnum';
 
 import {handle401Status} from '../Utility/Utility';
@@ -31,6 +32,9 @@ interface getLotteryListResponse {
 export const getLotteryList = createAsyncThunk(
     'lottery/get',
     async (queryParams:string, {dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }))
         await fetch(`${endpoint.getLotteryList}?lotteryType=${queryParams}`, {
             method: 'GET',
             headers:{
@@ -80,6 +84,11 @@ export const getLotteryList = createAsyncThunk(
                 message: "Something went wrong"
             }));
         })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
+            }))
+        })
     }
 );
 
@@ -87,6 +96,9 @@ export const getLotteryList = createAsyncThunk(
 export const getLotteryGameDetail = createAsyncThunk(
     'get lottery game detail',
     async(payload:string,{dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }))
         await(fetch(`${endpoint.getLotteryGameById}${payload}`,{
             method: 'GET',
             headers:{
@@ -128,12 +140,20 @@ export const getLotteryGameDetail = createAsyncThunk(
                 }));
             }
         })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
+            }));
+        })
     }
 );
 
 export const updateLottery = createAsyncThunk(
     'Update lottery',
     async(payload:any,{dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }));
         await fetch(endpoint.updateLottery,{
             method: 'PUT',
             body:JSON.stringify(payload),
@@ -151,6 +171,11 @@ export const updateLottery = createAsyncThunk(
                 isVisible: true,
                 status: NotificationType.success,
                 message: response.errorMsg
+            }));
+        })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
             }));
         })
     }

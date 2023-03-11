@@ -6,6 +6,7 @@ import {setLocalStorage} from '../LocalStorage/SetLocalStorage';
 import {getLocalStorage} from '../LocalStorage/GetLocalStorage'
 
 import {toggleNotificationVisibility} from './networkNotification';
+import {toggleLoader} from './loader'
 import {NotificationType} from '../Utility/InterFacesAndEnum';
 
 import {handle401Status} from '../Utility/Utility';
@@ -41,9 +42,9 @@ interface SigninAccount {
 export const createLogin = createAsyncThunk(
     'auth/login',
     async (loginObj:SigninAccount, {dispatch}) => {
-        dispatch(toggleLoading({
+        dispatch(toggleLoader({
             isLoading: true
-        }))
+        }));
         const response = await fetch(endPoint.login,
         {
             method: 'POST',

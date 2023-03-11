@@ -13,6 +13,7 @@ import PromotinsReducer from '../features/promotions';
 import DashboardReducer from '../features/dashboard';
 import Settings from '../features/settingsSlice';
 import emailNotifications from '../features/emailNotifications';
+import loaderslice from '../features/loader'
 
 const store = configureStore({
     reducer:{
@@ -28,7 +29,8 @@ const store = configureStore({
        promotions:PromotinsReducer,
        dashboard:DashboardReducer,
        settings: Settings,
-       emailNotifications:emailNotifications
+       emailNotifications:emailNotifications,
+       loaderslice:loaderslice
     }
 })
 

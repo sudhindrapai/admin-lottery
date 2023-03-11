@@ -5,7 +5,7 @@ import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 
 import {toggleNotificationVisibility} from './networkNotification';
 import {NotificationType} from '../Utility/InterFacesAndEnum';
-
+import {toggleLoader} from './loader'
 import {handle401Status} from '../Utility/Utility';
 
 interface NotificationStateProps {
@@ -33,6 +33,9 @@ const NotificationState:NotificationStateProps = {
 export const getEmailNotifications = createAsyncThunk(
     'Email notification',
     async (payload:string,{dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }));
         await fetch(endpoints.getEmailNotifications,{
             method: 'GET',
             headers:{
@@ -73,12 +76,20 @@ export const getEmailNotifications = createAsyncThunk(
                 message: "something went wrong"
             }));
         })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
+            }));
+        })
     }
 );
 
 export const getPushNotifications = createAsyncThunk(
     'get pushnotification list',
     async (payload:string,{dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: false
+        }));
         await fetch(endpoints.getPushNotifications,{
             method: 'GET',
             headers:{
@@ -117,6 +128,11 @@ export const getPushNotifications = createAsyncThunk(
                 isVisible: true,
                 status: NotificationType.error,
                 message: "something went wrong"
+            }));
+        })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
             }));
         })
     }

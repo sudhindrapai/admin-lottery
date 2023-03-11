@@ -5,7 +5,7 @@ import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 import {toggleNotificationVisibility} from './networkNotification';
 import {NotificationType} from '../Utility/InterFacesAndEnum';
 import {handle401Status} from '../Utility/Utility';
-
+import {toggleLoader} from './loader';
 
 interface DashboardData {
         totalUsers: number,
@@ -51,6 +51,9 @@ const dashboardInitialState:DashboardInitialState = {
 export const getDashboardData = createAsyncThunk(
     'get dashboard data',
     async(payload,{dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }));
         await fetch(endpoints.getDashboardData,{
             method: 'GET',
             headers:{
@@ -87,6 +90,11 @@ export const getDashboardData = createAsyncThunk(
         .catch((error) => {
             console.log(error,"dashboard error")
         })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
+            }));
+        });
     })
 
 const dashboardSlice = createSlice({

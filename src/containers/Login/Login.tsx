@@ -51,7 +51,7 @@ const loginFormState:LoginForm = {
             isValidInput:false,
             isTouched:false,
             errorMessage:"",
-            label:"emailId",
+            label:"Email ID",
             radioGroupValues:[],
             isPasswordHidden:true,
             dropdownValues:[],

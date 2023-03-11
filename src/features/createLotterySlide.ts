@@ -5,6 +5,7 @@ import * as localStorageActiontype from '../LocalStorage/ActionTypes';
 import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 
 import {toggleNotificationVisibility} from './networkNotification';
+import {toggleLoader} from './loader'
 import {NotificationType} from '../Utility/InterFacesAndEnum';
 
 import {handle401Status} from '../Utility/Utility';
@@ -22,6 +23,9 @@ const createLotteryState:CreateLottery = {
 export const createLottery = createAsyncThunk(
     'oneTimeLottery',
     async (requeryBody:any, {dispatch}) => {
+        dispatch(toggleLoader({
+            isLoading: true
+        }));
         await fetch (endpoints.createLottery,{
             method: "POST",
             body: JSON.stringify(requeryBody),
@@ -62,6 +66,11 @@ export const createLottery = createAsyncThunk(
                 isVisible: true,
                 status: NotificationType.error,
                 message: "Something went wrong"
+            }));
+        })
+        .finally(() => {
+            dispatch(toggleLoader({
+                isLoading: false
             }));
         })
     }

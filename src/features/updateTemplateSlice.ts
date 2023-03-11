@@ -6,7 +6,7 @@ import {getLocalStorage} from '../LocalStorage/GetLocalStorage';
 
 import {toggleNotificationVisibility} from './networkNotification';
 import {NotificationType} from '../Utility/InterFacesAndEnum';
-
+import {toggleLoader} from './loader'
 import {handle401Status} from '../Utility/Utility';
 
 let updateTemplateInitialState = {
@@ -17,6 +17,9 @@ let updateTemplateInitialState = {
 export const getUpdateTemplateDetail = createAsyncThunk(
         'get template detail',
         async (payload:string, {dispatch}) => {
+            dispatch(toggleLoader({
+                isLoading: true
+            }));
             await fetch (`${endpoints.getSingleTemplateDetail}${payload}`,{
                 method: "GET",
                 headers:{
@@ -42,6 +45,11 @@ export const getUpdateTemplateDetail = createAsyncThunk(
                     isVisible: true,
                     status: NotificationType.error,
                     message: "Something went wrong"
+                }));
+            })
+            .finally(() => {
+                dispatch(toggleLoader({
+                    isLoading: false
                 }));
             })
         }
