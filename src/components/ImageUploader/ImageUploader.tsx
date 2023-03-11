@@ -1,8 +1,8 @@
-import {FC, useMemo, useRef} from 'react';
+import {FC, useMemo, useRef, useEffect} from 'react';
 import {Wrapper, Container, TitleWrapper, Title, AddBtn, EmptyImgSection,
      Image, ImageWrapper, IndImgWrapper, DeleteIcon} from './StyledImageUploader';
 import {RootState} from '../../app/Store';
-import {uploadImage,deleteImage} from '../../features/imageUploaderSlice';
+import {uploadImage,deleteImage,resetImages} from '../../features/imageUploaderSlice';
 import {useSelector, useDispatch} from 'react-redux';
 
 const ImageUploader:FC = () => {
@@ -19,6 +19,12 @@ const ImageUploader:FC = () => {
             imgUrl:url
         }));
     }
+
+    useEffect(() => {
+        return() => {
+            dispatch(resetImages());
+        }
+    },[])
 
     let imagesView = useMemo(() => {
         if (images !== undefined && images !== null && images.length === 0) {

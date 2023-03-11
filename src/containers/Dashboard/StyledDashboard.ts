@@ -123,3 +123,18 @@ justify-content: center;
 padding: 0 25px;
 cursor: pointer;
 `;
+
+export const BtnSection = styled.div`
+width: 100%;
+box-sizing: border-box;
+text-align: right;
+`;
+
+export const RefreshBtn = styled.button`
+padding: 8px 16px;
+color: #ffffff;
+background-color: green;
+border: 1px solid green;
+cursor: pointer;
+border-radius: 4px;
+`;

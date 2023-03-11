@@ -117,9 +117,16 @@ const ImageUploaderSlice = createSlice({
                 ...state,
                 images:filteredImages
             }
+        },
+        resetImages:(state) => {
+            return{
+                ...state,
+                images:[],
+                imageNames:[]
+            }
         }
     }
 });
 
-export const {setImages,setUpdateImgDetails,deleteImage} = ImageUploaderSlice.actions;
+export const {setImages,setUpdateImgDetails,deleteImage,resetImages} = ImageUploaderSlice.actions;
 export default ImageUploaderSlice.reducer;

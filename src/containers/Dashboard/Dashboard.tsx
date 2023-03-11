@@ -10,7 +10,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {getDashboardData} from '../../features/dashboard';
 
 import {GraphList, GraphWrapper, Card, CardsList,HeaderWrapper,
-    VerticalButton,GraphButton,GraphRow,GraphYaxis, GraphYButton,GraphItem,Label} from './StyledDashboard';
+    VerticalButton,GraphButton,GraphRow,GraphYaxis, GraphYButton,GraphItem,Label, BtnSection, RefreshBtn} from './StyledDashboard';
 
 const exceptCards = ["yearwiseAuctionTicketsCount","monthwiseAuctionTicketsCount","daywiseAuctionTicketsCount","yearwiseLotteryTicketsCount","monthwiseLotteryTicketsCount","countrywiseUsers","countrywiseGoldUsers","countrywiseLotteryIncome","countrywiseAuctionIncome","goldUsers","regularUsers","monthwiseRegistartionsCount","yearwiseRegistartionsCount",
 "daywiseRegistartionsCount","yearwiseExecutedAuctionsCount","monthwiseExecutedAuctionsCount","daywiseLotteryTicketsCount",
@@ -231,6 +231,10 @@ const Dashboard:FC = () => {
         dispatch(getDashboardData())
     },[]);
 
+    const RereshData = () => {
+        dispatch(getDashboardData())
+    }
+
     // linegraphCode Starts
     const lineGraphXaxisButtons = graph1X.map((obj) =>{
         return <GraphButton onClick={() => {updateLineGraphXValue(obj)}}  isSelected={obj.isSelected}>
@@ -322,6 +326,11 @@ const Dashboard:FC = () => {
     return <>
     <HeaderWrapper>
     <ViewHeader title={"Dashboard"} />
+    <BtnSection>
+        <RefreshBtn onClick={RereshData}>
+            Refresh
+        </RefreshBtn>
+    </BtnSection>
     </HeaderWrapper>
     <h3>
             Lottery
