@@ -55,7 +55,7 @@ const LotteryTemplateList = () => {
                 {templateObj.lotteryId}
             </TemplateId>
             <TemplateItem>
-             {templateObj.rewardType === "M" ? `${templateObj.rewardAmount ? templateObj.rewardAmount: 0}` : templateObj.rewardGiftName} 
+             {templateObj.rewardType === "M" ? `${templateObj.rewardAmount ? "$ " + templateObj.rewardAmount: "$ 0"}` : templateObj.rewardGiftName} 
             </TemplateItem>
             <TemplateItem>
                 {templateObj.isRepeat ? "Repeated Lottery": "One Time Lottery"}

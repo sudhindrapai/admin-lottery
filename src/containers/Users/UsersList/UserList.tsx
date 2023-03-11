@@ -34,8 +34,10 @@ class TableHeader{
 
 let tableHeaders = [
     new TableHeader("User ID", true, true, false, 'userId'),
+    new TableHeader("User Email ID", true, true, false, 'emailId'),
     new TableHeader("User Name", false, false, false, 'userName'),
-    new TableHeader("Mobile Number", false, false, false, 'mobileNo'),
+    new TableHeader("Mobile No", false, false, false, 'mobileNo'),
+    new TableHeader("Is Godld Member", false, false, false, 'isGoldMember'),
     new TableHeader("Gender", false, false, false, 'gender'),
     new TableHeader("City", false, false, false, 'city'),
     new TableHeader("State", false, false, false, 'state'),
@@ -196,10 +198,16 @@ const UserList:FC = () => {
             {idBtn}
             </td>
             <td>
+            {tableRowObj.emailId}
+            </td>
+            <td>
                 {tableRowObj.firstName + " " + tableRowObj.lastName}
             </td>
             <td>
                 {tableRowObj.mobileNo}
+            </td>
+            <td>
+                {tableRowObj.isActive ? "Yes" : "No"}
             </td>
             <td>
                 {tableRowObj.gender}

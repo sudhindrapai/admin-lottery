@@ -292,7 +292,7 @@ const lotteryMoneyForm: CreateLottery = {
             isValidInput:false,
             isTouched:false,
             errorMessage:"",
-            label:"Lottery Price money",
+            label:"Lottery Price money (in Dolor)",
             radioGroupValues:[],
             isPasswordHidden:true,
             dropdownValues:[],
