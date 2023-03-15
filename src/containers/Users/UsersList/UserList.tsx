@@ -10,6 +10,7 @@ import EmptyTableView from '../../../components/EmptyTableView/EmptyTableView';
 import {RootState} from '../../../app/Store';
 import {useSelector, useDispatch} from 'react-redux';
 import {getUserList} from '../../../features/Users'
+import JsonToCsv from '../../../components/JSONToCSV/JsonToCsv'
 
 import {Wrapper, Container} from './StyledUserList';
 import * as TableStyle from '../../Lottery/LotteryList/StyledLottery';
@@ -231,6 +232,7 @@ const UserList:FC = () => {
         <Container>
             <TableStyle.BreadcrumbSection>
                 <ViewHeader title={"Users"} />
+                <JsonToCsv data={responseData} fileLabel={"users"} />
             </TableStyle.BreadcrumbSection>
         </Container>
         <TableStyle.ContentSection>

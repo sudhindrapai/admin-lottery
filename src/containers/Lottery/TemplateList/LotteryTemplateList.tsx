@@ -12,6 +12,7 @@ import { RootState } from '../../../app/Store';
 import {transformDate} from '../../../Utility/Utility';
 import {useNavigate} from 'react-router-dom';
 import {adminRouts} from '../../../routs';
+import JsonToCsv from '../../../components/JSONToCSV/JsonToCsv'
 
 import oneTimeLotteryImgSrc from '../../../assets/images/oneTimeLottery.svg';
 import repeatedLotteryImgSrc from '../../../assets/images/repeatedLottery.svg';
@@ -112,8 +113,12 @@ const LotteryTemplateList = () => {
     <BreadCrumbs>
     <ViewHeader title={"Lottery Templates"} isNeedCreateButton={false} btnText={"Test button"}
      routePath={"/"} />
+     <span>
+     <span style={{marginRight: '10px'}}>
+         <JsonToCsv data={templateList} fileLabel={"templates"} /></span>
      <Button title={"+ Create Lottery"} btnSize={ButtonSize.md} btnVariant={ButtonVariant.primaryFilled} 
      clicked={() => {setCreateLotteryModalStatus(true)}} />
+     </span>
      </BreadCrumbs>
      <GamesView>
          <TemplateListHeader>

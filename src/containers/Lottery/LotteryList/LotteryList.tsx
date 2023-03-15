@@ -10,6 +10,7 @@ import {useNavigate} from 'react-router-dom';
 import {transformDate,tablePagination,searchTableData, sortTableValues} from '../../../Utility/Utility';
 import TableHeaderComponent from '../../../components/TableHeader/TableHeader';
 import TableFooter from '../../../components/TableFooter/TableFooter';
+import JsonToCsv from '../../../components/JSONToCSV/JsonToCsv'
 import {BreadcrumbSection, 
     TableWrapper,
     Table, 
@@ -232,6 +233,7 @@ const LotteryList:FC = () => {
         <BreadcrumbSection>
     <ViewHeader title={"Lottery"} isNeedCreateButton={true} btnText={"Test button"}
      routePath={"/"} />
+     <JsonToCsv data={responseData} fileLabel={"games"} />
      </BreadcrumbSection>
      <ContentSection>
          <SearchSectionContainer>
