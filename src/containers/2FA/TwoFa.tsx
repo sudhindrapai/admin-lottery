@@ -10,7 +10,7 @@ import {updateFormInputState, validateForm} from '../../Utility/Utility';
 
 import { RootState } from '../../app/Store';
 import {useSelector, useDispatch} from 'react-redux';
-import {createLogin, toggleLogin} from '../../features/loginSlice';
+import {createLogin, toggleLogin, verify2FA} from '../../features/loginSlice';
 
 import {useNavigate} from 'react-router-dom';
 import {adminRouts} from '../../routs'
@@ -40,7 +40,7 @@ const loginFormState:LoginForm = {
     form:[
         {
             elementType:FormElementType.input,
-            value:"12",
+            value:"",
             id:"twoFa",
             isRequired:true,
             fullWidth: true,
@@ -98,10 +98,12 @@ const TwoFA:FC = () => {
             "emailId": "",
             "password": ""  
         }
+        let otp = "";
         for (let formObj of valeu.form) {
+            otp = formObj.value;
             loginObj[formObj.id] = formObj.value;
         }
-        dispatch(createLogin(loginObj));
+        dispatch(verify2FA(otp));
     };
 
     return <Wrapper>

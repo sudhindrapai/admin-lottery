@@ -62,6 +62,63 @@ export const createLogin = createAsyncThunk(
                 handle401Status();
             }
 
+            if (data.statusCode === 200) { 
+            
+            dispatch(toggleLogin({
+                isLoggedin:true,
+                isAuthenticated: false
+            }));
+            
+            dispatch(toggleNotificationVisibility({
+                isVisible: true,
+                status: NotificationType.success,
+                message: data.errorMsg
+            }));
+        } else {
+            dispatch(toggleNotificationVisibility({
+                isVisible: true,
+                status: NotificationType.error,
+                message: data.errorMsg
+            }));
+        }
+        })
+        .catch((error) => {
+            dispatch(toggleNotificationVisibility({
+                isVisible: true,
+                status: NotificationType.error,
+                message: "something went wrong!"
+            }));
+            dispatch(toggleLoading({
+                isLoading: false
+            }));
+        })
+        .finally(() => {
+            dispatch(toggleLoading({
+                isLoading: false
+            }));
+        })
+    }
+);
+
+export const verify2FA = createAsyncThunk(
+    'verify 2FA OTP',
+    async (payload:string,{dispatch}) => {
+        await fetch (endPoint.verifyOtp, {
+            method: 'POST',
+            body: payload,
+            headers:{
+                Authorization: `Bearer ${getLocalStorage(localStorageActionType.GET_ACCESS_TOKEN)}`,
+                "Content-type": "application/json; charset=UTF-8",
+            }
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            if (data.statusCode === 401) {
+                handle401Status();
+            }
+
             if (data.statusCode === 200) {
 
             let responseObj = data.result;
@@ -91,19 +148,7 @@ export const createLogin = createAsyncThunk(
                 message: data.errorMsg
             }));
         }
-        })
-        .catch((error) => {
-            console.log(error,"error");
-            dispatch(toggleNotificationVisibility({
-                isVisible: true,
-                status: NotificationType.error,
-                message: "something went wrong!"
-            }));
-        })
-        .finally(() => {
-            dispatch(toggleLoading({
-                isLoading: false
-            }));
+        
         })
     }
 );
@@ -111,6 +156,9 @@ export const createLogin = createAsyncThunk(
 export const getActiveUserCount = createAsyncThunk(
     'get active user count',
     async (payload:void,{dispatch}) => {
+        dispatch(toggleLoading({
+            isLoading: true
+        }));
         await fetch(endPoint.getUserCount,{
             method: 'GET',
             headers:{
@@ -126,6 +174,11 @@ export const getActiveUserCount = createAsyncThunk(
                 count:data.result
             }))
         })
+        .finally(() => {
+            dispatch(toggleLoading({
+                isLoading: false
+            }));
+        });
     }
 )
 

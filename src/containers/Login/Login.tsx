@@ -11,6 +11,7 @@ import {updateFormInputState} from '../../Utility/Utility';
 import { RootState } from '../../app/Store';
 import {useSelector, useDispatch} from 'react-redux';
 import {createLogin, toggleLogin} from '../../features/loginSlice';
+import {toggleLoader} from '../../features/loader'
 
 import {useNavigate} from 'react-router-dom';
 import {adminRouts} from '../../routs';
@@ -95,13 +96,16 @@ const Login:FC = () => {
 
     useEffect(() => {
         if (isLogedIn === true) {
-            navigate(adminRouts.dashboard);
-            window.location.reload();
+            navigate(adminRouts.twoFa);
+            // window.location.reload();
         }
         return() => {
             dispatch(toggleLogin({
                 isLoggedin: false,
                 isAuthenticated: true
+            }));
+            dispatch(toggleLoader({
+                isLoading: false
             }));
         }
     },[isLogedIn]);
